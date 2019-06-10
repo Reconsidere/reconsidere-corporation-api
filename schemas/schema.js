@@ -28,7 +28,11 @@ type Units {
     }
 
    type Users {
-            
+    name: String,
+    email: String,
+    profile: Profile
+    password: String,
+    active: Boolean
         }
 
 type Corporation {
