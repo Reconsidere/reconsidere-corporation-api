@@ -1,4 +1,4 @@
-Corporation = require('../models/corporation.model');
+Corporation = require('../../../models/corporation.model');
 module.exports = resolvers = {
     Query: {
         async getCorporation(root, {

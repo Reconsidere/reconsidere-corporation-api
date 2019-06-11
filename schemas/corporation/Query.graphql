@@ -1,0 +1,5 @@
+type Query {
+  #corporation
+    getCorporation(_id: ID!): Corporation
+    allCorporations: [Corporation]
+ }

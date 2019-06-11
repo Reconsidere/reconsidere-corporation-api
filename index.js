@@ -1,17 +1,18 @@
 mongoose = require('mongoose');
 graphlHTTP = require('express-graphql');
-schema = require('./schemas/schema');
 const express = require('express');
+const { importSchema } = require('graphql-import')
 
 
-// (path = require('path')),
-//     (bodyParser = require('body-parser')),
-//     (cors = require('cors'));
-// var corporations = express.Router();
-// const app = express();
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(bodyParser.json());
-// app.use(cors());
+const resolvers = require('./resolvers');
+const { makeExecutableSchema } = require('graphql-tools');
+const schemaPath = './schemas/index.graphql';
+
+const schema = makeExecutableSchema({
+    typeDefs: importSchema(schemaPath),
+    resolvers
+});
+
 
 const app = express();
 const PORT = 32546;

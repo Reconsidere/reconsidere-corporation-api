@@ -1,0 +1,3 @@
+#import Corporation, Location, Unit, Profile, User  from '../schemas/corporation/Corporation.graphql'
+#import Query from '../schemas/corporation/Query.graphql'
+#import Mutation from '../schemas/corporation/Mutation.graphql'
