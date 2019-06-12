@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
         msg: 'Welcome to GraphQL'
     })
 });
-app.use('/graphql', graphlHTTP({
+app.use('/corporation', graphlHTTP({
     schema: schema,
     graphiql: true
 }));

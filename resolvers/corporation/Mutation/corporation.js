@@ -26,7 +26,7 @@ module.exports = resolvers = {
                 res.users = res.users.filter(x => x.email === email && x.password === password);
                 return res;
             }
-        }
+        },
     },
     Mutation: {
         async createCorporation(root, {
