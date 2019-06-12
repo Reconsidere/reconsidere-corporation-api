@@ -8,6 +8,24 @@ module.exports = resolvers = {
         },
         async allCorporations() {
             return await Corporation.find();
+        },
+        async signIn(root, {
+            email, password
+        }) {
+            var res = await Corporation.findOne(
+                {
+                    $and: [
+                        { 'users.email': email },
+                        { 'users.password': password },
+                    ],
+                }
+            )
+            if (!res) {
+                return null;
+            } else {
+                res.users = res.users.filter(x => x.email === email && x.password === password);
+                return res;
+            }
         }
     },
     Mutation: {
@@ -25,7 +43,7 @@ module.exports = resolvers = {
             }, input, {
                     new: true
                 })
-        },  
+        },
         async deleteCorporation(root, {
             _id
         }) {

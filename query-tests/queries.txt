@@ -1,0 +1,37 @@
+Apenas um arquivo para manter as queryes para teste, pode ser removida para produção
+
+mutation {
+  createCorporation(input: 
+    {
+      company: "teste", 
+      cnpj: "12345667", 
+      tradingName: "teste", 
+      active: true, 
+      class: "Privada"
+    })
+  {
+    _id
+  }
+}
+
+mutation {
+  createCorporation(input: 
+    {
+      company: "teste", 
+      cnpj: "12345667", 
+      tradingName: "teste", 
+      active: true, 
+      class: "Privada"
+      email:"teste@gmail.com"
+      users:[{
+        email:"vinicius@gmail.com",
+        password:"123456"
+      }]
+      
+    })
+  {
+    _id
+  }
+}
+
+
