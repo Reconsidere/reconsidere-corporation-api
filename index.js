@@ -2,7 +2,8 @@ mongoose = require('mongoose');
 graphlHTTP = require('express-graphql');
 const express = require('express');
 const { importSchema } = require('graphql-import')
-
+const bodyParser = require('body-parser')
+const cors = require('cors');
 
 const resolvers = require('./resolvers');
 const { makeExecutableSchema } = require('graphql-tools');
@@ -23,10 +24,11 @@ app.get('/', (req, res) => {
         msg: 'Welcome to GraphQL'
     })
 });
-app.use('/corporation', graphlHTTP({
+app.use('/corporation', bodyParser.text({ type: 'application/graphql' }),bodyParser.json(), cors(), graphlHTTP({
     schema: schema,
     graphiql: true
 }));
+
 app.listen(PORT, () => {
     console.log(`Server is listening on PORT ${PORT}`);
 })
