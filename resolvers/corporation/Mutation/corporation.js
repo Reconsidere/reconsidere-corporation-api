@@ -6,6 +6,17 @@ module.exports = resolvers = {
         }) {
             return await Corporation.findById(_id);
         },
+        async getCorporationByUser(root, {
+            _id
+        }) {
+            var res = await Corporation.findOne({ 'users._id': _id }
+            )
+            if (!res) {
+                return null;
+            } else {
+                return res;
+            }
+        },
         async allCorporations() {
             return await Corporation.find();
         },
