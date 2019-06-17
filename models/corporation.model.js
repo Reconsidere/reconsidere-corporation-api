@@ -54,6 +54,10 @@ const CorporationSchema = new Schema({
             active: Boolean
         }
     ],
+    providers: [{
+        providerId: String
+    }]
+
 });
 
 module.exports = mongoose.model('corporation', CorporationSchema);

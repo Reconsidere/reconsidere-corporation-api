@@ -1,6 +1,10 @@
 scalar Date
 scalar Number
 
+type Provider {
+     providerId: String!
+}
+
 type Location {
     _id: ID!
     country: String
@@ -52,6 +56,7 @@ type Corporation {
   location:Location
   units:[Unit]
   users:[User]
+  providers:[Provider]
  }
 
 
@@ -86,6 +91,10 @@ input UserInput {
     password: String,
     active: Boolean
 }
+
+input ProviderInput{
+    providerId: String!
+}
     input CorporationInput {
         company: String
         cnpj: String
@@ -102,4 +111,5 @@ input UserInput {
         location:LocationInput
         units:[UnitInput]
         users:[UserInput]
+        providers:[ProviderInput]
     }
