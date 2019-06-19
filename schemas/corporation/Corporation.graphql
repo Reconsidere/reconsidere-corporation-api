@@ -2,11 +2,12 @@ scalar Date
 scalar Number
 
 type Provider {
-     providerId: String!
+    _id:ID
+     providerId: String
 }
 
 type Location {
-    _id: ID!
+    _id: ID
     country: String
     state: String
     latitude: Number
@@ -20,7 +21,7 @@ type Location {
 }
 
 type Unit {
-    _id: ID!
+    _id: ID
         name: String
         location:[Location]
 }
@@ -31,7 +32,7 @@ type Profile {
 }
 
 type User {
-    _id: ID!
+    _id: ID
     name: String,
     email: String,
     profile: Profile
@@ -40,7 +41,7 @@ type User {
 }
 
 type Corporation {
-  _id: ID!
+  _id: ID
   company: String
   cnpj: String
   tradingName: String
@@ -62,6 +63,7 @@ type Corporation {
 
 #corporation inputs
 input LocationInput{
+     _id:String
     country: String
     state: String
     latitude: Number
@@ -75,16 +77,19 @@ input LocationInput{
 }
 
 input UnitInput{
+     _id:String
         name: String
         location:[LocationInput]
 }
 
 input ProfileInput{
+     _id:String
     name: String
     access: [String]
 }
 
 input UserInput {
+     _id:String
     name: String,
     email: String,
     profile: ProfileInput
@@ -93,9 +98,11 @@ input UserInput {
 }
 
 input ProviderInput{
-    providerId: String!
+    _id:String
+    providerId: String
 }
     input CorporationInput {
+         _id:String
         company: String
         cnpj: String
         tradingName: String

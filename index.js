@@ -24,9 +24,15 @@ app.get('/', (req, res) => {
         msg: 'Welcome to GraphQL'
     })
 });
-app.use('/corporation', bodyParser.text({ type: 'application/graphql' }),bodyParser.json(), cors(), graphlHTTP({
+app.use('/corporation', bodyParser.text({ type: 'application/graphql' }), bodyParser.json(), cors(), graphlHTTP({
     schema: schema,
-    graphiql: true
+    graphiql: true,
+    formatError: error => ({
+        message: error.message,
+        state: error.originalError && error.originalError.state,
+        locations: error.locations,
+        path: error.path,
+    }),
 }));
 
 app.listen(PORT, () => {

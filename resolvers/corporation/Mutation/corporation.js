@@ -43,17 +43,18 @@ module.exports = resolvers = {
         async createCorporation(root, {
             input
         }) {
-            return await Corporation.create(input);
+            var res = await Corporation.findOne({ 'users.email': input.users[0].email })
+            if (res) {
+                throw new Error('WRE005');
+            } else {
+                return await Corporation.create(input);
+            }
         },
         async updateCorporation(root, {
             _id,
             input
         }) {
-            return await Corporation.findOneAndUpdate({
-                _id
-            }, input, {
-                    new: true
-                })
+            return await Corporation.findOneAndUpdate(_id, { input }, { new: true })
         },
         async deleteCorporation(root, {
             _id
