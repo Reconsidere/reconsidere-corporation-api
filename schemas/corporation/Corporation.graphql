@@ -2,121 +2,166 @@ scalar Date
 scalar Number
 
 type Provider {
-    _id:ID
-     providerId: String
+	_id: ID
+	providerId: String
+}
+
+type Material {
+    _id: ID
+	type: String
+	name: String
+	weight: Number
+	quantity: Number
+}
+
+type QrCode {
+    _id: ID
+	code: String
+	material: Material
+}
+
+type Department {
+    _id: ID
+	name: String
+	description: String
+	qrCode: [QrCode]
+	active: Boolean
 }
 
 type Location {
-    _id: ID
-    country: String
-    state: String
-    latitude: Number
-    longitude: Number
-    cep: String
-    publicPlace: String
-    neighborhood: String
-    number: Number
-    county: String
-    complement: String
+	_id: ID
+	country: String
+	state: String
+	latitude: Number
+	longitude: Number
+	cep: String
+	publicPlace: String
+	neighborhood: String
+	number: Number
+	county: String
+	complement: String
 }
 
 type Unit {
-    _id: ID
-        name: String
-        location:[Location]
+	_id: ID
+	name: String
+	location: Location
 }
 
 type Profile {
-        name: String
-        access: [String]
+	name: String
+	access: [String]
 }
 
 type User {
-    _id: ID
-    name: String,
-    email: String,
-    profile: Profile
-    password: String,
-    active: Boolean
+	_id: ID
+	name: String
+	email: String
+	profile: Profile
+	password: String
+	active: Boolean
 }
 
 type Corporation {
-  _id: ID
-  company: String
-  cnpj: String
-  tradingName: String
-  active: Boolean
-  class: String
-  phone: Number
-  email: String
-  classification: String
-  cellPhone: Number
-  creationDate: Date
-  activationDate: Date
-  verificationDate: Date
-  location:Location
-  units:[Unit]
-  users:[User]
-  providers:[Provider]
- }
-
+	_id: ID
+	company: String
+	cnpj: String
+	tradingName: String
+	active: Boolean
+	class: String
+	phone: Number
+	email: String
+	classification: String
+	cellPhone: Number
+	creationDate: Date
+	activationDate: Date
+	verificationDate: Date
+	units: [Unit]
+	users: [User]
+	providers: [Provider]
+	departments: [Department]
+}
 
 #corporation inputs
-input LocationInput{
-     _id:String
-    country: String
-    state: String
-    latitude: Number
-    longitude: Number
-    cep: String
-    publicPlace: String
-    neighborhood: String
-    number: Number
-    county: String
-    complement: String
+
+input MaterialInput {
+	_id: String
+	type: String
+	name: String
+	weight: Number
+	quantity: Number
 }
 
-input UnitInput{
-     _id:String
-        name: String
-        location:[LocationInput]
+input QrCodeInput {
+	_id: String
+	code: String
+	material: MaterialInput
 }
 
-input ProfileInput{
-     _id:String
-    name: String
-    access: [String]
+input DepartmentInput {
+	_id: String
+	name: String
+	description: String
+	qrCode: [QrCodeInput]
+	active:Boolean
+}
+
+input LocationInput {
+	_id: String
+	country: String
+	state: String
+	latitude: Number
+	longitude: Number
+	cep: String
+	publicPlace: String
+	neighborhood: String
+	number: Number
+	county: String
+	complement: String
+}
+
+input UnitInput {
+	_id: String
+	name: String
+	location: LocationInput
+}
+
+input ProfileInput {
+	_id: String
+	name: String
+	access: [String]
 }
 
 input UserInput {
-     _id:String
-    name: String,
-    email: String,
-    profile: ProfileInput
-    password: String,
-    active: Boolean
+	_id: String
+	name: String
+	email: String
+	profile: ProfileInput
+	password: String
+	active: Boolean
 }
 
-input ProviderInput{
-    _id:String
-    providerId: String
+input ProviderInput {
+	_id: String
+	providerId: String
 }
-    input CorporationInput {
-         _id:String
-        company: String
-        cnpj: String
-        tradingName: String
-        active: Boolean
-        class: String
-        phone: Number
-        email: String
-        classification: String
-        cellPhone: Number
-        creationDate: Date
-        activationDate: Date
-        verificationDate: Date
-        location:LocationInput
-        units:[UnitInput]
-        users:[UserInput]
-        providers:[ProviderInput]
-    }
+
+input CorporationInput {
+	_id: String
+	company: String
+	cnpj: String
+	tradingName: String
+	active: Boolean
+	class: String
+	phone: Number
+	email: String
+	classification: String
+	cellPhone: Number
+	creationDate: Date
+	activationDate: Date
+	verificationDate: Date
+	units: [UnitInput]
+	users: [UserInput]
+	providers: [ProviderInput]
+	departments: [DepartmentInput]
+}

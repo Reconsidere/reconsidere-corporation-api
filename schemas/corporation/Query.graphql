@@ -1,7 +1,8 @@
 type Query {
-  #corporation
     getCorporation(_id: ID!): Corporation
     getCorporationByUser(_id: ID!): Corporation
     allCorporations: [Corporation]
     signIn(email: String!, password: String!): Corporation
+    allUnits(_id:ID!): [Unit]
+    allDepartments(_id:ID!): [Department]
  }
