@@ -39,7 +39,7 @@ module.exports = corporation = {
 		async allDepartments(root, { _id }) {
 			var res = await Corporation.findById(_id);
 			if (res) {
-				res.departments;
+				return res.departments;
 			} else {
 				return null;
 			}
@@ -72,27 +72,37 @@ module.exports = corporation = {
 		},
 		async createorUpdateDepartment(root, { _id, input }) {
 			try {
-				console.log(_id);
 				console.log(input);
 				input.forEach((department) => {
 					if (department._id) {
-						Corporation.findOneAndUpdate(
+						Corporation.update(
 							{ _id: _id, 'departments._id': department._id },
-							{
-								$set: {
-									'departments.$': department
+							{ $set: { departments: department } },
+							function(error, success) {
+								if (error) {
+									throw new Error('ERE009');
+								} else {
+									console.log(success);
 								}
 							}
 						);
 					} else {
-						var res = Corporation.findById(_id);
-						res.departments.push(depart);
-						res.save();
+						Corporation.update({ _id: _id }, { $push: { departments: department } }, function(
+							error,
+							success
+						) {
+							if (error) {
+								throw new Error('ERE009');
+							} else {
+								console.log(success);
+							}
+						});
 					}
 				});
 				var res = Corporation.findById(_id);
 				return res.departments;
 			} catch (error) {
+				console.log(error);
 				throw new Error('ERE009');
 			}
 		}
