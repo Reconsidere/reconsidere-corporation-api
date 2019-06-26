@@ -59,7 +59,8 @@ const CorporationSchema = new Schema({
 						type: String,
 						name: String,
 						weight: Number,
-						quantity: Number
+						quantity: Number,
+						active:Boolean
 					}
 				}
 			]

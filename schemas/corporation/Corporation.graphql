@@ -12,6 +12,7 @@ type Material {
 	name: String
 	weight: Number
 	quantity: Number
+	active:Boolean
 }
 
 type QrCode {
@@ -90,6 +91,7 @@ input MaterialInput {
 	name: String
 	weight: Number
 	quantity: Number
+	active:Boolean
 }
 
 input QrCodeInput {

@@ -82,7 +82,6 @@ module.exports = corporation = {
 								if (error) {
 									throw new Error('ERE009');
 								} else {
-									console.log(success);
 								}
 							}
 						);
@@ -94,15 +93,13 @@ module.exports = corporation = {
 							if (error) {
 								throw new Error('ERE009');
 							} else {
-								console.log(success);
 							}
 						});
 					}
 				});
-				var res = Corporation.findById(_id);
+				var res = await Corporation.findById(_id);
 				return res.departments;
 			} catch (error) {
-				console.log(error);
 				throw new Error('ERE009');
 			}
 		}
