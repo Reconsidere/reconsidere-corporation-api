@@ -36,7 +36,7 @@ const CorporationSchema = new Schema({
 			email: String,
 			profile: {
 				name: String,
-				access: [String]
+				access: [ String ]
 			},
 			password: String,
 			active: Boolean
@@ -51,7 +51,7 @@ const CorporationSchema = new Schema({
 		{
 			name: String,
 			description: String,
-			active:Boolean,
+			active: Boolean,
 			qrCode: [
 				{
 					code: String,
@@ -60,12 +60,113 @@ const CorporationSchema = new Schema({
 						name: String,
 						weight: Number,
 						quantity: Number,
-						active:Boolean
+						active: Boolean
 					}
 				}
 			]
 		}
 	],
+	checkPoints: [
+		{
+			wastegenerated: [
+				{
+					qrCode: [
+						{
+							code: String,
+							material: {
+								type: String,
+								name: String,
+								weight: Number,
+								quantity: Number,
+								active: Boolean
+							}
+						}
+					]
+				}
+			],
+			collectionrequested: [
+				{
+					qrCode: [
+						{
+							code: String,
+							material: {
+								type: String,
+								name: String,
+								weight: Number,
+								quantity: Number,
+								active: Boolean
+							}
+						}
+					]
+				}
+			],
+			collectionperformed: [
+				{
+					qrCode: [
+						{
+							code: String,
+							material: {
+								type: String,
+								name: String,
+								weight: Number,
+								quantity: Number,
+								active: Boolean
+							}
+						}
+					]
+				}
+			],
+
+			arrivedcollector: [
+				{
+					qrCode: [
+						{
+							code: String,
+							material: {
+								type: String,
+								name: String,
+								weight: Number,
+								quantity: Number,
+								active: Boolean
+							}
+						}
+					]
+				}
+			],
+			insorting: [
+				{
+					qrCode: [
+						{
+							code: String,
+							material: {
+								type: String,
+								name: String,
+								weight: Number,
+								quantity: Number,
+								active: Boolean
+							}
+						}
+					]
+				}
+			],
+			completedestination: [
+				{
+					qrCode: [
+						{
+							code: String,
+							material: {
+								type: String,
+								name: String,
+								weight: Number,
+								quantity: Number,
+								active: Boolean
+							}
+						}
+					]
+				}
+			]
+		}
+	]
 });
 
 module.exports = mongoose.model('corporation', CorporationSchema);

@@ -72,16 +72,18 @@ module.exports = corporation = {
 		},
 		async createorUpdateDepartment(root, { _id, input }) {
 			try {
-				console.log(input);
 				input.forEach((department) => {
 					if (department._id) {
 						Corporation.update(
 							{ _id: _id, 'departments._id': department._id },
-							{ $set: { departments: department } },
-							function(error, success) {
-								if (error) {
+							{
+								$set: {
+									'departments.$': department
+								}
+							},
+							function(err, model) {
+								if (err) {
 									throw new Error('ERE009');
-								} else {
 								}
 							}
 						);
