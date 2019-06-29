@@ -43,6 +43,22 @@ module.exports = corporation = {
 			} else {
 				return null;
 			}
+		},
+		async allCheckPoints(root, { _id }) {
+			var res = await Corporation.findById(_id);
+			if (res) {
+				return res.checkPoints;
+			} else {
+				return null;
+			}
+		},
+		async allResiduesRegister(root, { _id }) {
+			var res = await Corporation.findById(_id);
+			if (res) {
+				return res.residuesRegister;
+			} else {
+				return null;
+			}
 		}
 	},
 	Mutation: {
@@ -104,6 +120,42 @@ module.exports = corporation = {
 			} catch (error) {
 				throw new Error('ERE009');
 			}
-		}
+		},
+		async createorUpdateResiduesRegister(root, { _id, input }) {
+			try {
+				input.forEach((residuesRegister) => {
+					if (residuesRegister._id) {
+						Corporation.update(
+							{ _id: _id, 'residuesRegister._id': residuesRegister._id },
+							{
+								$set: {
+									'residuesRegister.$': residuesRegister
+								}
+							},
+							function(err, model) {
+								if (err) {
+									throw new Error('ERE009');
+								}
+							}
+						);
+					} else {
+						Corporation.update({ _id: _id }, { $push: { residuesRegister: residuesRegister } }, function(
+							error,
+							success
+						) {
+							if (error) {
+								throw new Error('ERE009');
+							} else {
+							}
+						});
+					}
+				});
+				var res = await Corporation.findById(_id);
+				return res.residuesRegister;
+			} catch (error) {
+				throw new Error('ERE009');
+			}
+		},
+		async createorUpdateCheckPoints(root, { _id, input }) {}
 	}
 };

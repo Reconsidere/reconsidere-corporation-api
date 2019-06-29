@@ -1,0 +1,7 @@
+input DepartmentInput {
+	_id: String
+	name: String
+	description: String
+	qrCode: [QrCodeInput]
+	active: Boolean
+}

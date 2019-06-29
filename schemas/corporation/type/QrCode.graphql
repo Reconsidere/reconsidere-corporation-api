@@ -1,0 +1,6 @@
+type QrCode {
+	_id: ID
+	description:String
+	code: String
+	material: Material
+}

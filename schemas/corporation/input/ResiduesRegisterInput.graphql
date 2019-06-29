@@ -1,0 +1,4 @@
+input ResiduesRegisterInput{
+   _id:String
+   departments: [DepartmentInput]
+}

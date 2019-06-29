@@ -1,67 +1,28 @@
+#import Location  from '../corporation/type/Location.graphql'
+#import Provider  from '../corporation/type/Provider.graphql'
+#import Material  from '../corporation/type/Material.graphql'
+#import QrCode  from '../corporation/type/QrCode.graphql'
+#import Department  from '../corporation/type/Department.graphql'
+#import CheckPoints, WasteGenerated, CollectionRequested, CollectionPerformed, ArrivedCollector, Insorting, CompleteDestination  from '../corporation/type/CheckPoints.graphql'
+#import Unit  from '../corporation/type/Unit.graphql'
+#import Profile  from '../corporation/type/Profile.graphql'
+#import User  from '../corporation/type/User.graphql'
+#import ResiduesRegister  from '../corporation/type/ResiduesRegister.graphql'
+
+#import MaterialInput  from '../corporation/input/MaterialInput.graphql'
+#import QrCodeInput  from '../corporation/input/QrCodeInput.graphql'
+#import DepartmentInput  from '../corporation/input/DepartmentInput.graphql'
+#import CheckPointsInput,WasteGeneratedInput,CollectionRequestedInput,CollectionPerformedInput,ArrivedCollectorInput,InsortingInput,CompleteDestinationInput  from '../corporation/input/CheckPointsInput.graphql'
+#import LocationInput  from '../corporation/input/LocationInput.graphql'
+#import UnitInput  from '../corporation/input/UnitInput.graphql'
+#import ProfileInput  from '../corporation/input/ProfileInput.graphql'
+#import UserInput  from '../corporation/input/UserInput.graphql'
+#import ProviderInput  from '../corporation/input/ProviderInput.graphql'
+#import ResiduesRegisterInput  from '../corporation/input/ResiduesRegisterInput.graphql'
+
 scalar Date
+
 scalar Number
-
-type Provider {
-	_id: ID
-	providerId: String
-}
-
-type Material {
-    _id: ID
-	type: String
-	name: String
-	weight: Number
-	quantity: Number
-	active:Boolean
-}
-
-type QrCode {
-    _id: ID
-	code: String
-	material: Material
-}
-
-type Department {
-    _id: ID
-	name: String
-	description: String
-	qrCode: [QrCode]
-	active: Boolean
-}
-
-type Location {
-	_id: ID
-	country: String
-	state: String
-	latitude: Number
-	longitude: Number
-	cep: String
-	publicPlace: String
-	neighborhood: String
-	number: Number
-	county: String
-	complement: String
-}
-
-type Unit {
-	_id: ID
-	name: String
-	location: Location
-}
-
-type Profile {
-	name: String
-	access: [String]
-}
-
-type User {
-	_id: ID
-	name: String
-	email: String
-	profile: Profile
-	password: String
-	active: Boolean
-}
 
 type Corporation {
 	_id: ID
@@ -81,71 +42,8 @@ type Corporation {
 	users: [User]
 	providers: [Provider]
 	departments: [Department]
-}
-
-#corporation inputs
-
-input MaterialInput {
-	_id: String
-	type: String
-	name: String
-	weight: Number
-	quantity: Number
-	active:Boolean
-}
-
-input QrCodeInput {
-	_id: String
-	code: String
-	material: MaterialInput
-}
-
-input DepartmentInput {
-	_id: String
-	name: String
-	description: String
-	qrCode: [QrCodeInput]
-	active:Boolean
-}
-
-input LocationInput {
-	_id: String
-	country: String
-	state: String
-	latitude: Number
-	longitude: Number
-	cep: String
-	publicPlace: String
-	neighborhood: String
-	number: Number
-	county: String
-	complement: String
-}
-
-input UnitInput {
-	_id: String
-	name: String
-	location: LocationInput
-}
-
-input ProfileInput {
-	_id: String
-	name: String
-	access: [String]
-}
-
-input UserInput {
-	_id: String
-	name: String
-	email: String
-	profile: ProfileInput
-	password: String
-	active: Boolean
-}
-
-input ProviderInput {
-	_id: String
-	providerId: String
+	checkPoints: CheckPoints
+	residuesRegister: [ResiduesRegister]
 }
 
 input CorporationInput {
@@ -166,4 +64,6 @@ input CorporationInput {
 	users: [UserInput]
 	providers: [ProviderInput]
 	departments: [DepartmentInput]
+	checkPoints: CheckPointsInput
+	residuesRegisterInput: [ResiduesRegisterInput]
 }

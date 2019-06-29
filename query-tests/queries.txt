@@ -35,3 +35,151 @@ mutation {
 }
 
 
+{
+  allCorporations {
+    _id
+    company
+    cnpj
+    tradingName
+    active
+    class
+    phone
+    email
+    classification
+    cellPhone
+    creationDate
+    activationDate
+    verificationDate
+    users {
+      _id
+      name
+      email
+      password
+      active
+    }
+    units {
+      _id
+      name
+      location {
+        _id
+        country
+        state
+        latitude
+        longitude
+        cep
+        publicPlace
+        neighborhood
+        number
+        county
+        complement
+      }
+    }
+    departments {
+      _id
+      name
+      description
+      active
+      qrCode {
+        _id
+        code
+        material {
+          _id
+          type
+          name
+          weight
+          quantity
+          active
+        }
+      }
+    }
+      checkPoints{
+        wasteGenerated{
+          qrCode {
+            _id
+            code
+            material {
+              _id
+              type
+              name
+              weight
+              quantity
+              active
+            }
+          }
+        }
+        collectionRequested
+        {
+         qrCode {
+            _id
+            code
+            material {
+              _id
+              type
+              name
+              weight
+              quantity
+              active
+            }
+          }
+        }
+        collectionPerformed{
+          qrCode {
+            _id
+            code
+            material {
+              _id
+              type
+              name
+              weight
+              quantity
+              active
+            }
+          }
+        }
+        arrivedCollector{
+          qrCode {
+            _id
+            code
+            material {
+              _id
+              type
+              name
+              weight
+              quantity
+              active
+            }
+          }
+        }
+        insorting{
+          qrCode {
+            _id
+            code
+            material {
+              _id
+              type
+              name
+              weight
+              quantity
+              active
+            }
+          }
+        }
+        completedestination{
+          qrCode {
+            _id
+            code
+            material {
+              _id
+              type
+              name
+              weight
+              quantity
+              active
+            }
+          }
+        }
+      }
+  }
+}
+
+

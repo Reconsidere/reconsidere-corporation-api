@@ -1,0 +1,9 @@
+input MaterialInput {
+	_id: String
+	type: String
+	name: String
+	weight: Number
+	quantity: Number
+	active: Boolean
+	unity:String
+}

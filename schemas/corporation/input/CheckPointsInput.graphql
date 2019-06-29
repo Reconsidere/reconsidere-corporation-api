@@ -1,0 +1,32 @@
+input WasteGeneratedInput {
+	qrCode: [QrCodeInput]
+}
+
+input CollectionRequestedInput {
+	qrCode: [QrCodeInput]
+}
+
+input CollectionPerformedInput {
+	qrCode: [QrCodeInput]
+}
+
+input ArrivedCollectorInput {
+	qrCode: [QrCodeInput]
+}
+
+input InsortingInput {
+	qrCode: [QrCodeInput]
+}
+
+input CompleteDestinationInput {
+	qrCode: [QrCodeInput]
+}
+
+input CheckPointsInput {
+	wasteGenerated: [WasteGeneratedInput]
+	collectionRequested: [CollectionRequestedInput]
+	collectionPerformed: [CollectionPerformedInput]
+	arrivedCollector: [ArrivedCollectorInput]
+	insorting: [InsortingInput]
+	completedestination: [CompleteDestinationInput]
+}

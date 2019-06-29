@@ -60,97 +60,131 @@ const CorporationSchema = new Schema({
 						name: String,
 						weight: Number,
 						quantity: Number,
-						active: Boolean
+						active: Boolean,
+						unity: String
 					}
 				}
 			]
 		}
 	],
-	checkPoints: [
-		{
-			wastegenerated: [
-				{
-					qrCode: [
-						{
-							code: String,
-							material: {
-								type: String,
-								name: String,
-								weight: Number,
-								quantity: Number,
-								active: Boolean
-							}
+	checkPoints: {
+		wastegenerated: [
+			{
+				qrCode: [
+					{
+						code: String,
+						description: String,
+						material: {
+							type: String,
+							name: String,
+							weight: Number,
+							quantity: Number,
+							active: Boolean,
+							unity: String
 						}
-					]
-				}
-			],
-			collectionrequested: [
-				{
-					qrCode: [
-						{
-							code: String,
-							material: {
-								type: String,
-								name: String,
-								weight: Number,
-								quantity: Number,
-								active: Boolean
-							}
+					}
+				]
+			}
+		],
+		collectionrequested: [
+			{
+				qrCode: [
+					{
+						code: String,
+						description: String,
+						material: {
+							type: String,
+							name: String,
+							weight: Number,
+							quantity: Number,
+							active: Boolean,
+							unity: String
 						}
-					]
-				}
-			],
-			collectionperformed: [
-				{
-					qrCode: [
-						{
-							code: String,
-							material: {
-								type: String,
-								name: String,
-								weight: Number,
-								quantity: Number,
-								active: Boolean
-							}
+					}
+				]
+			}
+		],
+		collectionperformed: [
+			{
+				qrCode: [
+					{
+						code: String,
+						description: String,
+						material: {
+							type: String,
+							name: String,
+							weight: Number,
+							quantity: Number,
+							active: Boolean,
+							unity: String
 						}
-					]
-				}
-			],
+					}
+				]
+			}
+		],
 
-			arrivedcollector: [
-				{
-					qrCode: [
-						{
-							code: String,
-							material: {
-								type: String,
-								name: String,
-								weight: Number,
-								quantity: Number,
-								active: Boolean
-							}
+		arrivedcollector: [
+			{
+				qrCode: [
+					{
+						code: String,
+						description: String,
+						material: {
+							type: String,
+							name: String,
+							weight: Number,
+							quantity: Number,
+							active: Boolean,
+							unity: String
 						}
-					]
-				}
-			],
-			insorting: [
-				{
-					qrCode: [
-						{
-							code: String,
-							material: {
-								type: String,
-								name: String,
-								weight: Number,
-								quantity: Number,
-								active: Boolean
-							}
+					}
+				]
+			}
+		],
+		insorting: [
+			{
+				qrCode: [
+					{
+						code: String,
+						description: String,
+						material: {
+							type: String,
+							name: String,
+							weight: Number,
+							quantity: Number,
+							active: Boolean,
+							unity: String
 						}
-					]
-				}
-			],
-			completedestination: [
+					}
+				]
+			}
+		],
+		completedestination: [
+			{
+				qrCode: [
+					{
+						code: String,
+						description: String,
+						material: {
+							type: String,
+							name: String,
+							weight: Number,
+							quantity: Number,
+							active: Boolean,
+							unity: String
+						}
+					}
+				]
+			}
+		]
+	},
+	residuesRegister: [
+		{
+			departments: [
 				{
+					name: String,
+					description: String,
+					active: Boolean,
 					qrCode: [
 						{
 							code: String,
@@ -159,7 +193,8 @@ const CorporationSchema = new Schema({
 								name: String,
 								weight: Number,
 								quantity: Number,
-								active: Boolean
+								active: Boolean,
+								unity: String
 							}
 						}
 					]

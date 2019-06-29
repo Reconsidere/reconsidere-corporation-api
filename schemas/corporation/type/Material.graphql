@@ -1,0 +1,8 @@
+type Material {
+	_id: ID
+	type: String
+	name: String
+	weight: Number
+	quantity: Number
+	active: Boolean
+}

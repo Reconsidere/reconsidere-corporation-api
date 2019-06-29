@@ -9,6 +9,7 @@ const resolvers = require('./resolvers');
 const { makeExecutableSchema } = require('graphql-tools');
 const schemaPath = './schemas/index.graphql';
 
+
 const schema = makeExecutableSchema({
 	typeDefs: importSchema(schemaPath),
 	resolvers
