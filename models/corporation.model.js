@@ -52,19 +52,6 @@ const CorporationSchema = new Schema({
 			name: String,
 			description: String,
 			active: Boolean,
-			qrCode: [
-				{
-					code: String,
-					material: {
-						type: String,
-						name: String,
-						weight: Number,
-						quantity: Number,
-						active: Boolean,
-						unity: String
-					}
-				}
-			]
 		}
 	],
 	checkPoints: {
