@@ -3,6 +3,6 @@ type Mutation {
 	updateCorporation(_id: ID!, input: CorporationInput): Corporation
 	deleteCorporation(_id: ID!): Corporation
 	createorUpdateDepartment(_id: ID!, input: [DepartmentInput]): [Department]
-	createorUpdateResiduesRegister(_id: ID!, input: [ResiduesRegisterInput]): [ResiduesRegister]
+	createorUpdateResiduesRegister(_id: ID!, input: ResiduesRegisterInput): ResiduesRegister
 	createorUpdateCheckPoints(_id: ID!, input: [CheckPointsInput]): CheckPoints
 }

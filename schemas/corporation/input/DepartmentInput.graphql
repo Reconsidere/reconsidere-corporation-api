@@ -4,4 +4,5 @@ input DepartmentInput {
 	description: String
 	qrCode: [QrCodeInput]
 	active: Boolean
+	isEnable:Boolean
 }

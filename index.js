@@ -9,7 +9,6 @@ const resolvers = require('./resolvers');
 const { makeExecutableSchema } = require('graphql-tools');
 const schemaPath = './schemas/index.graphql';
 
-
 const schema = makeExecutableSchema({
 	typeDefs: importSchema(schemaPath),
 	resolvers
@@ -31,13 +30,7 @@ app.use(
 	cors(),
 	graphlHTTP({
 		schema: schema,
-		graphiql: true,
-		formatError: (error) => ({
-			message: error.message,
-			state: error.originalError && error.originalError.state,
-			locations: error.locations,
-			path: error.path
-		})
+		graphiql: true
 	})
 );
 

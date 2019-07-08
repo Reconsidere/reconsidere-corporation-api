@@ -1,3 +1,5 @@
+scalar Number
+
 type Location {
 	_id: ID
 	country: String

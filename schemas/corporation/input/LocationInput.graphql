@@ -1,3 +1,5 @@
+scalar Number
+
 input LocationInput {
 	_id: String
 	country: String

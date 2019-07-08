@@ -1,3 +1,5 @@
+scalar Number
+
 input MaterialInput {
 	_id: String
 	type: String

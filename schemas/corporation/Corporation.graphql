@@ -43,7 +43,7 @@ type Corporation {
 	providers: [Provider]
 	departments: [Department]
 	checkPoints: CheckPoints
-	residuesRegister: [ResiduesRegister]
+	residuesRegister: ResiduesRegister
 }
 
 input CorporationInput {
@@ -65,5 +65,5 @@ input CorporationInput {
 	providers: [ProviderInput]
 	departments: [DepartmentInput]
 	checkPoints: CheckPointsInput
-	residuesRegisterInput: [ResiduesRegisterInput]
+	residuesRegister: ResiduesRegisterInput
 }

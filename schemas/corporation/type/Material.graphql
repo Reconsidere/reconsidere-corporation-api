@@ -1,3 +1,5 @@
+scalar Number
+
 type Material {
 	_id: ID
 	type: String
@@ -5,4 +7,5 @@ type Material {
 	weight: Number
 	quantity: Number
 	active: Boolean
+	unity: String
 }

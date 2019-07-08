@@ -1,6 +1,33 @@
 mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const CorporationSchema = new Schema({
+
+const Material = new Schema({
+	type: String,
+	name: String,
+	weight: Number,
+	quantity: Number,
+	active: Boolean,
+	unity: String
+});
+
+const QrCode = new Schema({
+	code: String,
+	material: Material
+});
+
+const ResiduesRegisterSchema = new Schema({
+	departments: [
+		{
+			isEnable: Boolean,
+			name: String,
+			description: String,
+			active: Boolean,
+			qrCode: [ QrCode ]
+		}
+	]
+});
+
+var CorporationSchema = new Schema({
 	company: String,
 	cnpj: String,
 	tradingName: String,
@@ -52,6 +79,7 @@ const CorporationSchema = new Schema({
 			name: String,
 			description: String,
 			active: Boolean,
+			isEnable:Boolean
 		}
 	],
 	checkPoints: {
@@ -165,30 +193,7 @@ const CorporationSchema = new Schema({
 			}
 		]
 	},
-	residuesRegister: [
-		{
-			departments: [
-				{
-					name: String,
-					description: String,
-					active: Boolean,
-					qrCode: [
-						{
-							code: String,
-							material: {
-								type: String,
-								name: String,
-								weight: Number,
-								quantity: Number,
-								active: Boolean,
-								unity: String
-							}
-						}
-					]
-				}
-			]
-		}
-	]
+	residuesRegister: ResiduesRegisterSchema
 });
 
 module.exports = mongoose.model('corporation', CorporationSchema);

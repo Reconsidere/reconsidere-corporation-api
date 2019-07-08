@@ -1,6 +1,5 @@
 input QrCodeInput {
 	_id: String
 	code: String
-	description: String
 	material: MaterialInput
 }
