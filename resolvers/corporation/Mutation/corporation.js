@@ -136,6 +136,7 @@ module.exports = corporation = {
 						else {
 							corp.residuesRegister = input;
 							input.departments.forEach((department) => {
+								department.isChanged = false;
 								corp.residuesRegister.departments.qrCode = department.qrCode;
 								department.qrCode.forEach((qrCode) => {
 									corp.residuesRegister.departments.qrCode.material = qrCode.material;
@@ -157,26 +158,44 @@ module.exports = corporation = {
 				});
 			} else {
 				for (i = 0; i < input.departments.length; i++) {
-					var exist = res.residuesRegister.departments.find((x) => x._id == input.departments[i]._id);
+					var exist = await res.residuesRegister.departments.find((x) => x._id == input.departments[i]._id);
 					if (exist === undefined || exist.length <= 0) {
-						res.residuesRegister.departments.push(input.departments[i]);
-						var exec = await res.update(res).then(console.log('ok'));
+						input.departments[i].isChanged = false;
+						await res.residuesRegister.departments.push(input.departments[i]);
+						await res.update(res).then(console.log('ok push in department'));
+						res = await Corporation.findById(_id);
 					} else {
+						//verificar se o changed é true se for, verificar em em qual departamento estava o qrcode e excluir ele e inserir novo
+						//caso usuario tenha mudado o departamento e voltado para o msm fazer com que que so de um set nos dados
+						// if(input.departments[i].isChanged){
+
+						// }
+
 						for (q = 0; q < input.departments[i].qrCode.length; q++) {
-							if (input.departments[i].qrCode[q]._id) {
+							res = await Corporation.findById(_id);
+							if (
+								input.departments[i].qrCode[q]._id !== undefined &&
+								input.departments[i].qrCode[q]._id !== null
+							) {
 								res.residuesRegister.departments.forEach((department) => {
 									department.qrCode.forEach((qrCode) => {
 										if (qrCode.code === input.departments[i].qrCode[q].code) {
-											qrCode.set(input.departments[i].qrCode[q])
+											department.isChanged = false;
+											qrCode.set(input.departments[i].qrCode[q]);
 										}
 									});
 								});
-								var exec = await res.update(res).then(console.log('ok set'));
+								await res.update(res).then(console.log('ok set'));
+								res = await Corporation.findById(_id);
 							} else {
 								res.residuesRegister.departments.forEach((department) => {
-									department.qrCode.push(input.departments[i].qrCode[q]);
+									department.isChanged = false;
+									if (input.departments[i]._id == department._id) {
+										department.qrCode.push(input.departments[i].qrCode[q]);
+									}
 								});
-								var exec = await res.update(res).then(console.log('ok'));
+								await res.update(res).then(console.log('ok push to exist department'));
+								res = await Corporation.findById(_id);
 							}
 						}
 					}

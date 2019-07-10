@@ -18,7 +18,7 @@ const QrCode = new Schema({
 const ResiduesRegisterSchema = new Schema({
 	departments: [
 		{
-			isEnable: Boolean,
+			isChanged: Boolean,
 			name: String,
 			description: String,
 			active: Boolean,
@@ -79,7 +79,7 @@ var CorporationSchema = new Schema({
 			name: String,
 			description: String,
 			active: Boolean,
-			isEnable:Boolean
+			isChanged:Boolean
 		}
 	],
 	checkPoints: {
