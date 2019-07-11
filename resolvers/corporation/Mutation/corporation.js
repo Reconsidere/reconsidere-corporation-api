@@ -165,11 +165,28 @@ module.exports = corporation = {
 						await res.update(res).then(console.log('ok push in department'));
 						res = await Corporation.findById(_id);
 					} else {
-						//verificar se o changed é true se for, verificar em em qual departamento estava o qrcode e excluir ele e inserir novo
-						//caso usuario tenha mudado o departamento e voltado para o msm fazer com que que so de um set nos dados
-						// if(input.departments[i].isChanged){
-
-						// }
+						if (input.departments[i].isChanged) {
+							var existRemoved = false;
+							/*verifica se existe mudança de departamento e exclui o item que esta salvo no departamento antigo para depois inserir no novo
+							Se por acaso o usuário modificou, mas voltou ao antigo ele apenas não exclui e retorn
+							*/
+							for (y = 0; y < input.departments[i].qrCode.length; y++) {
+								res.residuesRegister.departments.forEach((department, index) => {
+									department.qrCode.forEach((qrCode) => {
+										if (!existRemoved) {
+											if (qrCode.code === input.departments[i].qrCode[y].code) {
+												if (input.departments[i]._id !== department._id) {
+												} else {
+													res.residuesRegister.departments.splice(index, 1);
+												}
+											}
+										}
+									});
+								});
+							}
+							await res.update(res).then(console.log('ok set'));
+							res = await Corporation.findById(_id);
+						}
 
 						for (q = 0; q < input.departments[i].qrCode.length; q++) {
 							res = await Corporation.findById(_id);
