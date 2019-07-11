@@ -9,6 +9,8 @@ const resolvers = require('./resolvers');
 const { makeExecutableSchema } = require('graphql-tools');
 const schemaPath = './schemas/index.graphql';
 
+
+
 const schema = makeExecutableSchema({
 	typeDefs: importSchema(schemaPath),
 	resolvers
@@ -18,6 +20,8 @@ const app = express();
 const PORT = 32546;
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/eowyn-reconsidere-corporation');
+const connection = mongoose;
+
 app.get('/', (req, res) => {
 	res.json({
 		msg: 'Welcome to GraphQL'
@@ -37,3 +41,8 @@ app.use(
 app.listen(PORT, () => {
 	console.log(`Server is listening on PORT ${PORT}`);
 });
+
+
+exports.connection = connection;
+
+
