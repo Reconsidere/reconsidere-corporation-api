@@ -1,5 +1,6 @@
 Corporation = require('../../../models/corporation.model');
 Mongoose = require('../../../index');
+Blockchain = require('../../../blockchain/blockchain');
 
 module.exports = corporation = {
 	Query: {
@@ -151,6 +152,10 @@ module.exports = corporation = {
 								corp
 									.update(corp)
 									.then((corp) => {
+										const blockchain = new Blockchain();
+										blockchain.addBlock({ residueRegister: corp.residueRegister });
+										console.log(blockchain);
+										return;
 										console.log('save new');
 										resolve(corp.residuesRegister);
 									})
@@ -162,6 +167,7 @@ module.exports = corporation = {
 						});
 					});
 				} else {
+					return;
 					for (i = 0; i < input.departments.length; i++) {
 						var exist = await res.residuesRegister.departments.find(
 							(x) => x._id == input.departments[i]._id
