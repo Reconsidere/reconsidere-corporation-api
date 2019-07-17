@@ -20,7 +20,6 @@ const app = express();
 const PORT = 32546;
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/eowyn-reconsidere-corporation');
-const connection = mongoose;
 
 app.get('/', (req, res) => {
 	res.json({
@@ -43,6 +42,5 @@ app.listen(PORT, () => {
 });
 
 
-exports.connection = connection;
 
 

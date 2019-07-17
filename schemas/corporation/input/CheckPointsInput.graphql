@@ -23,10 +23,10 @@ input CompleteDestinationInput {
 }
 
 input CheckPointsInput {
-	wasteGenerated: [WasteGeneratedInput]
-	collectionRequested: [CollectionRequestedInput]
-	collectionPerformed: [CollectionPerformedInput]
-	arrivedCollector: [ArrivedCollectorInput]
-	insorting: [InsortingInput]
-	completedestination: [CompleteDestinationInput]
+	wastegenerated: WasteGeneratedInput
+	collectionrequested: CollectionRequestedInput
+	collectionperformed: CollectionPerformedInput
+	arrivedcollector: ArrivedCollectorInput
+	insorting: InsortingInput
+	completedestination: CompleteDestinationInput
 }

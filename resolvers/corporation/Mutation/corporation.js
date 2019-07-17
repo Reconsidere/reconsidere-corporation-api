@@ -1,5 +1,4 @@
 Corporation = require('../../../models/corporation.model');
-Mongoose = require('../../../index');
 Blockchain = require('../../../blockchain/blockchain');
 
 module.exports = corporation = {
@@ -125,18 +124,19 @@ module.exports = corporation = {
 			}
 		},
 		async createorUpdateResiduesRegister(root, { _id, input }) {
+			const session = await Corporation.startSession();
 			try {
-				const session = await Mongoose.connection.startSession();
 				session.startTransaction();
 				var res = await Corporation.findById(_id);
-				var returnAwaits;
+				var returnElement;
 				if (
 					res.residuesRegister === undefined ||
 					res.residuesRegister === null ||
 					res.residuesRegister.departments === undefined ||
 					res.residuesRegister.departments.length <= 0
 				) {
-					returnAwaits = await new Promise((resolve, reject) => {
+					var elementSaved;
+					returnElement = await new Promise((resolve, reject) => {
 						Corporation.findById(_id, function(err, corp) {
 							if (!corp) console.log('ERE009');
 							else {
@@ -148,26 +148,33 @@ module.exports = corporation = {
 										corp.residuesRegister.departments.qrCode.material = qrCode.material;
 									});
 								});
+								elementSaved = input;
 								corp.residuesRegister = input;
-								corp
-									.update(corp)
-									.then((corp) => {
-										const blockchain = new Blockchain();
-										blockchain.addBlock({ residueRegister: corp.residueRegister });
-										console.log(blockchain);
-										return;
-										console.log('save new');
-										resolve(corp.residuesRegister);
-									})
-									.catch((err) => {
-										reject();
-										throw new Error('ERE009');
-									});
+								corp.update(corp).then((x) => {
+									resolve(corp);
+								});
+							}
+						});
+					});
+					/* gerando checkPoint */
+					res = await Corporation.findById(_id);
+					var element = await new Promise((resolve, reject) => {
+						res.residuesRegister.departments.forEach((department) => {
+							department.qrCode.forEach((qrCode) => {
+								res.checkPoints.wastegenerated.qrCode.push(qrCode);
+							});
+						});
+						Corporation.findById(_id, function(err, corp) {
+							if (!corp) console.log('ERE009');
+							else {
+								corp.checkPoints.wastegenerated = res.checkPoints.wastegenerated;
+								corp.update(corp).then((x) => {
+									resolve(corp);
+								});
 							}
 						});
 					});
 				} else {
-					return;
 					for (i = 0; i < input.departments.length; i++) {
 						var exist = await res.residuesRegister.departments.find(
 							(x) => x._id == input.departments[i]._id
@@ -177,6 +184,24 @@ module.exports = corporation = {
 							await res.residuesRegister.departments.push(input.departments[i]);
 							await res.update(res).then(console.log('ok push in department'));
 							res = await Corporation.findById(_id);
+
+							/* gerando checkPoint */
+							var element = await new Promise((resolve, reject) => {
+								res.residuesRegister.departments.forEach((department) => {
+									department.qrCode.forEach((qrCode) => {
+										res.checkPoints.wastegenerated.qrCode.push(qrCode);
+									});
+								});
+								Corporation.findById(_id, function(err, corp) {
+									if (!corp) console.log('ERE009');
+									else {
+										corp.checkPoints.wastegenerated = res.checkPoints.wastegenerated;
+										corp.update(corp).then((x) => {
+											resolve(corp);
+										});
+									}
+								});
+							});
 						} else {
 							if (input.departments[i].isChanged) {
 								var existRemoved = false;
@@ -210,7 +235,7 @@ module.exports = corporation = {
 								) {
 									res.residuesRegister.departments.forEach((department) => {
 										department.qrCode.forEach((qrCode) => {
-											if (qrCode.code === input.departments[i].qrCode[q].code) {
+											if (qrCode.code == input.departments[i].qrCode[q].code) {
 												department.isChanged = false;
 												qrCode.set(input.departments[i].qrCode[q]);
 												isUpdated = true;
@@ -221,6 +246,25 @@ module.exports = corporation = {
 										await res.update(res).then(console.log('ok set'));
 										res = await Corporation.findById(_id);
 										isUpdated = false;
+
+										/* gerando checkPoint */
+										var element = await new Promise((resolve, reject) => {
+											res.checkPoints.wastegenerated.qrCode.forEach((qrCode, index) => {
+												if (qrCode.code == input.departments[i].qrCode[q].code) {
+													qrCode.set(input.departments[i].qrCode[q]);
+												}
+											});
+											Corporation.findById(_id, function(err, corp) {
+												if (!corp) console.log('ERE009');
+												else {
+													corp.checkPoints.wastegenerated = res.checkPoints.wastegenerated;
+													corp.update(corp).then((x) => {
+														resolve(corp);
+													});
+												}
+											});
+										});
+										res = await Corporation.findById(_id);
 									}
 								} else {
 									res.residuesRegister.departments.forEach((department) => {
@@ -231,6 +275,29 @@ module.exports = corporation = {
 									});
 									await res.update(res).then(console.log('ok push to exist department'));
 									res = await Corporation.findById(_id);
+
+									/* gerando checkPoint */
+									var isPushed = false;
+									var element = await new Promise((resolve, reject) => {
+										res.checkPoints.wastegenerated.qrCode.forEach((qrCode, index) => {
+											if (!isPushed) {
+												res.checkPoints.wastegenerated.qrCode.push(
+													input.departments[i].qrCode[q]
+												);
+												isPushed = true;
+											}
+										});
+										Corporation.findById(_id, function(err, corp) {
+											if (!corp) console.log('ERE009');
+											else {
+												corp.checkPoints.wastegenerated = res.checkPoints.wastegenerated;
+												corp.update(corp).then((x) => {
+													resolve(corp);
+												});
+											}
+										});
+									});
+									res = await Corporation.findById(_id);
 								}
 							}
 						}
@@ -238,20 +305,17 @@ module.exports = corporation = {
 				}
 
 				await session.commitTransaction();
-				session.endSession();
+				await session.endSession();
 
-				if (returnAwaits) {
-					return returnAwaits;
-				} else {
-					console.log('resolved');
-					var res = await Corporation.findById(_id);
-					return res.residuesRegister;
-				}
+				console.log('resolved');
+				var res = await Corporation.findById(_id);
+				return res.residuesRegister;
 			} catch (error) {
+				console.log('aborting');
 				console.log(error);
 				await session.abortTransaction();
-				session.endSession();
-				throw new Error('ERE009');
+				await session.endSession();
+				return new Error('ERE009');
 			}
 		},
 		async createorUpdateCheckPoints(root, { _id, input }) {}

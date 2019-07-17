@@ -23,10 +23,10 @@ type CompleteDestination {
 }
 
 type CheckPoints {
-	wasteGenerated: [WasteGenerated]
-	collectionRequested: [CollectionRequested]
-	collectionPerformed: [CollectionPerformed]
-	arrivedCollector: [ArrivedCollector]
-	insorting: [Insorting]
-	completedestination: [CompleteDestination]
+	wastegenerated: WasteGenerated
+	collectionrequested: CollectionRequested
+	collectionperformed: CollectionPerformed
+	arrivedcollector: ArrivedCollector
+	insorting: Insorting
+	completedestination: CompleteDestination
 }
