@@ -140,16 +140,52 @@ module.exports = corporation = {
 						Corporation.findById(_id, function(err, corp) {
 							if (!corp) console.log('ERE009');
 							else {
-								corp.residuesRegister = input;
 								input.departments.forEach((department) => {
-									department.isChanged = false;
-									corp.residuesRegister.departments.qrCode = department.qrCode;
+									if (
+										res.residuesRegister === undefined ||
+										res.residuesRegister === null ||
+										res.residuesRegister.departments === undefined ||
+										res.residuesRegister.departments.length <= 0
+									) {
+										res['residuesRegister'] = new Object();
+										var depart = {
+											_id: department._id,
+											name: department.name,
+											isChanged: false,
+											description: department.description,
+											active: department.active,
+											qrCode: []
+										};
+										res['residuesRegister']['departments'] = [ depart ];
+									} else {
+										var depart = {
+											_id: department._id,
+											name: department.name,
+											isChanged: false,
+											description: department.description,
+											active: department.active,
+											qrCode: []
+										};
+										var exist = res.residuesRegister.departments.find(
+											(x) => x.name === depart.name
+										);
+										if (!exist) {
+											res.residuesRegister.departments.push(depart);
+										}
+									}
+								});
+
+								input.departments.forEach((department) => {
 									department.qrCode.forEach((qrCode) => {
-										corp.residuesRegister.departments.qrCode.material = qrCode.material;
+										res.residuesRegister.departments.forEach((departmentDB) => {
+											if (department.name === departmentDB.name) {
+												departmentDB.qrCode.push(qrCode);
+											}
+										});
 									});
 								});
-								elementSaved = input;
-								corp.residuesRegister = input;
+
+								corp.residuesRegister = res.residuesRegister;
 								corp.update(corp).then((x) => {
 									resolve(corp);
 								});
@@ -189,7 +225,9 @@ module.exports = corporation = {
 							var element = await new Promise((resolve, reject) => {
 								res.residuesRegister.departments.forEach((department) => {
 									department.qrCode.forEach((qrCode) => {
-										res.checkPoints.wastegenerated.qrCode.push(qrCode);
+										if (input.departments[i].name === department.name) {
+											res.checkPoints.wastegenerated.qrCode.push(qrCode);
+										}
 									});
 								});
 								Corporation.findById(_id, function(err, corp) {
