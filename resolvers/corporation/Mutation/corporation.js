@@ -1,5 +1,4 @@
 Corporation = require('../../../models/corporation.model');
-Blockchain = require('../../../blockchain/blockchain');
 
 module.exports = corporation = {
 	Query: {
@@ -210,6 +209,57 @@ module.exports = corporation = {
 							}
 						});
 					});
+
+					/* gerando histórico de alterações */
+					res = await Corporation.findById(_id);
+					var history = await new Promise((resolve, reject) => {
+						res.residuesRegister.departments.forEach((department) => {
+							department.qrCode.forEach((qrCode) => {
+								if (!res.transactionHistory) {
+									var value = {
+										date: new Date(),
+										code: qrCode.code,
+										description: qrCode.description,
+										material: qrCode.material
+									};
+
+									res['transactionHistory'] = new Object({
+										checkPoints: new Object({
+											wastegenerated: new Object({
+												qrCode: [ value ]
+											})
+										})
+									});
+								} else {
+									res.residuesRegister.departments.forEach((department) => {
+										department.qrCode.forEach((qrCode) => {
+											var value = {
+												date: new Date(),
+												code: qrCode.code,
+												description: qrCode.description,
+												material: qrCode.material
+											};
+											res.transactionHistory.checkPoints.wastegenerated.qrCode.push(value);
+										});
+									});
+								}
+							});
+						});
+						Corporation.findById(_id, function(err, corp) {
+							if (!corp) console.log('ERE009');
+							else {
+								if (!corp.transactionHistory) {
+									corp.transactionHistory = res.transactionHistory;
+								} else {
+									corp.transactionHistory.checkPoints.wastegenerated =
+										res.transactionHistory.checkPoints.wastegenerated;
+								}
+								corp.update(corp).then((x) => {
+									resolve(corp);
+								});
+							}
+						});
+					});
 				} else {
 					for (i = 0; i < input.departments.length; i++) {
 						var exist = await res.residuesRegister.departments.find(
@@ -240,6 +290,34 @@ module.exports = corporation = {
 									}
 								});
 							});
+
+							/* gerando histórico de alterações */
+							res = await Corporation.findById(_id);
+							var history = await new Promise((resolve, reject) => {
+								res.residuesRegister.departments.forEach((department) => {
+									department.qrCode.forEach((qrCode) => {
+										if (input.departments[i].name === department.name) {
+											var value = {
+												date: new Date(),
+												code: qrCode.code,
+												description: qrCode.description,
+												material: qrCode.material
+											};
+											Corporation.findById(_id, function(err, corp) {
+												if (!corp) console.log('ERE009');
+												else {
+													corp.transactionHistory.checkPoints.wastegenerated.qrCode.push(
+														value
+													);
+													corp.update(corp).then((x) => {});
+												}
+											});
+										}
+									});
+								});
+								resolve();
+							});
+							res = await Corporation.findById(_id);
 						} else {
 							if (input.departments[i].isChanged) {
 								var existRemoved = false;
@@ -302,6 +380,32 @@ module.exports = corporation = {
 												}
 											});
 										});
+
+										/* gerando histórico de alterações */
+										res = await Corporation.findById(_id);
+										var history = await new Promise((resolve, reject) => {
+											res.checkPoints.wastegenerated.qrCode.forEach((qrCode, index) => {
+												if (qrCode.code == input.departments[i].qrCode[q].code) {
+													var value = {
+														date: new Date(),
+														code: qrCode.code,
+														description: qrCode.description,
+														material: qrCode.material
+													};
+													Corporation.findById(_id, function(err, corp) {
+														if (!corp) console.log('ERE009');
+														else {
+															corp.transactionHistory.checkPoints.wastegenerated.qrCode.push(
+																value
+															);
+															corp.update(corp).then((x) => {});
+														}
+													});
+												}
+											});
+
+											resolve();
+										});
 										res = await Corporation.findById(_id);
 									}
 								} else {
@@ -334,6 +438,32 @@ module.exports = corporation = {
 												});
 											}
 										});
+									});
+
+									/* gerando histórico de alterações */
+									res = await Corporation.findById(_id);
+									var history = await new Promise((resolve, reject) => {
+										res.checkPoints.wastegenerated.qrCode.forEach((qrCode, index) => {
+											if (qrCode.code == input.departments[i].qrCode[q].code) {
+												var value = {
+													date: new Date(),
+													code: qrCode.code,
+													description: qrCode.description,
+													material: qrCode.material
+												};
+												Corporation.findById(_id, function(err, corp) {
+													if (!corp) console.log('ERE009');
+													else {
+														corp.transactionHistory.checkPoints.wastegenerated.qrCode.push(
+															value
+														);
+														corp.update(corp).then((x) => {});
+													}
+												});
+											}
+										});
+
+										resolve();
 									});
 									res = await Corporation.findById(_id);
 								}

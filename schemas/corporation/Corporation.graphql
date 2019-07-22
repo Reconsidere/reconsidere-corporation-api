@@ -8,6 +8,7 @@
 #import Profile  from '../corporation/type/Profile.graphql'
 #import User  from '../corporation/type/User.graphql'
 #import ResiduesRegister  from '../corporation/type/ResiduesRegister.graphql'
+#import TransactionHistory  from '../corporation/type/TransactionHistory.graphql'
 
 #import MaterialInput  from '../corporation/input/MaterialInput.graphql'
 #import QrCodeInput  from '../corporation/input/QrCodeInput.graphql'
@@ -19,6 +20,7 @@
 #import UserInput  from '../corporation/input/UserInput.graphql'
 #import ProviderInput  from '../corporation/input/ProviderInput.graphql'
 #import ResiduesRegisterInput  from '../corporation/input/ResiduesRegisterInput.graphql'
+#import TransactionHistoryInput  from '../corporation/input/TransactionHistoryInput.graphql'
 
 scalar Date
 
@@ -44,6 +46,7 @@ type Corporation {
 	departments: [Department]
 	checkPoints: CheckPoints
 	residuesRegister: ResiduesRegister
+	transactionHistory: TransactionHistory
 }
 
 input CorporationInput {
@@ -66,4 +69,5 @@ input CorporationInput {
 	departments: [DepartmentInput]
 	checkPoints: CheckPointsInput
 	residuesRegister: ResiduesRegisterInput
+	transactionHistory: TransactionHistoryInput
 }
