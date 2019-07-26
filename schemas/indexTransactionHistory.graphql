@@ -1,0 +1,3 @@
+#import TransactionHistory  from '../schemas/transactionhistory/TransactionHistory.graphql'
+#import Query from '../schemas/transactionhistory/Query.graphql'
+#import Mutation from '../schemas/transactionhistory/Mutation.graphql'

@@ -1,8 +1,6 @@
 mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-
-
 const Material = new Schema({
 	type: String,
 	name: String,
@@ -29,7 +27,7 @@ const ResiduesRegisterSchema = new Schema({
 	]
 });
 
-var CorporationSchema = new Schema({
+var CollectorSchema = new Schema({
 	company: String,
 	cnpj: String,
 	tradingName: String,
@@ -84,7 +82,6 @@ var CorporationSchema = new Schema({
 			isChanged: Boolean
 		}
 	],
-	
 	residuesRegister: ResiduesRegisterSchema,
 	scheduling: [
 		{
@@ -106,4 +103,4 @@ var CorporationSchema = new Schema({
 	]
 });
 
-module.exports = mongoose.model('corporation', CorporationSchema);
+module.exports = mongoose.model('collector', CollectorSchema);

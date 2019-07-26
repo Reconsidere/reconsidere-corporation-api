@@ -1,0 +1,75 @@
+type WasteGenerated {
+	qrCode: [QrCode]
+}
+
+type CollectionRequested {
+	qrCode: [QrCode]
+}
+
+type CollectionPerformed {
+	qrCode: [QrCode]
+}
+
+type ArrivedCollector {
+	qrCode: [QrCode]
+}
+
+type Insorting {
+	qrCode: [QrCode]
+}
+
+type CompleteDestination {
+	qrCode: [QrCode]
+}
+
+input WasteGeneratedInput {
+	qrCode: [QrCodeInput]
+}
+
+input CollectionRequestedInput {
+	qrCode: [QrCodeInput]
+}
+
+input CollectionPerformedInput {
+	qrCode: [QrCodeInput]
+}
+
+input ArrivedCollectorInput {
+	qrCode: [QrCodeInput]
+}
+
+input InsortingInput {
+	qrCode: [QrCodeInput]
+}
+
+input CompleteDestinationInput {
+	qrCode: [QrCodeInput]
+}
+
+type CheckPoint {
+	wastegenerated: WasteGenerated
+	collectionrequested: CollectionRequested
+	collectionperformed: CollectionPerformed
+	arrivedcollector: ArrivedCollector
+	insorting: Insorting
+	completedestination: CompleteDestination
+}
+
+input CheckPointInput {
+	wastegenerated: WasteGeneratedInput
+	collectionrequested: CollectionRequestedInput
+	collectionperformed: CollectionPerformedInput
+	arrivedcollector: ArrivedCollectorInput
+	insorting: InsortingInput
+	completedestination: CompleteDestinationInput
+}
+
+type TransactionHistory {
+	date: Date
+	checkPoint: CheckPoint
+}
+
+input TransactionHistoryInput {
+	date: Date
+	checkPoint: CheckPointInput
+}

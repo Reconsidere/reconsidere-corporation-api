@@ -7,5 +7,6 @@ type Query {
 	allDepartments(_id: ID!): [Department]
 	allDepartmentsNames(_id: ID!): [String]
 	allResiduesRegister(_id: ID!): ResiduesRegister
+	allCheckPoints(_id: ID!): CheckPoints
 	allSchedulings(_id: ID!): [Scheduling]
 }

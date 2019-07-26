@@ -1,0 +1,4 @@
+input TransactionHistoryInput {
+	date: Date
+    checkPoints:CheckPointsInput
+}

@@ -1,0 +1,5 @@
+input ProfileInput {
+	_id: String
+	name: String
+	access: [String]
+}

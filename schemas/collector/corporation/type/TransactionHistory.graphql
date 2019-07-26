@@ -1,0 +1,4 @@
+type TransactionHistory {
+	date: Date
+	checkPoints: CheckPoints
+}

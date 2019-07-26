@@ -1,0 +1,3 @@
+#import CheckPoint  from '../schemas/checkpoint/CheckPoint.graphql'
+#import Query from '../schemas/checkpoint/Query.graphql'
+#import Mutation from '../schemas/checkpoint/Mutation.graphql'

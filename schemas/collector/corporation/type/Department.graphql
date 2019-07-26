@@ -1,0 +1,8 @@
+type Department {
+	_id: ID
+	name: String
+	description: String
+	qrCode: [QrCode]
+	active: Boolean
+	isChanged:Boolean
+}

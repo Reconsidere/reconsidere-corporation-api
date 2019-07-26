@@ -3,21 +3,25 @@
 #import Material  from '../corporation/type/Material.graphql'
 #import QrCode  from '../corporation/type/QrCode.graphql'
 #import Department  from '../corporation/type/Department.graphql'
+#import CheckPoints, WasteGenerated, CollectionRequested, CollectionPerformed, ArrivedCollector, Insorting, CompleteDestination  from '../corporation/type/CheckPoints.graphql'
 #import Unit  from '../corporation/type/Unit.graphql'
 #import Profile  from '../corporation/type/Profile.graphql'
 #import User  from '../corporation/type/User.graphql'
 #import ResiduesRegister  from '../corporation/type/ResiduesRegister.graphql'
+#import TransactionHistory  from '../corporation/type/TransactionHistory.graphql'
 #import Scheduling, Collector  from '../corporation/type/Scheduling.graphql'
 
 #import MaterialInput  from '../corporation/input/MaterialInput.graphql'
 #import QrCodeInput  from '../corporation/input/QrCodeInput.graphql'
 #import DepartmentInput  from '../corporation/input/DepartmentInput.graphql'
+#import CheckPointsInput,WasteGeneratedInput,CollectionRequestedInput,CollectionPerformedInput,ArrivedCollectorInput,InsortingInput,CompleteDestinationInput  from '../corporation/input/CheckPointsInput.graphql'
 #import LocationInput  from '../corporation/input/LocationInput.graphql'
 #import UnitInput  from '../corporation/input/UnitInput.graphql'
 #import ProfileInput  from '../corporation/input/ProfileInput.graphql'
 #import UserInput  from '../corporation/input/UserInput.graphql'
 #import ProviderInput  from '../corporation/input/ProviderInput.graphql'
 #import ResiduesRegisterInput  from '../corporation/input/ResiduesRegisterInput.graphql'
+#import TransactionHistoryInput  from '../corporation/input/TransactionHistoryInput.graphql'
 #import SchedulingInput, CollectorInput  from '../corporation/input/SchedulingInput.graphql'
 scalar Date
 
@@ -41,7 +45,9 @@ type Corporation {
 	users: [User]
 	providers: [Provider]
 	departments: [Department]
+	checkPoints: CheckPoints
 	residuesRegister: ResiduesRegister
+	transactionHistory: TransactionHistory
 	scheduling: Scheduling
 }
 
@@ -63,6 +69,8 @@ input CorporationInput {
 	users: [UserInput]
 	providers: [ProviderInput]
 	departments: [DepartmentInput]
+	checkPoints: CheckPointsInput
 	residuesRegister: ResiduesRegisterInput
+	transactionHistory: TransactionHistoryInput
 	scheduling: SchedulingInput
 }

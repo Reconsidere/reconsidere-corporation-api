@@ -1,4 +1,6 @@
 Corporation = require('../../../models/corporation.model');
+CheckPoint = require('../../../models/checkpoint.model');
+TransactionHistory = require('../../../models/transactionhistory.model');
 
 module.exports = corporation = {
 	Query: {
@@ -15,17 +17,6 @@ module.exports = corporation = {
 		},
 		async allCorporations() {
 			return await Corporation.find();
-		},
-		async signIn(root, { email, password }) {
-			var res = await Corporation.findOne({
-				$and: [ { 'users.email': email }, { 'users.password': password } ]
-			});
-			if (!res) {
-				return null;
-			} else {
-				res.users = res.users.filter((x) => x.email === email && x.password === password);
-				return res;
-			}
 		},
 
 		async allUnits(root, { _id }) {
@@ -45,18 +36,18 @@ module.exports = corporation = {
 				return null;
 			}
 		},
-		async allCheckPoints(root, { _id }) {
-			var res = await Corporation.findById(_id);
-			if (res) {
-				return res.checkPoints;
-			} else {
-				return null;
-			}
-		},
 		async allResiduesRegister(root, { _id }) {
 			var res = await Corporation.findById(_id);
 			if (res) {
 				return res.residuesRegister;
+			} else {
+				return null;
+			}
+		},
+		async allSchedulings(root, { _id }) {
+			var res = await Corporation.findById(_id);
+			if (res) {
+				return res.scheduling;
 			} else {
 				return null;
 			}
@@ -83,9 +74,9 @@ module.exports = corporation = {
 			);
 		},
 		async deleteCorporation(root, { _id }) {
-			return await Product.findOneAndRemove({
-				_id
-			});
+			// return await Collector.findOneAndRemove({
+			// 	_id
+			// });
 		},
 		async createorUpdateDepartment(root, { _id, input }) {
 			try {
@@ -192,30 +183,32 @@ module.exports = corporation = {
 						});
 					});
 					/* gerando checkPoint */
+					var checkpoint = await CheckPoint.find();
 					res = await Corporation.findById(_id);
 					var element = await new Promise((resolve, reject) => {
 						res.residuesRegister.departments.forEach((department) => {
 							department.qrCode.forEach((qrCode) => {
-								res.checkPoints.wastegenerated.qrCode.push(qrCode);
+								checkpoint.checkPoints.wastegenerated.qrCode.push(qrCode);
 							});
 						});
-						Corporation.findById(_id, function(err, corp) {
-							if (!corp) console.log('ERE009');
+						CheckPoint.findById(_id, function(err, check) {
+							if (!check) console.log('ERE009');
 							else {
-								corp.checkPoints.wastegenerated = res.checkPoints.wastegenerated;
-								corp.update(corp).then((x) => {
-									resolve(corp);
+								check.checkPoints.wastegenerated = res.checkPoints.wastegenerated;
+								check.update(check).then((x) => {
+									resolve(check);
 								});
 							}
 						});
 					});
 
 					/* gerando histórico de alterações */
+					var transaction = TransactionHistory.find();
 					res = await Corporation.findById(_id);
 					var history = await new Promise((resolve, reject) => {
 						res.residuesRegister.departments.forEach((department) => {
 							department.qrCode.forEach((qrCode) => {
-								if (!res.transactionHistory) {
+								if (!transaction.transactionHistory) {
 									var value = {
 										date: new Date(),
 										code: qrCode.code,
@@ -223,7 +216,7 @@ module.exports = corporation = {
 										material: qrCode.material
 									};
 
-									res['transactionHistory'] = new Object({
+									transaction['transactionHistory'] = new Object({
 										checkPoints: new Object({
 											wastegenerated: new Object({
 												qrCode: [ value ]
@@ -239,23 +232,25 @@ module.exports = corporation = {
 												description: qrCode.description,
 												material: qrCode.material
 											};
-											res.transactionHistory.checkPoints.wastegenerated.qrCode.push(value);
+											transaction.transactionHistory.checkPoints.wastegenerated.qrCode.push(
+												value
+											);
 										});
 									});
 								}
 							});
 						});
-						Corporation.findById(_id, function(err, corp) {
-							if (!corp) console.log('ERE009');
+						TransactionHistory.findById(_id, function(err, trans) {
+							if (!trans) console.log('ERE009');
 							else {
-								if (!corp.transactionHistory) {
-									corp.transactionHistory = res.transactionHistory;
+								if (!trans.transactionHistory) {
+									trans.transactionHistory = res.transactionHistory;
 								} else {
-									corp.transactionHistory.checkPoints.wastegenerated =
+									trans.transactionHistory.checkPoints.wastegenerated =
 										res.transactionHistory.checkPoints.wastegenerated;
 								}
-								corp.update(corp).then((x) => {
-									resolve(corp);
+								trans.update(trans).then((x) => {
+									resolve(trans);
 								});
 							}
 						});
@@ -486,6 +481,5 @@ module.exports = corporation = {
 				return new Error('ERE009');
 			}
 		},
-		async createorUpdateCheckPoints(root, { _id, input }) {}
 	}
 };
