@@ -1,2 +1,4 @@
 type Mutation {
+    	createorUpdateTransactionHistory(input: TransactionHistoryInput): TransactionHistory
+
 }

@@ -12,6 +12,7 @@ const resolverTransactionHistory = require('./resolvers/indexTransactionHistory'
 const { makeExecutableSchema } = require('graphql-tools');
 const schemaPathCorporation = './schemas/indexCorporation.graphql';
 const schemaPathCheckPoint = './schemas/indexCheckPoint.graphql';
+const schemaPathTransactionHistory = './schemas/indexTransactionHistory.graphql';
 
 const schema = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCorporation),
@@ -21,7 +22,14 @@ const schema = makeExecutableSchema({
 const schemaCheckPoint = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCheckPoint),
 	resolvers: resolverCheckPoint
-});
+})
+
+
+const schemaTransactionHistory = makeExecutableSchema({
+	typeDefs: importSchema(schemaPathTransactionHistory),
+	resolvers: resolverTransactionHistory
+})
+
 const app = express();
 const PORT = 32546;
 mongoose.Promise = global.Promise;
@@ -38,7 +46,7 @@ app.use(
 	bodyParser.json(),
 	cors(),
 	graphlHTTP({
-		schema: [ schema , schemaCheckPoint],
+		schema: [ schema , schemaCheckPoint, schemaTransactionHistory],
 		graphiql: true
 	})
 );

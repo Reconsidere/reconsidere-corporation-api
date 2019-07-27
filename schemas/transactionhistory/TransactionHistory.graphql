@@ -1,3 +1,12 @@
+#import QrCode  from '../transactionhistory/type/QrCode.graphql'
+#import QrCodeInput  from '../transactionhistory/input/QrCodeInput.graphql'
+
+#import Material  from '../transactionhistory/type/Material.graphql'
+#import MaterialInput  from '../transactionhistory/input/MaterialInput.graphql'
+
+
+scalar Date
+
 type WasteGenerated {
 	qrCode: [QrCode]
 }
