@@ -183,23 +183,43 @@ module.exports = corporation = {
 						});
 					});
 					/* gerando checkPoint */
-					var checkpoint = await CheckPoint.find();
+					var checkpoint = await CheckPoint.find()[0];
+					var isNew = false;
 					res = await Corporation.findById(_id);
 					var element = await new Promise((resolve, reject) => {
 						res.residuesRegister.departments.forEach((department) => {
 							department.qrCode.forEach((qrCode) => {
-								checkpoint.checkPoints.wastegenerated.qrCode.push(qrCode);
+								if (!checkpoint) {
+									checkpoint = new Object({
+										wastegenerated: new Object({
+											qrCode: [ qrCode ]
+										})
+									});
+									isNew = true;
+								} else {
+									checkpoint.wastegenerated.qrCode.push(qrCode);
+								}
 							});
 						});
-						CheckPoint.findById(_id, function(err, check) {
-							if (!check) console.log('ERE009');
-							else {
-								check.checkPoints.wastegenerated = res.checkPoints.wastegenerated;
-								check.update(check).then((x) => {
-									resolve(check);
-								});
-							}
-						});
+
+						if (isNew) {
+							var returned = CheckPoint.create(checkpoint);
+						} else {
+							CheckPoint.find(function(err, check) {
+								if (!check) console.log('ERE009');
+								else {
+									if (check === undefined || check.length <= 0) {
+										check = checkpoint;
+									} else {
+										check.wastegenerated = checkpoint.wastegenerated;
+									}
+									console.log(check);
+									check.update(check).then((x) => {
+										resolve(check);
+									});
+								}
+							});
+						}
 					});
 
 					/* gerando histórico de alterações */
@@ -480,6 +500,6 @@ module.exports = corporation = {
 				await session.endSession();
 				return new Error('ERE009');
 			}
-		},
+		}
 	}
 };

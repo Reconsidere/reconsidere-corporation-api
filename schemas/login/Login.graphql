@@ -1,0 +1,44 @@
+type Profile {
+	name: String
+	access: [String]
+}
+
+type User {
+	_id: ID
+	name: String
+	email: String
+	profile: Profile
+	password: String
+	active: Boolean
+}
+
+
+
+input ProfileInput {
+	_id: String
+	name: String
+	access: [String]
+}
+
+input UserInput {
+	_id: String
+	name: String
+	email: String
+	profile: ProfileInput
+	password: String
+	active: Boolean
+}
+
+
+
+type Login {
+	_id: String
+	class: String
+	users: [User]
+}
+
+input LoginInput {
+	_id: String
+	class: String
+	users: [UserInput]
+}

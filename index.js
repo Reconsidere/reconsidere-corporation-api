@@ -13,22 +13,27 @@ const { makeExecutableSchema } = require('graphql-tools');
 const schemaPathCorporation = './schemas/indexCorporation.graphql';
 const schemaPathCheckPoint = './schemas/indexCheckPoint.graphql';
 const schemaPathTransactionHistory = './schemas/indexTransactionHistory.graphql';
+const schemaPathLogin = './schemas/indexLogin.graphql';
 
-const schema = makeExecutableSchema({
+const schemaLogin = makeExecutableSchema({
+	typeDefs: importSchema(schemaPathLogin),
+	resolvers: resolverLogin
+});
+
+const schemaCorporation = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCorporation),
-	resolvers: [ resolverCorporation, resolverLogin ]
+	resolvers: resolverCorporation
 });
 
 const schemaCheckPoint = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCheckPoint),
 	resolvers: resolverCheckPoint
-})
-
+});
 
 const schemaTransactionHistory = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathTransactionHistory),
 	resolvers: resolverTransactionHistory
-})
+});
 
 const app = express();
 const PORT = 32546;
@@ -41,12 +46,45 @@ app.get('/', (req, res) => {
 	});
 });
 app.use(
-	[ '/corporation', '/login', '/checkpoint', '/transactionhistory' ],
+	'/login',
 	bodyParser.text({ type: 'application/graphql' }),
 	bodyParser.json(),
 	cors(),
 	graphlHTTP({
-		schema: [ schema , schemaCheckPoint, schemaTransactionHistory],
+		schema: schemaLogin,
+		graphiql: true
+	})
+);
+
+app.use(
+	'/corporation',
+	bodyParser.text({ type: 'application/graphql' }),
+	bodyParser.json(),
+	cors(),
+	graphlHTTP({
+		schema: schemaCorporation,
+		graphiql: true
+	})
+);
+
+app.use(
+	'/checkpoint',
+	bodyParser.text({ type: 'application/graphql' }),
+	bodyParser.json(),
+	cors(),
+	graphlHTTP({
+		schema: schemaCheckPoint,
+		graphiql: true
+	})
+);
+
+app.use(
+	'/transactionhistory',
+	bodyParser.text({ type: 'application/graphql' }),
+	bodyParser.json(),
+	cors(),
+	graphlHTTP({
+		schema: schemaTransactionHistory,
 		graphiql: true
 	})
 );

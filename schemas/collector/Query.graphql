@@ -2,7 +2,6 @@ type Query {
 	getCollector(_id: ID!): Collector
 	getCollectorByUser(_id: ID!): Collector
 	allCollectors: [Collector]
-	signIn(email: String!, password: String!): Collector
 	allUnits(_id: ID!): [Unit]
 	allDepartments(_id: ID!): [Department]
 	allDepartmentsNames(_id: ID!): [String]

@@ -1,6 +1,6 @@
 Corporation = require('../../../models/corporation.model');
 Collector = require('../../../models/collector.model');
-module.exports = collector = {
+module.exports = login = {
 	Query: {
 		async signIn(root, { email, password }) {
 			try {
