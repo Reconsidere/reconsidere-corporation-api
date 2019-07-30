@@ -8,7 +8,6 @@ const TransactionHistorySchema = new Schema({
 				{
 					date: { type: Date, required: true, immutable: true },
 					code: { type: String, required: true, immutable: true },
-					description: { type: String, required: true, immutable: true },
 					material: {
 						type: { type: String, required: true, immutable: true },
 						name: { type: String, required: true, immutable: true },
@@ -25,7 +24,6 @@ const TransactionHistorySchema = new Schema({
 				{
 					date: { type: Date, required: true, immutable: true },
 					code: { type: String, required: true, immutable: true },
-					description: { type: String, required: true, immutable: true },
 					material: {
 						type: { type: String, required: true, immutable: true },
 						name: { type: String, required: true, immutable: true },
@@ -42,7 +40,6 @@ const TransactionHistorySchema = new Schema({
 				{
 					date: { type: Date, required: true, immutable: true },
 					code: { type: String, required: true, immutable: true },
-					description: { type: String, required: true, immutable: true },
 					material: {
 						type: { type: String, required: true, immutable: true },
 						name: { type: String, required: true, immutable: true },
@@ -59,7 +56,6 @@ const TransactionHistorySchema = new Schema({
 				{
 					date: { type: Date, required: true, immutable: true },
 					code: { type: String, required: true, immutable: true },
-					description: { type: String, required: true, immutable: true },
 					material: {
 						type: { type: String, required: true, immutable: true },
 						name: { type: String, required: true, immutable: true },
@@ -76,7 +72,6 @@ const TransactionHistorySchema = new Schema({
 				{
 					date: { type: Date, required: true, immutable: true },
 					code: { type: String, required: true, immutable: true },
-					description: { type: String, required: true, immutable: true },
 					material: {
 						type: { type: String, required: true, immutable: true },
 						name: { type: String, required: true, immutable: true },
@@ -93,7 +88,6 @@ const TransactionHistorySchema = new Schema({
 				{
 					date: { type: Date, required: true, immutable: true },
 					code: { type: String, required: true, immutable: true },
-					description: { type: String, required: true, immutable: true },
 					material: {
 						type: { type: String, required: true, immutable: true },
 						name: { type: String, required: true, immutable: true },
