@@ -33,12 +33,12 @@ input UserInput {
 
 type Login {
 	_id: String
-	class: String
+	classification: String
 	users: [User]
 }
 
 input LoginInput {
 	_id: String
-	class: String
+	classification: String
 	users: [UserInput]
 }
