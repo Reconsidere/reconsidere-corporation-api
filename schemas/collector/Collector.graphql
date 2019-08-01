@@ -7,7 +7,7 @@
 #import Profile  from '../collector/type/Profile.graphql'
 #import User  from '../collector/type/User.graphql'
 #import ResiduesRegister  from '../collector/type/ResiduesRegister.graphql'
-#import Scheduling, Collector  from '../collector/type/Scheduling.graphql'
+#import Scheduling  from '../collector/type/Scheduling.graphql'
 
 #import MaterialInput  from '../collector/input/MaterialInput.graphql'
 #import QrCodeInput  from '../collector/input/QrCodeInput.graphql'
@@ -18,7 +18,7 @@
 #import UserInput  from '../collector/input/UserInput.graphql'
 #import ProviderInput  from '../collector/input/ProviderInput.graphql'
 #import ResiduesRegisterInput  from '../collector/input/ResiduesRegisterInput.graphql'
-#import SchedulingInput, CollectorInput  from '../collector/input/SchedulingInput.graphql'
+#import SchedulingInput  from '../collector/input/SchedulingInput.graphql'
 scalar Date
 
 scalar Number
@@ -46,7 +46,7 @@ type Collector {
 }
 
 input CollectorInput {
-	_id: String
+	_id: ID
 	company: String
 	cnpj: String
 	tradingName: String

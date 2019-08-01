@@ -46,7 +46,7 @@ type Corporation {
 }
 
 input CorporationInput {
-	_id: String
+	_id: ID
 	company: String
 	cnpj: String
 	tradingName: String

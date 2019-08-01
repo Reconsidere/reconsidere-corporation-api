@@ -4,6 +4,5 @@ type Mutation {
 	deleteCollector(_id: ID!): Collector
 	createorUpdateDepartment(_id: ID!, input: [DepartmentInput]): [Department]
 	createorUpdateResiduesRegister(_id: ID!, input: ResiduesRegisterInput): ResiduesRegister
-	createorUpdateCheckPoints(_id: ID!, input: [CheckPointsInput]): CheckPoints
 	createorUpdateScheduling(_id: ID!, input: [SchedulingInput]): [Scheduling]
 }

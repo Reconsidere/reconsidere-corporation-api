@@ -6,11 +6,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const resolverCorporation = require('./resolvers/indexCorporation');
+const resolverCollector = require('./resolvers/indexCollector');
 const resolverLogin = require('./resolvers/indexLogin');
 const resolverCheckPoint = require('./resolvers/indexCheckPoint');
 const resolverTransactionHistory = require('./resolvers/indexTransactionHistory');
 const { makeExecutableSchema } = require('graphql-tools');
 const schemaPathCorporation = './schemas/indexCorporation.graphql';
+const schemaPathCollector = './schemas/indexCollector.graphql';
 const schemaPathCheckPoint = './schemas/indexCheckPoint.graphql';
 const schemaPathTransactionHistory = './schemas/indexTransactionHistory.graphql';
 const schemaPathLogin = './schemas/indexLogin.graphql';
@@ -23,6 +25,11 @@ const schemaLogin = makeExecutableSchema({
 const schemaCorporation = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCorporation),
 	resolvers: resolverCorporation
+});
+
+const schemaCollector = makeExecutableSchema({
+	typeDefs: importSchema(schemaPathCollector),
+	resolvers: resolverCollector
 });
 
 const schemaCheckPoint = makeExecutableSchema({
@@ -68,6 +75,17 @@ app.use(
 );
 
 app.use(
+	'/collector',
+	bodyParser.text({ type: 'application/graphql' }),
+	bodyParser.json(),
+	cors(),
+	graphlHTTP({
+		schema: schemaCollector,
+		graphiql: true
+	})
+);
+
+app.use(
 	'/checkpoint',
 	bodyParser.text({ type: 'application/graphql' }),
 	bodyParser.json(),
@@ -92,6 +110,5 @@ app.use(
 app.listen(PORT, () => {
 	console.log(`Server is listening on PORT ${PORT}`);
 });
-
 
 exports.mongoose = mongoose;

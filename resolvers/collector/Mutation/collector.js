@@ -37,7 +37,7 @@ module.exports = collector = {
 				}
 			);
 		},
-		async deleteCorporation(root, { _id }) {
+		async deleteCollector(root, { _id }) {
 			// return await Collector.findOneAndRemove({
 			// 	_id
 			// });
