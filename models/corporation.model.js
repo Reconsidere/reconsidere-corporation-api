@@ -90,8 +90,9 @@ var CorporationSchema = new Schema({
 		{
 			hour: Date,
 			date: Date,
+			active: Boolean,
 			collector: {
-				_idCollector: String,
+				_id: String,
 				company: String,
 				cnpj: String,
 				tradingName: String,
@@ -101,7 +102,8 @@ var CorporationSchema = new Schema({
 				class: String,
 				email: String,
 				classification: String
-			}
+			},
+			qrCode: [QrCode]
 		}
 	]
 });

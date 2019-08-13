@@ -1,18 +1,20 @@
-# type Collector {
-# 	_idCollector: String
-# 	company: String
-# 	cnpj: String
-# 	tradingName: String
-# 	active: Boolean
-# 	phone: Number
-# 	cellPhone: Number
-# 	class: String
-# 	email: String
-# 	classification: String
-# }
+type Collector {
+	_id: ID
+	company: String
+	cnpj: String
+	tradingName: String
+	active: Boolean
+	phone: Number
+	cellPhone: Number
+	class: String
+	email: String
+	classification: String
+}
 
 type Scheduling {
+	_id: ID
 	hour: Date
 	date: Date
-	#collector: Collector
+	collector: Collector
+	active:Boolean
 }

@@ -13,7 +13,7 @@ module.exports = collector = {
 				return res;
 			}
 		},
-		async allCollectors() {
+		async allCollectors(root, { _id }) {
 			return await Collector.find();
 		}
 	},

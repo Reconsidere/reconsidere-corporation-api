@@ -9,7 +9,7 @@
 #import User  from '../corporation/type/User.graphql'
 #import ResiduesRegister  from '../corporation/type/ResiduesRegister.graphql'
 #import TransactionHistory  from '../corporation/type/TransactionHistory.graphql'
-#import Scheduling, Collector  from '../corporation/type/Scheduling.graphql'
+#import Scheduling  from '../corporation/type/Scheduling.graphql'
 
 #import MaterialInput  from '../corporation/input/MaterialInput.graphql'
 #import QrCodeInput  from '../corporation/input/QrCodeInput.graphql'
@@ -22,7 +22,7 @@
 #import ProviderInput  from '../corporation/input/ProviderInput.graphql'
 #import ResiduesRegisterInput  from '../corporation/input/ResiduesRegisterInput.graphql'
 #import TransactionHistoryInput  from '../corporation/input/TransactionHistoryInput.graphql'
-#import SchedulingInput, CollectorInput  from '../corporation/input/SchedulingInput.graphql'
+#import SchedulingInput  from '../corporation/input/SchedulingInput.graphql'
 scalar Date
 
 scalar Number

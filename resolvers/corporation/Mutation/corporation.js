@@ -183,36 +183,63 @@ module.exports = corporation = {
 							}
 						});
 					});
+
 					/* gerando checkPoint */
-					var checkpoint = await CheckPoint.find()[0];
+					var checkpoint = await CheckPoint.find();
 					var isNew = false;
 					res = await Corporation.findById(_id);
-					var element = await new Promise(async (resolve, reject) => {
-						res.residuesRegister.departments.forEach((department) => {
-							department.qrCode.forEach((qrCode) => {
-								if (!checkpoint) {
+					var checkpoin = await new Promise(async (resolve, reject) => {
+						res.scheduling.forEach((scheduling) => {
+							scheduling.qrCode.forEach((qrCode) => {
+								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+									var value = {
+										code: qrCode.code,
+										description: qrCode.description,
+										material: qrCode.material
+									};
+
 									checkpoint = new Object({
-										wastegenerated: new Object({
-											qrCode: [ qrCode ]
+										collectionrequested: new Object({
+											qrCode: [ value ]
 										})
 									});
 									isNew = true;
 								} else {
-									checkpoint.wastegenerated.qrCode.push(qrCode);
+									res.scheduling.forEach((scheduling) => {
+										scheduling.qrCode.forEach((qrCode) => {
+											var value = {
+												code: qrCode.code,
+												description: qrCode.description,
+												material: qrCode.material
+											};
+
+											if (
+												checkpoint.collectionrequested === undefined ||
+												checkpoint.collectionrequested.length <= 0
+											) {
+												checkpoint = new Object({
+													collectionrequested: new Object({
+														qrCode: [ value ]
+													})
+												});
+											} else {
+												checkpoint.collectionrequested.qrCode.push(value);
+											}
+										});
+									});
 								}
 							});
 						});
-
 						if (isNew) {
 							var returned = await CheckPoint.create(checkpoint);
 						} else {
-							CheckPoint.find(function(err, check) {
+							CheckPoint.findOne(function(err, check) {
 								if (!check) console.log('ERE009');
 								else {
 									if (check === undefined || check.length <= 0) {
-										check = checkpoint;
+										check = check;
 									} else {
-										check.wastegenerated = checkpoint.wastegenerated;
+										check.collectionrequested = check.collectionrequested;
 									}
 									check.update(check).then((x) => {});
 								}
@@ -221,14 +248,19 @@ module.exports = corporation = {
 						resolve();
 					});
 
-					/* gerando histórico de alterações */
-					var transaction = TransactionHistory.find()[0];
+					/*Gerando historico */
+					var transaction = TransactionHistory.find();
 					var isNew = false;
 					res = await Corporation.findById(_id);
 					var history = await new Promise(async (resolve, reject) => {
-						res.residuesRegister.departments.forEach((department) => {
-							department.qrCode.forEach((qrCode) => {
-								if (!transaction) {
+						res.scheduling.forEach((scheduling) => {
+							scheduling.qrCode.forEach((qrCode) => {
+								if (
+									transaction === undefined ||
+									transaction === null ||
+									transaction.length <= 0 ||
+									transaction.checkPoints === undefined
+								) {
 									var value = {
 										date: new Date(),
 										code: qrCode.code,
@@ -238,22 +270,36 @@ module.exports = corporation = {
 
 									transaction = new Object({
 										checkPoints: new Object({
-											wastegenerated: new Object({
+											collectionrequested: new Object({
 												qrCode: [ value ]
 											})
 										})
 									});
 									isNew = true;
 								} else {
-									res.residuesRegister.departments.forEach((department) => {
-										department.qrCode.forEach((qrCode) => {
+									res.scheduling.forEach((scheduling) => {
+										scheduling.qrCode.forEach((qrCode) => {
 											var value = {
 												date: new Date(),
 												code: qrCode.code,
 												description: qrCode.description,
 												material: qrCode.material
 											};
-											transaction.checkPoints.wastegenerated.qrCode.push(value);
+
+											if (
+												transaction.collectionrequested === undefined ||
+												transaction.collectionrequested.length <= 0
+											) {
+												transaction = new Object({
+													checkPoints: new Object({
+														collectionrequested: new Object({
+															qrCode: [ value ]
+														})
+													})
+												});
+											} else {
+												transaction.collectionrequested.qrCode.push(value);
+											}
 										});
 									});
 								}
@@ -262,13 +308,14 @@ module.exports = corporation = {
 						if (isNew) {
 							var returned = await TransactionHistory.create(transaction);
 						} else {
-							TransactionHistory.find(function(err, trans) {
+							TransactionHistory.findOne(function(err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									if (trans === undefined || trans.length <= 0) {
 										trans = transaction;
 									} else {
-										trans.checkPoints.wastegenerated = transaction.checkPoints.wastegenerated;
+										trans.checkPoints.collectionrequested =
+											transaction.checkPoints.collectionrequested;
 									}
 									trans.update(trans).then((x) => {});
 								}
@@ -482,6 +529,251 @@ module.exports = corporation = {
 
 				var res = await Corporation.findById(_id);
 				return res.residuesRegister;
+			} catch (error) {
+				await session.abortTransaction();
+				await session.endSession();
+				console.log(error);
+				console.log('aborting');
+				return new Error('ERE009');
+			}
+		},
+		async createorUpdateScheduling(root, { _id, input }) {
+			const session = await mongoose.startSession();
+			try {
+				session.startTransaction();
+				var res = await Corporation.findById(_id);
+
+				if (res.scheduling === undefined || res.scheduling.length <= 0) {
+					returnElement = await new Promise((resolve, reject) => {
+						Corporation.findById(_id, function(err, corp) {
+							if (!corp) console.log('ERE009');
+							else {
+								input.forEach((scheduling) => {
+									if (res.scheduling === undefined || res.scheduling.length <= 0) {
+										res.scheduling = [ scheduling ];
+									} else {
+										res.scheduling.push(scheduling);
+									}
+								});
+							}
+
+							corp.scheduling = res.scheduling;
+							corp.update(corp).then((x) => {
+								resolve(corp);
+							});
+						});
+					});
+
+					/* gerando checkPoint */
+					var checkpoint = await CheckPoint.find();
+					var isNew = false;
+					res = await Corporation.findById(_id);
+					var checkpoin = await new Promise(async (resolve, reject) => {
+						res.scheduling.forEach((scheduling) => {
+							scheduling.qrCode.forEach((qrCode) => {
+								console.log(checkpoint);
+								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+									var value = {
+										code: qrCode.code,
+										description: qrCode.description,
+										material: qrCode.material
+									};
+
+									checkpoint = new Object({
+										collectionrequested: new Object({
+											qrCode: [ value ]
+										})
+									});
+									isNew = true;
+								} else {
+									res.scheduling.forEach((scheduling) => {
+										scheduling.qrCode.forEach((qrCode) => {
+											var value = {
+												code: qrCode.code,
+												description: qrCode.description,
+												material: qrCode.material
+											};
+
+											if (
+												checkpoint.collectionrequested === undefined ||
+												checkpoint.collectionrequested.length <= 0
+											) {
+												checkpoint = new Object({
+													collectionrequested: new Object({
+														qrCode: [ value ]
+													})
+												});
+											} else {
+												checkpoint.collectionrequested.qrCode.push(value);
+											}
+										});
+									});
+								}
+							});
+						});
+						if (isNew) {
+							var returned = await CheckPoint.create(checkpoint);
+						} else {
+							CheckPoint.findOne(function(err, check) {
+								if (!check) {
+									console.log('ERE009');
+								} else {
+									if (check === undefined || check.length <= 0) {
+										check = check;
+									} else {
+										check.collectionrequested = check.collectionrequested;
+									}
+									check.update(check).then((x) => {});
+								}
+							});
+						}
+						resolve();
+					});
+
+					/* gerando histórico de alterações */
+					var transaction = TransactionHistory.find();
+					var isNew = false;
+					res = await Corporation.findById(_id);
+					var history = await new Promise(async (resolve, reject) => {
+						res.scheduling.forEach((scheduling) => {
+							scheduling.qrCode.forEach((qrCode) => {
+								if (
+									transaction === undefined ||
+									transaction === null ||
+									transaction.length <= 0 ||
+									transaction.checkPoints === undefined
+								) {
+									var value = {
+										date: new Date(),
+										code: qrCode.code,
+										description: qrCode.description,
+										material: qrCode.material
+									};
+
+									transaction = new Object({
+										checkPoints: new Object({
+											collectionrequested: new Object({
+												qrCode: [ value ]
+											})
+										})
+									});
+									isNew = true;
+								} else {
+									res.scheduling.forEach((scheduling) => {
+										scheduling.qrCode.forEach((qrCode) => {
+											var value = {
+												date: new Date(),
+												code: qrCode.code,
+												description: qrCode.description,
+												material: qrCode.material
+											};
+
+											if (
+												transaction.collectionrequested === undefined ||
+												transaction.collectionrequested.length <= 0
+											) {
+												transaction = new Object({
+													checkPoints: new Object({
+														collectionrequested: new Object({
+															qrCode: [ value ]
+														})
+													})
+												});
+											} else {
+												transaction.collectionrequested.qrCode.push(value);
+											}
+										});
+									});
+								}
+							});
+						});
+						if (isNew) {
+							var returned = await TransactionHistory.create(transaction);
+						} else {
+							TransactionHistory.findOne(function(err, trans) {
+								if (!trans) console.log('ERE009');
+								else {
+									if (trans === undefined || trans.length <= 0) {
+										trans = transaction;
+									} else {
+										trans.checkPoints.collectionrequested =
+											transaction.checkPoints.collectionrequested;
+									}
+									trans.update(trans).then((x) => {});
+								}
+							});
+						}
+						resolve();
+					});
+				} else {
+					for (i = 0; i < input.length; i++) {
+						var exist = await res.scheduling.find((x) => x._id == input[i]._id);
+
+						if (exist === undefined) {
+							//input.departments[i].isChanged = false;
+							await res.scheduling.push(input[i]);
+							await res.update(res).then(console.log('ok push scheduling'));
+						} else {
+							exist.set(input[i]);
+							await res.update(res).then(console.log('ok set scheduling'));
+						}
+						res = await Corporation.findById(_id);
+
+						/* gerando checkPoint */
+						var checkpoint = await CheckPoint.findOne();
+						var element = await new Promise((resolve, reject) => {
+							for (x = 0; x < input[i].qrCode.length; x++) {
+								var existQr = undefined;
+								for (y = 0; y < checkpoint.collectionrequested.qrCode.length; y++) {
+									if (checkpoint.collectionrequested.qrCode[y].code === input[i].qrCode[x].code) {
+										existQr = checkpoint.collectionrequested.qrCode[y];
+									}
+								}
+								if (existQr) {
+									existQr.set(input[i].qrCode[x]);
+								} else {
+									checkpoint.collectionrequested.qrCode.push(input[i].qrCode[x]);
+								}
+							}
+
+							CheckPoint.findOne(function(err, check) {
+								if (!check) console.log('ERE009');
+								else {
+									check.collectionrequested = checkpoint.collectionrequested;
+									check.update(check).then((x) => {
+										resolve();
+									});
+								}
+							});
+						});
+
+						/* gerando histórico de alterações */
+						var transaction = await TransactionHistory.findOne();
+						var element = await new Promise((resolve, reject) => {
+							for (x = 0; x < input[i].qrCode.length; x++) {
+								transaction.checkPoints.collectionrequested.qrCode.push(input[i].qrCode[x]);
+							}
+
+							TransactionHistory.findOne(function(err, trans) {
+								if (!trans) console.log('ERE009');
+								else {
+									trans.checkPoints.collectionrequested = transaction.checkPoints.collectionrequested;
+									trans.update(trans).then((x) => {
+										resolve();
+									});
+								}
+							});
+						});
+						res = await Corporation.findById(_id);
+					}
+				}
+
+				await session.commitTransaction();
+				await session.endSession();
+				console.log('resolved');
+
+				var res = await Corporation.findById(_id);
+				return res.scheduling;
 			} catch (error) {
 				await session.abortTransaction();
 				await session.endSession();

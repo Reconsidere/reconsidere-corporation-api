@@ -1,18 +1,21 @@
-# input CollectorInput {
-# 	_idCollector: String
-# 	company: String
-# 	cnpj: String
-# 	tradingName: String
-# 	active: Boolean
-# 	phone: Number
-# 	cellPhone: Number
-# 	class: String
-# 	email: String
-# 	classification: String
-# }
+input CollectorInput {
+	_id: ID
+	company: String
+	cnpj: String
+	tradingName: String
+	active: Boolean
+	phone: Number
+	cellPhone: Number
+	class: String
+	email: String
+	classification: String
+}
 
 input SchedulingInput {
+	_id: ID
 	hour: Date
 	date: Date
-	#collector: CollectorInput
+	collector: CollectorInput
+	active:Boolean
+	qrCode:[QrCodeInput]
 }

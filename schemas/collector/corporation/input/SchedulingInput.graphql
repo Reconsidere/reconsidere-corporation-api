@@ -1,5 +1,5 @@
 input CollectorInput {
-	_idCollector: String
+	_id: String
 	company: String
 	cnpj: String
 	tradingName: String

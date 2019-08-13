@@ -87,8 +87,9 @@ var CollectorSchema = new Schema({
 		{
 			hour: Date,
 			date: Date,
+			active: Boolean,
 			collector: {
-				_idCollector: String,
+				_id: String,
 				company: String,
 				cnpj: String,
 				tradingName: String,
