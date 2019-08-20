@@ -5,14 +5,14 @@ const { importSchema } = require('graphql-import');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
-const resolverCorporation = require('./resolvers/indexCorporation');
+const { makeExecutableSchema } = require('graphql-tools');
 const resolverCollector = require('./resolvers/indexCollector');
+const resolverCorporation = require('./resolvers/indexCorporation');
 const resolverLogin = require('./resolvers/indexLogin');
 const resolverCheckPoint = require('./resolvers/indexCheckPoint');
 const resolverTransactionHistory = require('./resolvers/indexTransactionHistory');
-const { makeExecutableSchema } = require('graphql-tools');
-const schemaPathCorporation = './schemas/indexCorporation.graphql';
 const schemaPathCollector = './schemas/indexCollector.graphql';
+const schemaPathCorporation = './schemas/indexCorporation.graphql';
 const schemaPathCheckPoint = './schemas/indexCheckPoint.graphql';
 const schemaPathTransactionHistory = './schemas/indexTransactionHistory.graphql';
 const schemaPathLogin = './schemas/indexLogin.graphql';
@@ -22,15 +22,16 @@ const schemaLogin = makeExecutableSchema({
 	resolvers: resolverLogin
 });
 
+const schemaCollector = makeExecutableSchema({
+	typeDefs: importSchema(schemaPathCollector),
+	resolvers: resolverCollector
+});
+
 const schemaCorporation = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCorporation),
 	resolvers: resolverCorporation
 });
 
-const schemaCollector = makeExecutableSchema({
-	typeDefs: importSchema(schemaPathCollector),
-	resolvers: resolverCollector
-});
 
 const schemaCheckPoint = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCheckPoint),

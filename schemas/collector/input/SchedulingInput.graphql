@@ -1,4 +1,4 @@
-input CollectorInput {
+input CollectorSchedulingInput {
 	_id: ID
 	company: String
 	cnpj: String
@@ -15,7 +15,7 @@ input SchedulingInput {
 	_id: ID
 	hour: Date
 	date: Date
-	collector: CollectorInput
+	collector: CollectorSchedulingInput
 	active:Boolean
 	qrCode:[QrCodeInput]
 }
