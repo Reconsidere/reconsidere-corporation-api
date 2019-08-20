@@ -1,5 +1,0 @@
-input UnitInput {
-	_id: String
-	name: String
-	location: LocationInput
-}

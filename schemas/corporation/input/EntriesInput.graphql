@@ -1,0 +1,30 @@
+#import QrCodeInput  from '../input/QrCodeInput.graphql'
+
+
+input PurchaseInput {
+	date: Date
+	name: String
+	cost: Number
+	typeEntrie: String
+	quantity: Number
+	weight: Number
+	amount: Number
+	qrCode: QrCodeInput
+}
+
+input SaleInput {
+	date: Date
+	name: String
+	cost: Number
+	typeEntrie: String
+	quantity: Number
+	weight: Number
+	amount: Number
+	qrCode: QrCodeInput
+}
+
+input EntriesInput {
+	_id: String
+	purchase: [PurchaseInput]
+	sale: [SaleInput]
+}

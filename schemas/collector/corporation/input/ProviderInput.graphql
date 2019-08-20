@@ -1,4 +1,0 @@
-input ProviderInput {
-	_id: String
-	providerId: String
-}

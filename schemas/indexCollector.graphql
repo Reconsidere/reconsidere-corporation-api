@@ -1,3 +1,3 @@
-#import Collector, Location, Unit, Profile, User, Department, ResiduesRegister, QrCode, Material, Scheduling  from '../schemas/collector/Collector.graphql'
+#import Collector, Location, Unit, Profile, User, Department, ResiduesRegister, QrCode, Material, Scheduling, Entries  from '../schemas/collector/Collector.graphql'
 #import Query from '../schemas/collector/Query.graphql'
 #import Mutation from '../schemas/collector/Mutation.graphql'

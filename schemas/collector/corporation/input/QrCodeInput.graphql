@@ -1,5 +1,0 @@
-input QrCodeInput {
-	_id: String
-	code: String
-	material: MaterialInput
-}

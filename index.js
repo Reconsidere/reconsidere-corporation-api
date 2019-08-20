@@ -62,6 +62,16 @@ app.use(
 		graphiql: true
 	})
 );
+app.use(
+	'/collector',
+	bodyParser.text({ type: 'application/graphql' }),
+	bodyParser.json(),
+	cors(),
+	graphlHTTP({
+		schema: schemaCollector,
+		graphiql: true
+	})
+);
 
 app.use(
 	'/corporation',
@@ -74,16 +84,6 @@ app.use(
 	})
 );
 
-app.use(
-	'/collector',
-	bodyParser.text({ type: 'application/graphql' }),
-	bodyParser.json(),
-	cors(),
-	graphlHTTP({
-		schema: schemaCollector,
-		graphiql: true
-	})
-);
 
 app.use(
 	'/checkpoint',

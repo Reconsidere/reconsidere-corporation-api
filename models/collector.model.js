@@ -1,8 +1,9 @@
 mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 const Material = new Schema({
-	type: String,
+	type: { type: String },
 	name: String,
 	weight: Number,
 	quantity: Number,
@@ -23,6 +24,33 @@ const ResiduesRegisterSchema = new Schema({
 			description: String,
 			active: Boolean,
 			qrCode: [ QrCode ]
+		}
+	]
+});
+
+const Entries = new Schema({
+	purchase: [
+		{
+			date: Date,
+			name: String,
+			cost: Number,
+			typeEntrie: String,
+			quantity: Number,
+			weight: Number,
+			amount: Number,
+			qrCode: QrCode
+		}
+	],
+	sale: [
+		{
+			date: Date,
+			name: String,
+			cost: Number,
+			typeEntrie: String,
+			quantity: Number,
+			weight: Number,
+			amount: Number,
+			qrCode: QrCode
 		}
 	]
 });
@@ -82,6 +110,7 @@ var CollectorSchema = new Schema({
 			isChanged: Boolean
 		}
 	],
+
 	residuesRegister: ResiduesRegisterSchema,
 	scheduling: [
 		{
@@ -99,9 +128,11 @@ var CollectorSchema = new Schema({
 				class: String,
 				email: String,
 				classification: String
-			}
+			},
+			qrCode: [ QrCode ]
 		}
-	]
+	],
+	entries: Entries
 });
 
 module.exports = mongoose.model('collector', CollectorSchema);

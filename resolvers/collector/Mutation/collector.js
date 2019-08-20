@@ -1,4 +1,6 @@
 Collector = require('../../../models/collector.model');
+CheckPoint = require('../../../models/checkpoint.model');
+TransactionHistory = require('../../../models/transactionhistory.model');
 
 module.exports = collector = {
 	Query: {

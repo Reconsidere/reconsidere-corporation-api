@@ -1,8 +1,0 @@
-input UserInput {
-	_id: String
-	name: String
-	email: String
-	profile: ProfileInput
-	password: String
-	active: Boolean
-}

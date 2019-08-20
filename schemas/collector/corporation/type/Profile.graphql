@@ -1,4 +1,0 @@
-type Profile {
-	name: String
-	access: [String]
-}

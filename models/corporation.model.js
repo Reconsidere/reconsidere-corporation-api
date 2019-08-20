@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 
 const Material = new Schema({
-	type: String,
+	type: { type: String },
 	name: String,
 	weight: Number,
 	quantity: Number,
@@ -25,6 +25,33 @@ const ResiduesRegisterSchema = new Schema({
 			description: String,
 			active: Boolean,
 			qrCode: [ QrCode ]
+		}
+	]
+});
+
+const Entries = new Schema({
+	purchase: [
+		{
+			date: Date,
+			name: String,
+			cost: Number,
+			typeEntrie: String,
+			quantity: Number,
+			weight: Number,
+			amount: Number,
+			qrCode: QrCode
+		}
+	],
+	sale: [
+		{
+			date: Date,
+			name: String,
+			cost: Number,
+			typeEntrie: String,
+			quantity: Number,
+			weight: Number,
+			amount: Number,
+			qrCode: QrCode
 		}
 	]
 });
@@ -84,7 +111,7 @@ var CorporationSchema = new Schema({
 			isChanged: Boolean
 		}
 	],
-	
+
 	residuesRegister: ResiduesRegisterSchema,
 	scheduling: [
 		{
@@ -103,9 +130,10 @@ var CorporationSchema = new Schema({
 				email: String,
 				classification: String
 			},
-			qrCode: [QrCode]
+			qrCode: [ QrCode ]
 		}
-	]
+	],
+	entries:Entries
 });
 
 module.exports = mongoose.model('corporation', CorporationSchema);

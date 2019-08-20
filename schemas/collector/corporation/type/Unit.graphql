@@ -1,5 +1,0 @@
-type Unit {
-	_id: ID
-	name: String
-	location: Location
-}

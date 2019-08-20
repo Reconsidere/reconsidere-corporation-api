@@ -11,7 +11,7 @@ module.exports = corporation = {
 		async getCorporationByUser(root, { _id }) {
 			var res = await Corporation.findOne({ 'users._id': _id });
 			if (!res) {
-				return null;
+				return undefined;
 			} else {
 				return res;
 			}
@@ -25,7 +25,7 @@ module.exports = corporation = {
 			if (res) {
 				return res.units;
 			} else {
-				return null;
+				return undefined;
 			}
 		},
 
@@ -34,7 +34,7 @@ module.exports = corporation = {
 			if (res) {
 				return res.departments;
 			} else {
-				return null;
+				return undefined;
 			}
 		},
 		async allResiduesRegister(root, { _id }) {
@@ -42,7 +42,7 @@ module.exports = corporation = {
 			if (res) {
 				return res.residuesRegister;
 			} else {
-				return null;
+				return undefined;
 			}
 		},
 		async allSchedulings(root, { _id }) {
@@ -50,7 +50,15 @@ module.exports = corporation = {
 			if (res) {
 				return res.scheduling;
 			} else {
-				return null;
+				return undefined;
+			}
+		},
+		async allEntries(root, { _id }) {
+			var res = await Corporation.findById(_id);
+			if (res) {
+				return res.entries;
+			} else {
+				return undefined;
 			}
 		}
 	},
@@ -781,6 +789,8 @@ module.exports = corporation = {
 				console.log('aborting');
 				return new Error('ERE009');
 			}
-		}
+		},
+
+		async createorUpdateEntries(root, { _id, input }) {}
 	}
 };

@@ -17,4 +17,5 @@ type Scheduling {
 	date: Date
 	collector: Collector
 	active:Boolean
+	qrCode:[QrCode]
 }

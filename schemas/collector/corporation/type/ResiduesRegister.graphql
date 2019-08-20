@@ -1,3 +1,0 @@
-type ResiduesRegister {
-	departments: [Department]
-}

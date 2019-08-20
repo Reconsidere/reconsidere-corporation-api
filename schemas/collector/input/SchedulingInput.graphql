@@ -17,4 +17,5 @@ input SchedulingInput {
 	date: Date
 	collector: CollectorInput
 	active:Boolean
+	qrCode:[QrCodeInput]
 }
