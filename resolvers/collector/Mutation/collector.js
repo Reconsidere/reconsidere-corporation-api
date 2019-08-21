@@ -1,7 +1,7 @@
 var Collector = require('../../../models/collector.model');
 var CheckPoint = require('../../../models/checkpoint.model');
 var TransactionHistory = require('../../../models/transactionhistory.model');
-var mongoose = require('../../../index');
+mongoose = require('mongoose');
 
 module.exports = collector = {
 	Query: {
