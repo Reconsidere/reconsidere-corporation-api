@@ -207,7 +207,7 @@ module.exports = corporation = {
 									};
 
 									checkpoint = new Object({
-										collectionrequested: new Object({
+										wastegenerated: new Object({
 											qrCode: [ value ]
 										})
 									});
@@ -222,16 +222,16 @@ module.exports = corporation = {
 											};
 
 											if (
-												checkpoint.collectionrequested === undefined ||
-												checkpoint.collectionrequested.length <= 0
+												checkpoint.wastegenerated === undefined ||
+												checkpoint.wastegenerated.length <= 0
 											) {
 												checkpoint = new Object({
-													collectionrequested: new Object({
+													wastegenerated: new Object({
 														qrCode: [ value ]
 													})
 												});
 											} else {
-												checkpoint.collectionrequested.qrCode.push(value);
+												checkpoint.wastegenerated.qrCode.push(value);
 											}
 										});
 									});
@@ -247,7 +247,7 @@ module.exports = corporation = {
 									if (check === undefined || check.length <= 0) {
 										check = check;
 									} else {
-										check.collectionrequested = check.collectionrequested;
+										check.wastegenerated = check.wastegenerated;
 									}
 									check.update(check).then((x) => {});
 								}
@@ -278,7 +278,7 @@ module.exports = corporation = {
 
 									transaction = new Object({
 										checkPoints: new Object({
-											collectionrequested: new Object({
+											wastegenerated: new Object({
 												qrCode: [ value ]
 											})
 										})
@@ -295,18 +295,18 @@ module.exports = corporation = {
 											};
 
 											if (
-												transaction.collectionrequested === undefined ||
-												transaction.collectionrequested.length <= 0
+												transaction.wastegenerated === undefined ||
+												transaction.wastegenerated.length <= 0
 											) {
 												transaction = new Object({
 													checkPoints: new Object({
-														collectionrequested: new Object({
+														wastegenerated: new Object({
 															qrCode: [ value ]
 														})
 													})
 												});
 											} else {
-												transaction.collectionrequested.qrCode.push(value);
+												transaction.wastegenerated.qrCode.push(value);
 											}
 										});
 									});
@@ -322,8 +322,7 @@ module.exports = corporation = {
 									if (trans === undefined || trans.length <= 0) {
 										trans = transaction;
 									} else {
-										trans.checkPoints.collectionrequested =
-											transaction.checkPoints.collectionrequested;
+										trans.checkPoints.wastegenerated = transaction.checkPoints.wastegenerated;
 									}
 									trans.update(trans).then((x) => {});
 								}
@@ -791,6 +790,174 @@ module.exports = corporation = {
 			}
 		},
 
-		async createorUpdateEntries(root, { _id, input }) {}
+		async createorUpdateEntries(root, { _id, input }) {
+			const session = await mongoose.startSession();
+			try {
+				session.startTransaction();
+				var res = await Corporation.findById(_id);
+				if (res.entries === undefined || res.entries === null) {
+					returnElement = await new Promise((resolve, reject) => {
+						Corporation.findById(_id, function(err, corp) {
+							if (!corp) console.log('ERE009');
+							else {
+								if (res.entries === undefined || res.entries === null) {
+									res.entries = input;
+								} else {
+									res.entries = input;
+								}
+							}
+
+							corp.entries = res.entries;
+							corp.update(corp).then((x) => {
+								resolve(corp);
+							});
+						});
+					});
+					/* gerando checkPoint */
+					var checkpoint = await CheckPoint.find();
+					var isNew = false;
+					res = await Corporation.findById(_id);
+					var checkpoin = await new Promise(async (resolve, reject) => {
+						res.scheduling.forEach((scheduling) => {
+							scheduling.qrCode.forEach((qrCode) => {
+								console.log(checkpoint);
+								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+									var value = {
+										code: qrCode.code,
+										description: qrCode.description,
+										material: qrCode.material
+									};
+
+									checkpoint = new Object({
+										collectionrequested: new Object({
+											qrCode: [ value ]
+										})
+									});
+									isNew = true;
+								} else {
+									res.scheduling.forEach((scheduling) => {
+										scheduling.qrCode.forEach((qrCode) => {
+											var value = {
+												code: qrCode.code,
+												description: qrCode.description,
+												material: qrCode.material
+											};
+
+											if (
+												checkpoint.collectionrequested === undefined ||
+												checkpoint.collectionrequested.length <= 0
+											) {
+												checkpoint = new Object({
+													collectionrequested: new Object({
+														qrCode: [ value ]
+													})
+												});
+											} else {
+												checkpoint.collectionrequested.qrCode.push(value);
+											}
+										});
+									});
+								}
+							});
+						});
+						if (isNew) {
+							var returned = await CheckPoint.create(checkpoint);
+						} else {
+							CheckPoint.findOne(function(err, check) {
+								if (!check) {
+									console.log('ERE009');
+								} else {
+									if (check === undefined || check.length <= 0) {
+										check = check;
+									} else {
+										check.collectionrequested = check.collectionrequested;
+									}
+									check.update(check).then((x) => {});
+								}
+							});
+						}
+						resolve();
+					});
+				} else {
+					if (input.sale !== undefined || input.sale.length > 0) {
+						for (i = 0; i < input.sale.length; i++) {
+							var exist = await res.entries.sale.find((x) => x._id == input.sale[i]._id);
+							if (exist === undefined) {
+								//input.departments[i].isChanged = false;
+								await res.entries.sale.push(input.sale[i]);
+								await res.update(res).then(console.log('ok push entries sale'));
+							} else {
+								exist.set(input.sale[i]);
+								await res.update(res).then(console.log('ok set entries sale'));
+							}
+							res = await Corporation.findById(_id);
+
+							/* gerando checkPoint */
+							var checkpoint = await CheckPoint.findOne();
+							var element = await new Promise((resolve, reject) => {
+								for (x = 0; x < input.sale[i].qrCode.length; x++) {
+									var existQr = undefined;
+									for (y = 0; y < checkpoint.collectionperformed.qrCode.length; y++) {
+										if (
+											checkpoint.collectionperformed.qrCode[y].code ===
+											input.sale[i].qrCode[x].code
+										) {
+											existQr = checkpoint.collectionperformed.qrCode[y];
+										}
+									}
+									if (existQr) {
+										existQr.set(input.sale[i].qrCode[x]);
+									} else {
+										checkpoint.collectionperformed.qrCode.push(input.sale[i].qrCode[x]);
+									}
+								}
+
+								CheckPoint.findOne(function(err, check) {
+									if (!check) console.log('ERE009');
+									else {
+										check.collectionperformed = checkpoint.collectionperformed;
+										check.update(check).then((x) => {
+											resolve();
+										});
+									}
+								});
+							});
+
+							/* gerando histórico de alterações */
+							var transaction = await TransactionHistory.findOne();
+							var element = await new Promise((resolve, reject) => {
+								for (x = 0; x < input.sale[i].qrCode.length; x++) {
+									transaction.checkPoints.collectionperformed.qrCode.push(input.sale[i].qrCode[x]);
+								}
+
+								TransactionHistory.findOne(function(err, trans) {
+									if (!trans) console.log('ERE009');
+									else {
+										trans.checkPoints.collectionperformed =
+											transaction.checkPoints.collectionperformed;
+										trans.update(trans).then((x) => {
+											resolve();
+										});
+									}
+								});
+							});
+							res = await Corporation.findById(_id);
+						}
+					}
+				}
+				await session.commitTransaction();
+				await session.endSession();
+				console.log('resolved');
+
+				var res = await Corporation.findById(_id);
+				return res.entries;
+			} catch (error) {
+				await session.abortTransaction();
+				await session.endSession();
+				console.log(error);
+				console.log('aborting');
+				return new Error('ERE009');
+			}
+		}
 	}
 };
