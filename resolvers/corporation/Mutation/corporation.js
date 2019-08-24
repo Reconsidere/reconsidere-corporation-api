@@ -899,7 +899,7 @@ module.exports = corporation = {
 					});
 
 					/* gerando histórico de alterações */
-					var transaction = await TransactionHistory.find();
+					var transaction = await TransactionHistory.findOne();
 					var isNew = false;
 					res = await Corporation.findById(_id);
 					var history = await new Promise(async (resolve, reject) => {
@@ -911,8 +911,7 @@ module.exports = corporation = {
 							res.entries.sale.forEach((sale) => {
 								if (
 									transaction === undefined ||
-									transaction === null ||
-									transaction.checkPoints === undefined
+									transaction === null
 								) {
 									var value = {
 										date: new Date(),
@@ -933,12 +932,12 @@ module.exports = corporation = {
 										var value = {
 											date: new Date(),
 											code: sale.qrCode.code,
-											material: qrCode.material
+											material: sale.qrCode.material
 										};
 
 										if (
-											transaction.collectionperformed === undefined ||
-											transaction.collectionperformed.length <= 0
+											transaction.checkPoints.collectionperformed === undefined ||
+											transaction.checkPoints.collectionperformed.length <= 0
 										) {
 											transaction = new Object({
 												checkPoints: new Object({
@@ -948,7 +947,7 @@ module.exports = corporation = {
 												})
 											});
 										} else {
-											transaction.collectionperformed.qrCode.push(value);
+											transaction.checkPoints.collectionperformed.qrCode.push(value);
 										}
 									});
 								}
@@ -961,8 +960,7 @@ module.exports = corporation = {
 							res.entries.purchase.forEach((purchase) => {
 								if (
 									transaction === undefined ||
-									transaction === null ||
-									transaction.checkPoints === undefined
+									transaction === null
 								) {
 									var value = {
 										date: new Date(),
@@ -983,12 +981,12 @@ module.exports = corporation = {
 										var value = {
 											date: new Date(),
 											code: purchase.qrCode.code,
-											material: qrCode.material
+											material: purchase.qrCode.material
 										};
 
 										if (
-											transaction.collectionperformed === undefined ||
-											transaction.collectionperformed.length <= 0
+											transaction.checkPoints.collectionperformed === undefined ||
+											transaction.checkPoints.collectionperformed.length <= 0
 										) {
 											transaction = new Object({
 												checkPoints: new Object({
@@ -998,7 +996,7 @@ module.exports = corporation = {
 												})
 											});
 										} else {
-											transaction.collectionperformed.qrCode.push(value);
+											transaction.checkPoints.collectionperformed.qrCode.push(value);
 										}
 									});
 								}
@@ -1010,7 +1008,7 @@ module.exports = corporation = {
 							TransactionHistory.findOne(function(err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
-									if (trans === undefined || trans.length <= 0) {
+									if (trans === undefined || trans === null) {
 										trans = transaction;
 									} else {
 										trans.checkPoints.collectionperformed =
