@@ -2,6 +2,7 @@
 
 
 input PurchaseInput {
+	_id: String
 	date: Date
 	name: String
 	cost: Number
@@ -13,6 +14,7 @@ input PurchaseInput {
 }
 
 input SaleInput {
+	_id: String
 	date: Date
 	name: String
 	cost: Number

@@ -8,11 +8,13 @@ const cors = require('cors');
 const { makeExecutableSchema } = require('graphql-tools');
 const resolverCollector = require('./resolvers/indexCollector');
 const resolverCorporation = require('./resolvers/indexCorporation');
+const resolverProvider = require('./resolvers/indexProvider');
 const resolverLogin = require('./resolvers/indexLogin');
 const resolverCheckPoint = require('./resolvers/indexCheckPoint');
 const resolverTransactionHistory = require('./resolvers/indexTransactionHistory');
 const schemaPathCollector = './schemas/indexCollector.graphql';
 const schemaPathCorporation = './schemas/indexCorporation.graphql';
+const schemaPathProvider = './schemas/indexProvider.graphql';
 const schemaPathCheckPoint = './schemas/indexCheckPoint.graphql';
 const schemaPathTransactionHistory = './schemas/indexTransactionHistory.graphql';
 const schemaPathLogin = './schemas/indexLogin.graphql';
@@ -32,6 +34,10 @@ const schemaCorporation = makeExecutableSchema({
 	resolvers: resolverCorporation
 });
 
+const schemaProvider = makeExecutableSchema({
+	typeDefs: importSchema(schemaPathProvider),
+	resolvers: resolverProvider
+});
 
 const schemaCheckPoint = makeExecutableSchema({
 	typeDefs: importSchema(schemaPathCheckPoint),
@@ -85,6 +91,16 @@ app.use(
 	})
 );
 
+app.use(
+	'/provider',
+	bodyParser.text({ type: 'application/graphql' }),
+	bodyParser.json(),
+	cors(),
+	graphlHTTP({
+		schema: schemaProvider,
+		graphiql: true
+	})
+);
 
 app.use(
 	'/checkpoint',

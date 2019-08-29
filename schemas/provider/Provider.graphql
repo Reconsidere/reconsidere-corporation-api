@@ -1,0 +1,48 @@
+#import Location  from '../corporation/type/Location.graphql'
+#import Unit  from '../corporation/type/Unit.graphql'
+#import Profile  from '../corporation/type/Profile.graphql'
+#import User  from '../corporation/type/User.graphql'
+
+#import LocationInput  from '../corporation/input/LocationInput.graphql'
+#import UnitInput  from '../corporation/input/UnitInput.graphql'
+#import ProfileInput  from '../corporation/input/ProfileInput.graphql'
+#import UserInput  from '../corporation/input/UserInput.graphql'
+scalar Date
+
+scalar Number
+
+type Provider {
+	_id: ID
+	company: String
+	cnpj: String
+	tradingName: String
+	active: Boolean
+	class: String
+	phone: Number
+	email: String
+	classification: String
+	cellPhone: Number
+	creationDate: Date
+	activationDate: Date
+	verificationDate: Date
+	units: [Unit]
+	users: [User]
+}
+
+input ProviderInput {
+	_id: ID
+	company: String
+	cnpj: String
+	tradingName: String
+	active: Boolean
+	class: String
+	phone: Number
+	email: String
+	classification: String
+	cellPhone: Number
+	creationDate: Date
+	activationDate: Date
+	verificationDate: Date
+	units: [UnitInput]
+	users: [UserInput]
+}

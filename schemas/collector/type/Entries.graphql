@@ -2,6 +2,7 @@
 
 
 type Purchase {
+	_id: String
 	date: Date
 	name: String
 	cost: Number
@@ -13,6 +14,7 @@ type Purchase {
 }
 
 type Sale {
+	_id: String
 	date: Date
 	name: String
 	cost: Number

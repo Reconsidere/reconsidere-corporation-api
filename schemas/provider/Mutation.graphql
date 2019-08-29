@@ -1,0 +1,4 @@
+type Mutation {
+	createorUpdateProvider(input: [ProviderInput]): [Provider]
+	deleteProvider(_id: ID!): Provider
+}
