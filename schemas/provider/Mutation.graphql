@@ -1,4 +1,4 @@
 type Mutation {
-	createorUpdateProvider(input: [ProviderInput]): [Provider]
+	createorUpdateProvider(_id: ID!, typeCorporation: String, input: [ProviderInput]): [Provider]
 	deleteProvider(_id: ID!): Provider
 }

@@ -43,11 +43,6 @@ var ProviderSchema = new Schema({
 			active: Boolean
 		}
 	],
-	providers: [
-		{
-			providerId: String
-		}
-	]
 });
 
 module.exports = mongoose.model('provider', ProviderSchema);
