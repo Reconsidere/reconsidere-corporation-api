@@ -1,6 +1,59 @@
 mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const Material = new Schema({
+	type: { type: String },
+	name: String,
+	weight: Number,
+	quantity: Number,
+	active: Boolean,
+	unity: String
+});
+
+const QrCode = new Schema({
+	code: String,
+	material: Material
+});
+
+const ResiduesRegisterSchema = new Schema({
+	departments: [
+		{
+			isChanged: Boolean,
+			name: String,
+			description: String,
+			active: Boolean,
+			qrCode: [ QrCode ]
+		}
+	]
+});
+
+const Entries = new Schema({
+	purchase: [
+		{
+			date: Date,
+			name: String,
+			cost: Number,
+			typeEntrie: String,
+			quantity: Number,
+			weight: Number,
+			amount: Number,
+			qrCode: QrCode
+		}
+	],
+	sale: [
+		{
+			date: Date,
+			name: String,
+			cost: Number,
+			typeEntrie: String,
+			quantity: Number,
+			weight: Number,
+			amount: Number,
+			qrCode: QrCode
+		}
+	]
+});
+
 var ProviderSchema = new Schema({
 	company: String,
 	cnpj: String,
@@ -43,6 +96,43 @@ var ProviderSchema = new Schema({
 			active: Boolean
 		}
 	],
+	myProviders: [
+		{
+			providerId: String
+		}
+	],
+	departments: [
+		{
+			name: String,
+			description: String,
+			active: Boolean,
+			isChanged: Boolean
+		}
+	],
+
+	residuesRegister: ResiduesRegisterSchema,
+	scheduling: [
+		{
+			hour: Date,
+			date: Date,
+			active: Boolean,
+			collector: {
+				_id: String,
+				company: String,
+				cnpj: String,
+				tradingName: String,
+				active: Boolean,
+				phone: Number,
+				cellPhone: Number,
+				class: String,
+				email: String,
+				classification: String
+			},
+			qrCode: [ QrCode ]
+		}
+	],
+	entries:Entries
 });
+
 
 module.exports = mongoose.model('provider', ProviderSchema);

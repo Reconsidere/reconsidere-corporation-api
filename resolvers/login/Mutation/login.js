@@ -1,5 +1,6 @@
 Corporation = require('../../../models/corporation.model');
 Collector = require('../../../models/collector.model');
+Provider = require('../../../models/provider.model');
 module.exports = login = {
 	Query: {
 		async signIn(root, { email, password }) {
@@ -14,6 +15,15 @@ module.exports = login = {
 				}
 
 				res = await Collector.findOne({
+					$and: [ { 'users.email': email }, { 'users.password': password } ]
+				});
+				if (!res) {
+				} else {
+					res.users = res.users.filter((x) => x.email === email && x.password === password);
+					return res;
+				}
+
+				res = await Provider.findOne({
 					$and: [ { 'users.email': email }, { 'users.password': password } ]
 				});
 				if (!res) {

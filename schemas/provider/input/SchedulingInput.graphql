@@ -1,0 +1,21 @@
+input CollectorSchedulingInput {
+	_id: ID
+	company: String
+	cnpj: String
+	tradingName: String
+	active: Boolean
+	phone: Number
+	cellPhone: Number
+	class: String
+	email: String
+	classification: String
+}
+
+input SchedulingInput {
+	_id: ID
+	hour: Date
+	date: Date
+	collector: CollectorSchedulingInput
+	active:Boolean
+	qrCode:[QrCodeInput]
+}

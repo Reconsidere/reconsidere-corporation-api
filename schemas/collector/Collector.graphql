@@ -1,5 +1,5 @@
 #import Location  from '../collector/type/Location.graphql'
-#import Provider  from '../collector/type/Provider.graphql'
+#import MyProviders  from '../collector/type/MyProviders.graphql'
 #import Material  from '../collector/type/Material.graphql'
 #import QrCode  from '../collector/type/QrCode.graphql'
 #import Department  from '../collector/type/Department.graphql'
@@ -17,7 +17,7 @@
 #import UnitInput  from '../collector/input/UnitInput.graphql'
 #import ProfileInput  from '../collector/input/ProfileInput.graphql'
 #import UserInput  from '../collector/input/UserInput.graphql'
-#import ProviderInput  from '../collector/input/ProviderInput.graphql'
+#import MyProvidersInput  from '../collector/input/MyProvidersInput.graphql'
 #import ResiduesRegisterInput  from '../collector/input/ResiduesRegisterInput.graphql'
 #import SchedulingInput  from '../collector/input/SchedulingInput.graphql'
 #import EntriesInput  from '../collector/input/EntriesInput.graphql'
@@ -41,7 +41,7 @@ type Collector {
 	verificationDate: Date
 	units: [Unit]
 	users: [User]
-	providers: [Provider]
+	myProviders: [MyProviders]
 	departments: [Department]
 	residuesRegister: ResiduesRegister
 	scheduling: Scheduling
@@ -64,7 +64,7 @@ input CollectorInput {
 	verificationDate: Date
 	units: [UnitInput]
 	users: [UserInput]
-	providers: [ProviderInput]
+	myProviders: [MyProvidersInput]
 	departments: [DepartmentInput]
 	residuesRegister: ResiduesRegisterInput
 	scheduling: SchedulingInput

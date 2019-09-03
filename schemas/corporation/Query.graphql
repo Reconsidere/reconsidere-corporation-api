@@ -8,4 +8,5 @@ type Query {
 	allResiduesRegister(_id: ID!): ResiduesRegister
 	allSchedulings(_id: ID!): [Scheduling]
 	allEntries(_id: ID!): Entries
+	allProvidersId(_id: ID!): [MyProviders]
 }

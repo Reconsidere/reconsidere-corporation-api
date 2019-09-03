@@ -1,3 +1,3 @@
-#import Provider, Location, Unit, Profile, User  from '../schemas/provider/Provider.graphql'
+#import Provider, Location, Unit, Profile, User, Department, ResiduesRegister, QrCode, Material, Scheduling, Entries r  from '../schemas/provider/Provider.graphql'
 #import Query from '../schemas/provider/Query.graphql'
 #import Mutation from '../schemas/provider/Mutation.graphql'

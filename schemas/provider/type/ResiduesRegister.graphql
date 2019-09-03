@@ -1,0 +1,3 @@
+type ResiduesRegister {
+	departments: [Department]
+}

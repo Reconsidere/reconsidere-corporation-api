@@ -1,5 +1,5 @@
 #import Location  from '../corporation/type/Location.graphql'
-#import Provider  from '../corporation/type/Provider.graphql'
+#import MyProviders  from '../corporation/type/MyProviders.graphql'
 #import Material  from '../corporation/type/Material.graphql'
 #import QrCode  from '../corporation/type/QrCode.graphql'
 #import Department  from '../corporation/type/Department.graphql'
@@ -17,7 +17,7 @@
 #import UnitInput  from '../corporation/input/UnitInput.graphql'
 #import ProfileInput  from '../corporation/input/ProfileInput.graphql'
 #import UserInput  from '../corporation/input/UserInput.graphql'
-#import ProviderInput  from '../corporation/input/ProviderInput.graphql'
+#import MyProvidersInput  from '../corporation/input/MyProvidersInput.graphql'
 #import ResiduesRegisterInput  from '../corporation/input/ResiduesRegisterInput.graphql'
 #import SchedulingInput  from '../corporation/input/SchedulingInput.graphql'
 #import EntriesInput  from '../corporation/input/EntriesInput.graphql'
@@ -41,7 +41,7 @@ type Corporation {
 	verificationDate: Date
 	units: [Unit]
 	users: [User]
-	providers: [Provider]
+	myProviders: [MyProviders]
 	departments: [Department]
 	residuesRegister: ResiduesRegister
 	scheduling: Scheduling
@@ -64,7 +64,7 @@ input CorporationInput {
 	verificationDate: Date
 	units: [UnitInput]
 	users: [UserInput]
-	providers: [ProviderInput]
+	myProviders: [MyProvidersInput]
 	departments: [DepartmentInput]
 	residuesRegister: ResiduesRegisterInput
 	scheduling: SchedulingInput

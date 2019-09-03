@@ -1,4 +1,4 @@
-type Provider {
+type MyProviders {
 	_id: ID
 	providerId: String
 }

@@ -98,7 +98,7 @@ var CorporationSchema = new Schema({
 			active: Boolean
 		}
 	],
-	providers: [
+	myProviders: [
 		{
 			providerId: String
 		}

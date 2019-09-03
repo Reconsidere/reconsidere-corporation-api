@@ -60,6 +60,14 @@ module.exports = corporation = {
 			} else {
 				return undefined;
 			}
+		},
+		async allProvidersId(root, { _id }) {
+			var res = await Corporation.findById(_id);
+			if (res) {
+				return res.myProviders;
+			} else {
+				return undefined;
+			}
 		}
 	},
 	Mutation: {

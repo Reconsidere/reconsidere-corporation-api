@@ -1,12 +1,27 @@
-#import Location  from '../corporation/type/Location.graphql'
-#import Unit  from '../corporation/type/Unit.graphql'
-#import Profile  from '../corporation/type/Profile.graphql'
-#import User  from '../corporation/type/User.graphql'
+#import Location  from '../provider/type/Location.graphql'
+#import MyProviders  from '../provider/type/MyProviders.graphql'
+#import Material  from '../provider/type/Material.graphql'
+#import QrCode  from '../provider/type/QrCode.graphql'
+#import Department  from '../provider/type/Department.graphql'
+#import Unit  from '../provider/type/Unit.graphql'
+#import Profile  from '../provider/type/Profile.graphql'
+#import User  from '../provider/type/User.graphql'
+#import ResiduesRegister  from '../provider/type/ResiduesRegister.graphql'
+#import Scheduling  from '../provider/type/Scheduling.graphql'
+#import Entries  from '../provider/type/Entries.graphql'
 
-#import LocationInput  from '../corporation/input/LocationInput.graphql'
-#import UnitInput  from '../corporation/input/UnitInput.graphql'
-#import ProfileInput  from '../corporation/input/ProfileInput.graphql'
-#import UserInput  from '../corporation/input/UserInput.graphql'
+#import MaterialInput  from '../provider/input/MaterialInput.graphql'
+#import QrCodeInput  from '../provider/input/QrCodeInput.graphql'
+#import DepartmentInput  from '../provider/input/DepartmentInput.graphql'
+#import LocationInput  from '../provider/input/LocationInput.graphql'
+#import UnitInput  from '../provider/input/UnitInput.graphql'
+#import ProfileInput  from '../provider/input/ProfileInput.graphql'
+#import UserInput  from '../provider/input/UserInput.graphql'
+#import MyProvidersInput  from '../provider/input/MyProvidersInput.graphql'
+#import ResiduesRegisterInput  from '../provider/input/ResiduesRegisterInput.graphql'
+#import SchedulingInput  from '../provider/input/SchedulingInput.graphql'
+#import EntriesInput  from '../provider/input/EntriesInput.graphql'
+
 scalar Date
 
 scalar Number
@@ -27,6 +42,11 @@ type Provider {
 	verificationDate: Date
 	units: [Unit]
 	users: [User]
+	myProviders: [MyProviders]
+	departments: [Department]
+	residuesRegister: ResiduesRegister
+	scheduling: Scheduling
+	entries: Entries
 }
 
 input ProviderInput {
@@ -45,4 +65,9 @@ input ProviderInput {
 	verificationDate: Date
 	units: [UnitInput]
 	users: [UserInput]
+	myProviders: [MyProvidersInput]
+	departments: [DepartmentInput]
+	residuesRegister: ResiduesRegisterInput
+	scheduling: SchedulingInput
+	entries: EntriesInput
 }

@@ -3,4 +3,10 @@ type Query {
 	getProviderByUser(_id: ID!): Provider
 	allProviders: [Provider]
 	allUnits(_id: ID!): [Unit]
+	allDepartments(_id: ID!): [Department]
+	allDepartmentsNames(_id: ID!): [String]
+	allResiduesRegister(_id: ID!): ResiduesRegister
+	allSchedulings(_id: ID!): [Scheduling]
+	allEntries(_id: ID!): Entries
+	allProvidersId(_id: ID!):  [MyProviders]
 }

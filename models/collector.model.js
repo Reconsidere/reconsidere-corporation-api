@@ -97,7 +97,7 @@ var CollectorSchema = new Schema({
 			active: Boolean
 		}
 	],
-	providers: [
+	myProviders: [
 		{
 			providerId: String
 		}
@@ -132,7 +132,7 @@ var CollectorSchema = new Schema({
 			qrCode: [ QrCode ]
 		}
 	],
-	entries: Entries
+	entries:Entries
 });
 
 module.exports = mongoose.model('collector', CollectorSchema);

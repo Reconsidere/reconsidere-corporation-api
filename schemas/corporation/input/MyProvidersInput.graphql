@@ -1,4 +1,4 @@
-input ProviderInput {
+input MyProvidersInput {
 	_id: String
 	providerId: String
 }
