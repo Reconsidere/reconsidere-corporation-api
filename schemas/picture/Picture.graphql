@@ -1,23 +1,31 @@
-input FileInput {
-	name: String
-	type: String
-	size: Int
-}
+scalar Date
 
-type File {
-	name: String
-	type: String
-	size: Int
-}
+# input FileInput {
+# 	lastModified: Int
+# 	lastModifiedDate: Date
+# 	name: String
+# 	size: Int
+# 	type: String
+# 	webkitRelativePath: String
+# }
+
+# type File {
+# 	lastModified: Int
+# 	lastModifiedDate: Date
+# 	name: String
+# 	size: Int
+# 	type: String
+# 	webkitRelativePath: String
+# }
 
 type Picture {
-	image: File
+	file: String
 	name: String
 	extension: String
 }
 
 input PictureInput {
-	image: FileInput
+	file: String
 	name: String
 	extension: String
 }

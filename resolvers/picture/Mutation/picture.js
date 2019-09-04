@@ -13,9 +13,8 @@ module.exports = picture = {
 				}
 			});
 
-            console.log(input);
-			var buf = new Buffer(input.image, 'base64');
-			fs.writeFile(`${path}/${input.name}`, buf, 0, buffer.length, null, function(err) {
+			var base64Data = input.file.split(';base64,').pop();
+			fs.writeFile(`${path}/${input.name}`, base64Data, { encoding: 'base64' }, function(err) {
 				if (err) {
 					console.log(err);
 					throw new Error('ERE009');
