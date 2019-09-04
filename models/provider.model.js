@@ -55,6 +55,7 @@ const Entries = new Schema({
 });
 
 var ProviderSchema = new Schema({
+	picture: String,
 	company: String,
 	cnpj: String,
 	tradingName: String,
@@ -70,6 +71,7 @@ var ProviderSchema = new Schema({
 	units: [
 		{
 			name: String,
+			picture: String,
 			location: {
 				country: String,
 				state: String,

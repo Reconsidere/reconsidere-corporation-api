@@ -64,6 +64,7 @@ var CorporationSchema = new Schema({
 	class: String,
 	phone: Number,
 	email: String,
+	picture: String,
 	classification: String,
 	cellPhone: Number,
 	creationDate: Date,
@@ -72,6 +73,7 @@ var CorporationSchema = new Schema({
 	units: [
 		{
 			name: String,
+			picture: String,
 			location: {
 				country: String,
 				state: String,

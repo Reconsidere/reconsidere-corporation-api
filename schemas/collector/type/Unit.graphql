@@ -1,5 +1,6 @@
 type Unit {
 	_id: ID
 	name: String
+	picture: String
 	location: Location
 }

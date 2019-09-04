@@ -4,15 +4,18 @@ const express = require('express');
 const { importSchema } = require('graphql-import');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const {graphqlUploadExpress}  = require('graphql-upload');
 
 const { makeExecutableSchema } = require('graphql-tools');
 const resolverCollector = require('./resolvers/indexCollector');
+const resolverPicture = require('./resolvers/indexPicture');
 const resolverCorporation = require('./resolvers/indexCorporation');
 const resolverProvider = require('./resolvers/indexProvider');
 const resolverLogin = require('./resolvers/indexLogin');
 const resolverCheckPoint = require('./resolvers/indexCheckPoint');
 const resolverTransactionHistory = require('./resolvers/indexTransactionHistory');
 const schemaPathCollector = './schemas/indexCollector.graphql';
+const schemaPathPicture = './schemas/indexPicture.graphql';
 const schemaPathCorporation = './schemas/indexCorporation.graphql';
 const schemaPathProvider = './schemas/indexProvider.graphql';
 const schemaPathCheckPoint = './schemas/indexCheckPoint.graphql';
@@ -49,6 +52,11 @@ const schemaTransactionHistory = makeExecutableSchema({
 	resolvers: resolverTransactionHistory
 });
 
+const schemaPicture = makeExecutableSchema({
+	typeDefs: importSchema(schemaPathPicture),
+	resolvers: resolverPicture
+});
+
 const app = express();
 const PORT = 32546;
 mongoose.Promise = global.Promise;
@@ -59,6 +67,19 @@ app.get('/', (req, res) => {
 		msg: 'Welcome to GraphQL'
 	});
 });
+
+app.use(express.static('/reconsidere-corp/images'));
+
+app.use(
+	'/reconsidere/images',
+	graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
+	cors(),
+	graphlHTTP({
+		schema: schemaPicture,
+		graphiql: true
+	})
+);
+
 app.use(
 	'/login',
 	bodyParser.text({ type: 'application/graphql' }),

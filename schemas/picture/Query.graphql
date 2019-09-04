@@ -1,0 +1,3 @@
+type Query {
+	allPictures: [Picture]
+}

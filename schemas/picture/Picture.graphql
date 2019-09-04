@@ -1,0 +1,23 @@
+input FileInput {
+	name: String
+	type: String
+	size: Int
+}
+
+type File {
+	name: String
+	type: String
+	size: Int
+}
+
+type Picture {
+	image: File
+	name: String
+	extension: String
+}
+
+input PictureInput {
+	image: FileInput
+	name: String
+	extension: String
+}

@@ -1,5 +1,6 @@
 input UnitInput {
 	_id: String
+	picture: String
 	name: String
 	location: LocationInput
 }

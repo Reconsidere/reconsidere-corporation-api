@@ -28,6 +28,7 @@ scalar Number
 
 type Provider {
 	_id: ID
+	picture: String
 	company: String
 	cnpj: String
 	tradingName: String
@@ -51,6 +52,7 @@ type Provider {
 
 input ProviderInput {
 	_id: ID
+	picture: String
 	company: String
 	cnpj: String
 	tradingName: String

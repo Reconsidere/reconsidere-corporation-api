@@ -1,0 +1,3 @@
+type Mutation {
+	uploadImage(_id: ID, input: PictureInput!): Picture
+}

@@ -27,6 +27,7 @@ scalar Number
 
 type Corporation {
 	_id: ID
+	picture: String
 	company: String
 	cnpj: String
 	tradingName: String
@@ -50,6 +51,7 @@ type Corporation {
 
 input CorporationInput {
 	_id: ID
+	picture: String
 	company: String
 	cnpj: String
 	tradingName: String

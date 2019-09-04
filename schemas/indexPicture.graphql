@@ -1,0 +1,3 @@
+#import Picture  from '../schemas/picture/Picture.graphql'
+#import Query from '../schemas/picture/Query.graphql'
+#import Mutation from '../schemas/picture/Mutation.graphql'

@@ -56,6 +56,7 @@ const Entries = new Schema({
 });
 
 var CollectorSchema = new Schema({
+	picture: String,
 	company: String,
 	cnpj: String,
 	tradingName: String,
@@ -71,6 +72,7 @@ var CollectorSchema = new Schema({
 	units: [
 		{
 			name: String,
+			picture: String,
 			location: {
 				country: String,
 				state: String,

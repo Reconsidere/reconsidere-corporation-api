@@ -27,6 +27,7 @@ scalar Number
 
 type Collector {
 	_id: ID
+	picture: String
 	company: String
 	cnpj: String
 	tradingName: String
@@ -50,6 +51,7 @@ type Collector {
 
 input CollectorInput {
 	_id: ID
+	picture: String
 	company: String
 	cnpj: String
 	tradingName: String
