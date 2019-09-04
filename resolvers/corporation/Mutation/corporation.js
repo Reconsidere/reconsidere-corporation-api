@@ -200,14 +200,17 @@ module.exports = corporation = {
 						});
 					});
 
+
+
+					
 					/* gerando checkPoint */
-					var checkpoint = await CheckPoint.find();
+					var checkpoint = await CheckPoint.find()[0];
 					var isNew = false;
 					res = await Corporation.findById(_id);
 					var checkpoin = await new Promise(async (resolve, reject) => {
-						res.scheduling.forEach((scheduling) => {
-							scheduling.qrCode.forEach((qrCode) => {
-								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+						res.residuesRegister.departments.forEach((department) => {
+							department.qrCode.forEach((qrCode) => {
+								if (!checkpoint) {
 									var value = {
 										code: qrCode.code,
 										material: qrCode.material
@@ -220,8 +223,8 @@ module.exports = corporation = {
 									});
 									isNew = true;
 								} else {
-									res.scheduling.forEach((scheduling) => {
-										scheduling.qrCode.forEach((qrCode) => {
+									res.residuesRegister.departments.forEach((department) => {
+										department.qrCode.forEach((qrCode) => {
 											var value = {
 												code: qrCode.code,
 												material: qrCode.material
@@ -263,17 +266,13 @@ module.exports = corporation = {
 					});
 
 					/*Gerando historico */
-					var transaction = await TransactionHistory.find();
+					var transaction = await TransactionHistory.find()[0];
 					var isNew = false;
 					res = await Corporation.findById(_id);
 					var history = await new Promise(async (resolve, reject) => {
-						res.scheduling.forEach((scheduling) => {
-							scheduling.qrCode.forEach((qrCode) => {
-								if (
-									transaction === undefined ||
-									transaction === null ||
-									transaction.checkPoints === undefined
-								) {
+						res.residuesRegister.departments.forEach((department) => {
+							department.qrCode.forEach((qrCode) => {
+								if (!transaction) {
 									var value = {
 										date: new Date(),
 										code: qrCode.code,
@@ -289,8 +288,8 @@ module.exports = corporation = {
 									});
 									isNew = true;
 								} else {
-									res.scheduling.forEach((scheduling) => {
-										scheduling.qrCode.forEach((qrCode) => {
+									res.residuesRegister.departments.forEach((department) => {
+										department.qrCode.forEach((qrCode) => {
 											var value = {
 												date: new Date(),
 												code: qrCode.code,
