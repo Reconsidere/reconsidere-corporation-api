@@ -94,14 +94,12 @@ module.exports = provider = {
 							if (err) throw new Error('ERE009');
 						});
 					} else {
-						var res = await Provider.find();
 						var id;
 						for (var x = 0; input[i].users.length > x; x++) {
+							var res = await Provider.findOne({ email: input[i].users[x].email });
 							id = undefined;
-							var existEmail = res.find((x) => x.email === input[i].users[x].email);
-							if (!existEmail) {
-								res.push(input[i]);
-								await res.update(res).then((x) => {
+							if (!res) {
+								var returned = await Provider.create(input[i]).then((x) => {
 									id = x._id;
 								});
 								addID(_id, id, typeCorporation);
@@ -1206,7 +1204,7 @@ async function addID(_id, id, typeCorporation) {
 		providerId: id
 	};
 	if (typeCorporation === Classification.Collector) {
-		var collector = Collector.findById(_id);
+		var collector = await Collector.findById(_id);
 		if (collector.myProviders === undefined || collector.myProviders.length <= 0) {
 			collector['myProviders'] = [ object ];
 		} else {
@@ -1220,7 +1218,7 @@ async function addID(_id, id, typeCorporation) {
 			}
 		});
 	} else if (typeCorporation === Classification.Provider) {
-		var provider = Provider.findById(_id);
+		var provider = await Provider.findById(_id);
 		if (provider.myProviders === undefined || provider.myProviders.length <= 0) {
 			provider['myProviders'] = [ object ];
 		} else {
@@ -1234,7 +1232,7 @@ async function addID(_id, id, typeCorporation) {
 			}
 		});
 	} else {
-		var corporation = Corporation.findById(_id);
+		var corporation = await Corporation.findById(_id);
 		if (corporation.myProviders === undefined || corporation.myProviders.length <= 0) {
 			corporation['myProviders'] = [ object ];
 		} else {
