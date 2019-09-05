@@ -205,9 +205,9 @@ module.exports = collector = {
 					var isNew = false;
 					res = await Collector.findById(_id);
 					var checkpoin = await new Promise(async (resolve, reject) => {
-						res.scheduling.forEach((scheduling) => {
-							scheduling.qrCode.forEach((qrCode) => {
-								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+						res.residuesRegister.departments.forEach((department) => {
+							department.qrCode.forEach((qrCode) => {
+								if (!checkpoint) {
 									var value = {
 										code: qrCode.code,
 										material: qrCode.material
@@ -220,8 +220,8 @@ module.exports = collector = {
 									});
 									isNew = true;
 								} else {
-									res.scheduling.forEach((scheduling) => {
-										scheduling.qrCode.forEach((qrCode) => {
+									res.residuesRegister.departments.forEach((department) => {
+										department.qrCode.forEach((qrCode) => {
 											var value = {
 												code: qrCode.code,
 												material: qrCode.material
@@ -267,8 +267,8 @@ module.exports = collector = {
 					var isNew = false;
 					res = await Collector.findById(_id);
 					var history = await new Promise(async (resolve, reject) => {
-						res.scheduling.forEach((scheduling) => {
-							scheduling.qrCode.forEach((qrCode) => {
+						res.residuesRegister.departments.forEach((department) => {
+							department.qrCode.forEach((qrCode) => {
 								if (
 									transaction === undefined ||
 									transaction === null ||
@@ -289,8 +289,8 @@ module.exports = collector = {
 									});
 									isNew = true;
 								} else {
-									res.scheduling.forEach((scheduling) => {
-										scheduling.qrCode.forEach((qrCode) => {
+									res.residuesRegister.departments.forEach((department) => {
+										department.qrCode.forEach((qrCode) => {
 											var value = {
 												date: new Date(),
 												code: qrCode.code,

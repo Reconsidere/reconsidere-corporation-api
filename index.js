@@ -4,7 +4,7 @@ const express = require('express');
 const { importSchema } = require('graphql-import');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const {graphqlUploadExpress}  = require('graphql-upload');
+const { graphqlUploadExpress } = require('graphql-upload');
 
 const { makeExecutableSchema } = require('graphql-tools');
 const resolverCollector = require('./resolvers/indexCollector');
@@ -70,9 +70,17 @@ app.get('/', (req, res) => {
 
 app.use(express.static('/reconsidere-corp/images'));
 
+var jsonParser = bodyParser.json({ limit: '10mb', type: 'application/json' });
+var urlencodedParser = bodyParser.urlencoded({
+	extended: true,
+	limit: '10mb',
+	type: 'application/x-www-form-urlencoding'
+});
+
 app.use(
 	'/reconsidere/images',
-	graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }),
+	jsonParser,
+	urlencodedParser,
 	cors(),
 	graphlHTTP({
 		schema: schemaPicture,
