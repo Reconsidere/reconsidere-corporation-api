@@ -13,7 +13,8 @@ const Material = new Schema({
 
 const QrCode = new Schema({
 	code: String,
-	material: Material
+	date: Date,
+	material: Material,
 });
 
 const ResiduesRegisterSchema = new Schema({

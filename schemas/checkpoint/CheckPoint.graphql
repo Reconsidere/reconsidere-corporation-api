@@ -4,6 +4,7 @@
 
 #import MaterialInput  from '../checkpoint/input/MaterialInput.graphql'
 #import QrCodeInput  from '../checkpoint/input/QrCodeInput.graphql'
+scalar Date
 
 type WasteGenerated {
 	qrCode: [QrCode]

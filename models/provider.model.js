@@ -12,6 +12,7 @@ const Material = new Schema({
 
 const QrCode = new Schema({
 	code: String,
+	date: Date,
 	material: Material
 });
 
@@ -133,8 +134,7 @@ var ProviderSchema = new Schema({
 			qrCode: [ QrCode ]
 		}
 	],
-	entries:Entries
+	entries: Entries
 });
-
 
 module.exports = mongoose.model('provider', ProviderSchema);

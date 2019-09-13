@@ -6,6 +6,7 @@ const CheckPointSchema = new Schema({
 		qrCode: [
 			{
 				code: String,
+				date: Date,
 				material: {
 					type: { type: String },
 					name: String,
@@ -21,6 +22,7 @@ const CheckPointSchema = new Schema({
 		qrCode: [
 			{
 				code: String,
+				date: Date,
 				material: {
 					type: { type: String },
 					name: String,
@@ -36,6 +38,7 @@ const CheckPointSchema = new Schema({
 		qrCode: [
 			{
 				code: String,
+				date: Date,
 				material: {
 					type: { type: String },
 					name: String,
@@ -51,6 +54,7 @@ const CheckPointSchema = new Schema({
 		qrCode: [
 			{
 				code: String,
+				date: Date,
 				material: {
 					type: { type: String },
 					name: String,
@@ -66,6 +70,7 @@ const CheckPointSchema = new Schema({
 		qrCode: [
 			{
 				code: String,
+				date: Date,
 				material: {
 					type: { type: String },
 					name: String,
@@ -81,6 +86,7 @@ const CheckPointSchema = new Schema({
 		qrCode: [
 			{
 				code: String,
+				date: Date,
 				material: {
 					type: { type: String },
 					name: String,
