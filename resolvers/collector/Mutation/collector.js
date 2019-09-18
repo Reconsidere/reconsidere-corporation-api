@@ -636,7 +636,7 @@ module.exports = collector = {
 					});
 
 					/* gerando histórico de alterações */
-					var transaction = TransactionHistory.find();
+					var transaction = await TransactionHistory.find();
 					var isNew = false;
 					res = await Collector.findById(_id);
 					var history = await new Promise(async (resolve, reject) => {
@@ -712,7 +712,7 @@ module.exports = collector = {
 					for (i = 0; i < input.length; i++) {
 						var exist = await res.scheduling.find((x) => x._id == input[i]._id);
 
-						if (exist === undefined) {
+						if (exist === undefined || exist === null || exist.length <= 0) {
 							//input.departments[i].isChanged = false;
 							await res.scheduling.push(input[i]);
 							await res.update(res).then(console.log('ok push scheduling'));
