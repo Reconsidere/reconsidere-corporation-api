@@ -1,6 +1,6 @@
 type Mutation {
 	createCorporation(input: CorporationInput): Corporation
-	createCorporationUnit(_id: ID!, typeCorporation: String, input: [CorporationInput]): [Corporation]
+	createCorporationUnit(_id: ID!, typeCorporation: String, input: [CorporationInput]): Corporation
 	updateCorporation(_id: ID!, input: CorporationInput): Corporation
 	deleteCorporation(_id: ID!): Corporation
 	createorUpdateDepartment(_id: ID!, input: [DepartmentInput]): [Department]

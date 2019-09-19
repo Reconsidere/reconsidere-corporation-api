@@ -1,6 +1,6 @@
 type Mutation {
 	createCollector(input: CollectorInput): Collector
-	createCollectorUnit(_id: ID!, typeCorporation: String, input: [CollectorInput]): [Collector]
+	createCollectorUnit(_id: ID!, typeCorporation: String, input: [CollectorInput]): Collector
 	updateCollector(_id: ID!, input: CollectorInput): Collector
 	deleteCollector(_id: ID!): Collector
 	createorUpdateDepartment(_id: ID!, input: [DepartmentInput]): [Department]
