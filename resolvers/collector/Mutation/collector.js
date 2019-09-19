@@ -1,7 +1,14 @@
 var Collector = require('../../../models/collector.model');
+var Corporation = require('../../../models/corporation.model');
+var Provider = require('../../../models/provider.model');
 var CheckPoint = require('../../../models/checkpoint.model');
 var TransactionHistory = require('../../../models/transactionhistory.model');
 mongoose = require('mongoose');
+
+var Classification = {
+	Provider: 'Fornecedor',
+	Collector: 'Empresa Coletora'
+};
 
 module.exports = collector = {
 	Query: {
@@ -22,7 +29,21 @@ module.exports = collector = {
 		async allUnits(root, { _id }) {
 			var res = await Collector.findById(_id);
 			if (res) {
-				return res.units;
+				var unit;
+				var units = [];
+				for (var i = 0; res.units.length > i; i++) {
+					unit = undefined;
+					unit = await Collector.findById(res.units[i]._id);
+					if (!unit) {
+						unit = await Corporation.findById(res.units[i]._id);
+					}
+					if (!unit) {
+						unit = await Provider.findById(res.units[i]._id);
+					}
+
+					units.push(unit);
+				}
+				return units;
 			} else {
 				return undefined;
 			}
@@ -78,6 +99,40 @@ module.exports = collector = {
 				return await Collector.create(input);
 			}
 		},
+		async createCollectorUnit(root, { _id, typeCorporation, input }) {
+			var res = await Collector.findById(_id);
+			for (var i = 0; input.length > i; i++) {
+				for (var x = 0; res.units.length > x; x++) {
+					if (input[i].users[0].email === res.units[x].email) {
+						throw new Error('WRE005');
+					}
+				}
+			}
+
+			const session = await mongoose.startSession();
+			try {
+				session.startTransaction();
+				for (var i = 0; input.length > i; i++) {
+					var id = undefined;
+					var returned = await Corporation.create(input[i]).then((x) => {
+						id = x._id;
+					});
+					addID(_id, id, typeCorporation);
+				}
+
+				await session.commitTransaction();
+				await session.endSession();
+				console.log('resolved');
+				return await Collector.findById(_id);
+			} catch (error) {
+				await session.abortTransaction();
+				await session.endSession();
+				console.log(error);
+				console.log('aborting');
+				return new Error('ERE009');
+			}
+		},
+
 		async updateCollector(root, { _id, input }) {
 			return await Collector.findOneAndUpdate(
 				{
@@ -1166,3 +1221,52 @@ module.exports = collector = {
 		}
 	}
 };
+
+async function addID(_id, id, typeCorporation) {
+	var object = {
+		unitsId: id
+	};
+	if (typeCorporation === Classification.Collector) {
+		var collector = await Collector.findById(_id);
+		if (collector.units === undefined || collector.units.length <= 0) {
+			collector['units'] = [ object ];
+		} else {
+			collector.units.push(object);
+		}
+		Collector.findOne(_id, function(err, coll) {
+			if (!coll) console.log('ERE009');
+			else {
+				coll.units = collector.units;
+				coll.update(coll).then((x) => {});
+			}
+		});
+	} else if (typeCorporation === Classification.Provider) {
+		var provider = await Provider.findById(_id);
+		if (provider.units === undefined || provider.units.length <= 0) {
+			provider['units'] = [ object ];
+		} else {
+			provider.units.push(object);
+		}
+		Provider.findOne(_id, function(err, prov) {
+			if (!prov) console.log('ERE009');
+			else {
+				prov.units = provider.units;
+				prov.update(prov).then((x) => {});
+			}
+		});
+	} else {
+		var corporation = await Corporation.findById(_id);
+		if (corporation.units === undefined || corporation.units.length <= 0) {
+			corporation['units'] = [ object ];
+		} else {
+			corporation.units.push(object);
+		}
+		await Corporation.findById(_id, function(err, corp) {
+			if (!corp) console.log('ERE009');
+			else {
+				corp.units = corporation.units;
+				corp.update(corp).then((x) => {});
+			}
+		});
+	}
+}

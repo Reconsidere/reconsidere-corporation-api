@@ -9,6 +9,7 @@
 #import ResiduesRegister  from '../corporation/type/ResiduesRegister.graphql'
 #import Scheduling  from '../corporation/type/Scheduling.graphql'
 #import Entries  from '../corporation/type/Entries.graphql'
+#import Location  from '../corporation/type/Location.graphql'
 
 #import MaterialInput  from '../corporation/input/MaterialInput.graphql'
 #import QrCodeInput  from '../corporation/input/QrCodeInput.graphql'
@@ -21,6 +22,8 @@
 #import ResiduesRegisterInput  from '../corporation/input/ResiduesRegisterInput.graphql'
 #import SchedulingInput  from '../corporation/input/SchedulingInput.graphql'
 #import EntriesInput  from '../corporation/input/EntriesInput.graphql'
+#import LocationInput  from '../corporation/input/LocationInput.graphql'
+
 scalar Date
 
 scalar Number
@@ -47,6 +50,7 @@ type Corporation {
 	residuesRegister: ResiduesRegister
 	scheduling: Scheduling
 	entries: Entries
+	location: Location
 }
 
 input CorporationInput {
@@ -71,4 +75,5 @@ input CorporationInput {
 	residuesRegister: ResiduesRegisterInput
 	scheduling: SchedulingInput
 	entries: EntriesInput
+	location: LocationInput
 }

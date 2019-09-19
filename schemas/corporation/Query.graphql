@@ -2,7 +2,7 @@ type Query {
 	getCorporation(_id: ID!): Corporation
 	getCorporationByUser(_id: ID!): Corporation
 	allCorporations: [Corporation]
-	allUnits(_id: ID!): [Unit]
+	allUnits(_id: ID!): [Corporation]
 	allDepartments(_id: ID!): [Department]
 	allDepartmentsNames(_id: ID!): [String]
 	allResiduesRegister(_id: ID!): ResiduesRegister

@@ -1,6 +1,4 @@
 type Unit {
-	_id: ID
-	picture: String
-	name: String
-	location: Location
+	_id: String
+	unitsId: String
 }

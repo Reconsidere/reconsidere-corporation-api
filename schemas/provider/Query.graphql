@@ -2,7 +2,7 @@ type Query {
 	getProvider(_id: ID!): Provider
 	getProviderByUser(_id: ID!): Provider
 	allProviders: [Provider]
-	allUnits(_id: ID!): [Unit]
+	allUnits(_id: ID!): [Provider]
 	allDepartments(_id: ID!): [Department]
 	allDepartmentsNames(_id: ID!): [String]
 	allResiduesRegister(_id: ID!): ResiduesRegister

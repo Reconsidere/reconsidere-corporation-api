@@ -2,7 +2,7 @@ type Query {
 	getCollector(_id: ID!): Collector
 	getCollectorByUser(_id: ID!): Collector
 	allCollectors(_id: ID): [Collector]
-	allUnits(_id: ID!): [Unit]
+	allUnits(_id: ID!): [Collector]
 	allDepartments(_id: ID!): [Department]
 	allDepartmentsNames(_id: ID!): [String]
 	allResiduesRegister(_id: ID!): ResiduesRegister

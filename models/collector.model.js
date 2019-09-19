@@ -70,22 +70,21 @@ var CollectorSchema = new Schema({
 	creationDate: Date,
 	activationDate: Date,
 	verificationDate: Date,
+	location: {
+		country: String,
+		state: String,
+		latitude: Number,
+		longitude: Number,
+		cep: String,
+		publicPlace: String,
+		neighborhood: String,
+		number: Number,
+		county: String,
+		complement: String
+	},
 	units: [
 		{
-			name: String,
-			picture: String,
-			location: {
-				country: String,
-				state: String,
-				latitude: Number,
-				longitude: Number,
-				cep: String,
-				publicPlace: String,
-				neighborhood: String,
-				number: Number,
-				county: String,
-				complement: String
-			}
+			unitsId: String,
 		}
 	],
 	users: [

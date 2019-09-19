@@ -30,7 +30,21 @@ module.exports = provider = {
 		async allUnits(root, { _id }) {
 			var res = await Provider.findById(_id);
 			if (res) {
-				return res.units;
+				var unit;
+				var units = [];
+				for (var i = 0; res.units.length > i; i++) {
+					unit = undefined;
+					unit = await Provider.findById(res.units[i]._id);
+					if (!unit) {
+						unit = await Corporation.findById(res.units[i]._id);
+					}
+					if (!unit) {
+						unit = await Collector.findById(res.units[i]._id);
+					}
+
+					units.push(unit);
+				}
+				return units;
 			} else {
 				return undefined;
 			}
