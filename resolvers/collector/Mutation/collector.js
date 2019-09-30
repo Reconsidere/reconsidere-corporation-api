@@ -152,13 +152,13 @@ module.exports = collector = {
 
 		async createorUpdateDepartment(root, { _id, input }) {
 			try {
-				input.forEach((department) => {
-					if (department._id) {
+				for (var i = 0; input.length > i; i++) {
+					if (input[i]._id) {
 						Collector.update(
-							{ _id: _id, 'departments._id': department._id },
+							{ _id: _id, 'departments._id': input[i]._id },
 							{
 								$set: {
-									'departments.$': department
+									'departments.$': input[i]
 								}
 							},
 							function(err, model) {
@@ -168,17 +168,14 @@ module.exports = collector = {
 							}
 						);
 					} else {
-						Collector.update({ _id: _id }, { $push: { departments: department } }, function(
-							error,
-							success
-						) {
+						Collector.update({ _id: _id }, { $push: { departments: input[i] } }, function(error, success) {
 							if (error) {
 								throw new Error('ERE009');
 							} else {
 							}
 						});
 					}
-				});
+				}
 				var res = await Collector.findById(_id);
 				return res.departments;
 			} catch (error) {

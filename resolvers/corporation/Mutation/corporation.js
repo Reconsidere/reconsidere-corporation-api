@@ -42,7 +42,7 @@ module.exports = corporation = {
 						unit = await Provider.findById(res.units[i].unitsId);
 					}
 
-					if(unit){
+					if (unit) {
 						units.push(unit);
 					}
 				}
@@ -154,13 +154,13 @@ module.exports = corporation = {
 		},
 		async createorUpdateDepartment(root, { _id, input }) {
 			try {
-				input.forEach((department) => {
-					if (department._id) {
-						Corporation.update(
-							{ _id: _id, 'departments._id': department._id },
+				for (var i = 0; input.length > i; i++) {
+					if (input[i]._id) {
+						 Corporation.update(
+							{ _id: _id, 'departments._id': input[i]._id },
 							{
 								$set: {
-									'departments.$': department
+									'departments.$': input[i]
 								}
 							},
 							function(err, model) {
@@ -170,7 +170,7 @@ module.exports = corporation = {
 							}
 						);
 					} else {
-						Corporation.update({ _id: _id }, { $push: { departments: department } }, function(
+						 Corporation.update({ _id: _id }, { $push: { departments: input[i] } }, function(
 							error,
 							success
 						) {
@@ -180,7 +180,7 @@ module.exports = corporation = {
 							}
 						});
 					}
-				});
+				}
 				var res = await Corporation.findById(_id);
 				return res.departments;
 			} catch (error) {
