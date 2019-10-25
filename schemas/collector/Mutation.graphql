@@ -4,6 +4,7 @@ type Mutation {
 	updateCollector(_id: ID!, input: CollectorInput): Collector
 	deleteCollector(_id: ID!): Collector
 	createorUpdateDepartment(_id: ID!, input: [DepartmentInput]): [Department]
+	createorUpdateDocument(_id: ID!, input: [DocumentInput]): [Document]
 	createorUpdateResiduesRegister(_id: ID!, input: ResiduesRegisterInput): ResiduesRegister
 	createorUpdateScheduling(_id: ID!, input: [SchedulingInput]): [Scheduling]
 	createorUpdateEntries(_id: ID!, input: EntriesInput): Entries

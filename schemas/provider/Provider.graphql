@@ -10,6 +10,7 @@
 #import Scheduling  from '../provider/type/Scheduling.graphql'
 #import Entries  from '../provider/type/Entries.graphql'
 #import Location  from '../provider/type/Location.graphql'
+#import Document  from '../provider/type/Document.graphql'
 
 #import MaterialInput  from '../provider/input/MaterialInput.graphql'
 #import QrCodeInput  from '../provider/input/QrCodeInput.graphql'
@@ -23,6 +24,7 @@
 #import SchedulingInput  from '../provider/input/SchedulingInput.graphql'
 #import EntriesInput  from '../provider/input/EntriesInput.graphql'
 #import LocationInput  from '../provider/input/LocationInput.graphql'
+#import DocumentInput  from '../provider/input/DocumentInput.graphql'
 
 scalar Date
 
@@ -51,6 +53,7 @@ type Provider {
 	scheduling: Scheduling
 	entries: Entries
 	location: Location
+	documents: [Document]
 }
 
 input ProviderInput {
@@ -76,4 +79,5 @@ input ProviderInput {
 	scheduling: SchedulingInput
 	entries: EntriesInput
 	location: LocationInput
+	documents: [DocumentInput]
 }

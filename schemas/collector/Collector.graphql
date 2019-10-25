@@ -10,6 +10,7 @@
 #import Scheduling  from '../collector/type/Scheduling.graphql'
 #import Entries  from '../collector/type/Entries.graphql'
 #import Location  from '../collector/type/Location.graphql'
+#import Document  from '../collector/type/Document.graphql'
 
 #import MaterialInput  from '../collector/input/MaterialInput.graphql'
 #import QrCodeInput  from '../collector/input/QrCodeInput.graphql'
@@ -23,6 +24,7 @@
 #import SchedulingInput  from '../collector/input/SchedulingInput.graphql'
 #import EntriesInput  from '../collector/input/EntriesInput.graphql'
 #import LocationInput  from '../collector/input/LocationInput.graphql'
+#import DocumentInput  from '../collector/input/DocumentInput.graphql'
 
 scalar Date
 
@@ -51,6 +53,7 @@ type Collector {
 	residuesRegister: ResiduesRegister
 	scheduling: Scheduling
 	entries: Entries
+	documents: [Document]
 }
 
 input CollectorInput {
@@ -76,4 +79,5 @@ input CollectorInput {
 	scheduling: SchedulingInput
 	entries: EntriesInput
 	location: LocationInput
+	documents: [DocumentInput]
 }

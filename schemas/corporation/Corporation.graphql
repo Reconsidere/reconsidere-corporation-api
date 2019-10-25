@@ -10,10 +10,12 @@
 #import Scheduling  from '../corporation/type/Scheduling.graphql'
 #import Entries  from '../corporation/type/Entries.graphql'
 #import Location  from '../corporation/type/Location.graphql'
+#import Document  from '../corporation/type/Document.graphql'
 
 #import MaterialInput  from '../corporation/input/MaterialInput.graphql'
 #import QrCodeInput  from '../corporation/input/QrCodeInput.graphql'
 #import DepartmentInput  from '../corporation/input/DepartmentInput.graphql'
+#import DocumentInput  from '../corporation/input/DocumentInput.graphql'
 #import LocationInput  from '../corporation/input/LocationInput.graphql'
 #import UnitInput  from '../corporation/input/UnitInput.graphql'
 #import ProfileInput  from '../corporation/input/ProfileInput.graphql'
@@ -51,6 +53,7 @@ type Corporation {
 	scheduling: Scheduling
 	entries: Entries
 	location: Location
+	documents: [Document]
 }
 
 input CorporationInput {
@@ -76,4 +79,5 @@ input CorporationInput {
 	scheduling: SchedulingInput
 	entries: EntriesInput
 	location: LocationInput
+	documents: [DocumentInput]
 }

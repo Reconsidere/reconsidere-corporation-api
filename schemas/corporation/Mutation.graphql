@@ -4,6 +4,7 @@ type Mutation {
 	updateCorporation(_id: ID!, input: CorporationInput): Corporation
 	deleteCorporation(_id: ID!): Corporation
 	createorUpdateDepartment(_id: ID!, input: [DepartmentInput]): [Department]
+	createorUpdateDocument(_id: ID!, input: [DocumentInput]): [Document]
 	createorUpdateResiduesRegister(_id: ID!, input: ResiduesRegisterInput): ResiduesRegister
 	createorUpdateScheduling(_id: ID!, input: [SchedulingInput]): [Scheduling]
 	createorUpdateEntries(_id: ID!, input: EntriesInput): Entries

@@ -1,6 +1,14 @@
 mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const Documents = new Schema({
+	type: { type: String },
+	name: String,
+	archive: String,
+	daysNotification: Number,
+	date: Date,
+	expire: Boolean
+});
 
 const Material = new Schema({
 	type: { type: String },
@@ -14,7 +22,7 @@ const Material = new Schema({
 const QrCode = new Schema({
 	code: String,
 	date: Date,
-	material: Material,
+	material: Material
 });
 
 const ResiduesRegisterSchema = new Schema({
@@ -84,7 +92,7 @@ var CollectorSchema = new Schema({
 	},
 	units: [
 		{
-			unitsId: String,
+			unitsId: String
 		}
 	],
 	users: [
@@ -134,7 +142,8 @@ var CollectorSchema = new Schema({
 			qrCode: [ QrCode ]
 		}
 	],
-	entries:Entries
+	entries: Entries,
+	documents: [Documents]
 });
 
 module.exports = mongoose.model('collector', CollectorSchema);

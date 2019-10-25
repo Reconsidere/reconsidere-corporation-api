@@ -1,6 +1,15 @@
 mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const Documents = new Schema({
+	type: { type: String },
+	name: String,
+	archive: String,
+	daysNotification: Number,
+	date: Date,
+	expire: Boolean
+});
+
 const Material = new Schema({
 	type: { type: String },
 	name: String,
@@ -83,7 +92,7 @@ var ProviderSchema = new Schema({
 	},
 	units: [
 		{
-			unitsId: String,
+			unitsId: String
 		}
 	],
 	users: [
@@ -133,7 +142,8 @@ var ProviderSchema = new Schema({
 			qrCode: [ QrCode ]
 		}
 	],
-	entries: Entries
+	entries: Entries,
+	documents: [ Documents ]
 });
 
 module.exports = mongoose.model('provider', ProviderSchema);

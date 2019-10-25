@@ -4,6 +4,7 @@ type Query {
 	allCorporations: [Corporation]
 	allUnits(_id: ID!): [Corporation]
 	allDepartments(_id: ID!): [Department]
+	allDocuments(_id: ID!): [Document]
 	allDepartmentsNames(_id: ID!): [String]
 	allResiduesRegister(_id: ID!): ResiduesRegister
 	allSchedulings(_id: ID!): [Scheduling]

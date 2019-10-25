@@ -4,6 +4,7 @@ type Query {
 	allProviders: [Provider]
 	allUnits(_id: ID!): [Provider]
 	allDepartments(_id: ID!): [Department]
+	allDocuments(_id: ID!): [Document]
 	allDepartmentsNames(_id: ID!): [String]
 	allResiduesRegister(_id: ID!): ResiduesRegister
 	allSchedulings(_id: ID!): [Scheduling]

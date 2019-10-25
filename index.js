@@ -9,6 +9,7 @@ const { graphqlUploadExpress } = require('graphql-upload');
 const { makeExecutableSchema } = require('graphql-tools');
 const resolverCollector = require('./resolvers/indexCollector');
 const resolverPicture = require('./resolvers/indexPicture');
+const resolverArchive = require('./resolvers/indexArchive');
 const resolverCorporation = require('./resolvers/indexCorporation');
 const resolverProvider = require('./resolvers/indexProvider');
 const resolverLogin = require('./resolvers/indexLogin');
@@ -16,6 +17,7 @@ const resolverCheckPoint = require('./resolvers/indexCheckPoint');
 const resolverTransactionHistory = require('./resolvers/indexTransactionHistory');
 const schemaPathCollector = './schemas/indexCollector.graphql';
 const schemaPathPicture = './schemas/indexPicture.graphql';
+const schemaPathArchive = './schemas/indexArchive.graphql';
 const schemaPathCorporation = './schemas/indexCorporation.graphql';
 const schemaPathProvider = './schemas/indexProvider.graphql';
 const schemaPathCheckPoint = './schemas/indexCheckPoint.graphql';
@@ -57,6 +59,11 @@ const schemaPicture = makeExecutableSchema({
 	resolvers: resolverPicture
 });
 
+const schemaArchive = makeExecutableSchema({
+	typeDefs: importSchema(schemaPathArchive),
+	resolvers: resolverArchive
+});
+
 const app = express();
 const PORT = 32546;
 mongoose.Promise = global.Promise;
@@ -84,6 +91,17 @@ app.use(
 	cors(),
 	graphlHTTP({
 		schema: schemaPicture,
+		graphiql: true
+	})
+);
+
+app.use(
+	'/reconsidere/archives',
+	jsonParser,
+	urlencodedParser,
+	cors(),
+	graphlHTTP({
+		schema: schemaArchive,
 		graphiql: true
 	})
 );

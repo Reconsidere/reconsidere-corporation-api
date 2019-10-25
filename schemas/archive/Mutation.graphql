@@ -1,0 +1,3 @@
+type Mutation {
+	uploadArchive(_id: ID, input: ArchiveInput!): Archive
+}

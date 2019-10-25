@@ -1,0 +1,13 @@
+scalar Date
+
+type Archive {
+	file: String
+	name: String
+	extension: String
+}
+
+input ArchiveInput {
+	file: String
+	name: String
+	extension: String
+}

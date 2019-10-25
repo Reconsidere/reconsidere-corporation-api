@@ -4,9 +4,10 @@ type Query {
 	allCollectors(_id: ID): [Collector]
 	allUnits(_id: ID!): [Collector]
 	allDepartments(_id: ID!): [Department]
+	allDocuments(_id: ID!): [Document]
 	allDepartmentsNames(_id: ID!): [String]
 	allResiduesRegister(_id: ID!): ResiduesRegister
 	allSchedulings(_id: ID!): [Scheduling]
 	allEntries(_id: ID!): Entries
-	allProvidersId(_id: ID!):  [MyProviders]
+	allProvidersId(_id: ID!): [MyProviders]
 }

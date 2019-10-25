@@ -52,6 +52,15 @@ module.exports = corporation = {
 			}
 		},
 
+		async allDocuments(root, { _id }) {
+			var res = await Corporation.findById(_id);
+			if (res) {
+				return res.documents;
+			} else {
+				return undefined;
+			}
+		},
+
 		async allDepartments(root, { _id }) {
 			var res = await Corporation.findById(_id);
 			if (res) {
@@ -154,33 +163,23 @@ module.exports = corporation = {
 		},
 		async createorUpdateDepartment(root, { _id, input }) {
 			try {
-				for (var i = 0; input.length > i; i++) {
-					if (input[i]._id) {
-						 Corporation.update(
-							{ _id: _id, 'departments._id': input[i]._id },
-							{
-								$set: {
-									'departments.$': input[i]
-								}
-							},
-							function(err, model) {
-								if (err) {
-									throw new Error('ERE009');
-								}
-							}
-						);
+				res = await Corporation.findById(_id, function(err, corp) {
+					if (err) {
+						return next(new Error('ERE009'));
 					} else {
-						 Corporation.update({ _id: _id }, { $push: { departments: input[i] } }, function(
-							error,
-							success
-						) {
-							if (error) {
-								throw new Error('ERE009');
+						for (var i = 0; input.length > i; i++) {
+							if (input[i]._id) {
+								index = corp.departments.findIndex((x) => x._id == input[i]._id);
+								corp.departments[index] = input[i];
 							} else {
+								corp.departments.push(input[i]);
 							}
-						});
+						}
+						corp.save();
+						return;
 					}
-				}
+				});
+
 				var res = await Corporation.findById(_id);
 				return res.departments;
 			} catch (error) {
@@ -1215,6 +1214,31 @@ module.exports = corporation = {
 				console.log(error);
 				console.log('aborting');
 				return new Error('ERE009');
+			}
+		},
+		async createorUpdateDocument(root, { _id, input }) {
+			try {
+				res = await Corporation.findById(_id, function(err, corp) {
+					if (err) {
+						return next(new Error('ERE009'));
+					} else {
+						for (var i = 0; input.length > i; i++) {
+							if (input[i]._id) {
+								index = corp.documents.findIndex((x) => x._id == input[i]._id);
+								corp.documents[index] = input[i];
+							} else {
+								corp.documents.push(input[i]);
+							}
+						}
+						corp.save();
+						return;
+					}
+				});
+
+				var res = await Corporation.findById(_id);
+				return res.documents;
+			} catch (error) {
+				throw new Error('ERE009');
 			}
 		}
 	}
