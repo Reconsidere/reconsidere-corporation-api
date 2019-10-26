@@ -350,8 +350,8 @@ module.exports = corporation = {
 											};
 
 											if (
-												transaction.wastegenerated === undefined ||
-												transaction.wastegenerated.length <= 0
+												transaction.checkPoints.wastegenerated === undefined ||
+												transaction.checkPoints.wastegenerated.length <= 0
 											) {
 												transaction = new Object({
 													checkPoints: new Object({
@@ -361,7 +361,7 @@ module.exports = corporation = {
 													})
 												});
 											} else {
-												transaction.wastegenerated.qrCode.push(value);
+												transaction.checkPoints.wastegenerated.qrCode.push(value);
 											}
 										});
 									});
