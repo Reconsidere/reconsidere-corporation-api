@@ -163,7 +163,7 @@ module.exports = corporation = {
 		},
 		async createorUpdateDepartment(root, { _id, input }) {
 			try {
-				res = await Corporation.findById(_id, function(err, corp) {
+				res = await Corporation.findById(_id, function (err, corp) {
 					if (err) {
 						return next(new Error('ERE009'));
 					} else {
@@ -193,21 +193,19 @@ module.exports = corporation = {
 				var res = await Corporation.findById(_id);
 				var returnElement;
 				if (
-					res.residuesRegister === undefined ||
-					res.residuesRegister === null ||
-					res.residuesRegister.departments === undefined ||
+					!res.residuesRegister || !res.residuesRegister.departments ||
 					res.residuesRegister.departments.length <= 0
 				) {
+					console.log('caiu aqui');
 					var elementSaved;
 					returnElement = await new Promise((resolve, reject) => {
-						Corporation.findById(_id, function(err, corp) {
+						Corporation.findById(_id, function (err, corp) {
 							if (!corp) console.log('ERE009');
 							else {
 								input.departments.forEach((department) => {
 									if (
-										res.residuesRegister === undefined ||
-										res.residuesRegister === null ||
-										res.residuesRegister.departments === undefined ||
+										!res.residuesRegister ||
+										!res.residuesRegister.departments ||
 										res.residuesRegister.departments.length <= 0
 									) {
 										res['residuesRegister'] = new Object();
@@ -219,7 +217,7 @@ module.exports = corporation = {
 											active: department.active,
 											qrCode: []
 										};
-										res['residuesRegister']['departments'] = [ depart ];
+										res['residuesRegister']['departments'] = [depart];
 									} else {
 										var depart = {
 											_id: department._id,
@@ -271,47 +269,46 @@ module.exports = corporation = {
 
 									checkpoint = new Object({
 										wastegenerated: new Object({
-											qrCode: [ value ]
+											qrCode: [value]
 										})
 									});
 									isNew = true;
 								} else {
-									res.residuesRegister.departments.forEach((department) => {
-										department.qrCode.forEach((qrCode) => {
-											var value = {
-												code: qrCode.code,
-												material: qrCode.material
-											};
 
-											if (
-												checkpoint.wastegenerated === undefined ||
-												checkpoint.wastegenerated.length <= 0
-											) {
-												checkpoint = new Object({
-													wastegenerated: new Object({
-														qrCode: [ value ]
-													})
-												});
-											} else {
-												checkpoint.wastegenerated.qrCode.push(value);
-											}
+									var value = {
+										code: qrCode.code,
+										material: qrCode.material
+									};
+
+									if (
+										!checkpoint.wastegenerated ||
+										checkpoint.wastegenerated.length <= 0
+									) {
+										checkpoint = new Object({
+											wastegenerated: new Object({
+												qrCode: [value]
+											})
 										});
-									});
+									} else {
+										checkpoint.wastegenerated.qrCode.push(value);
+									}
+
+
 								}
 							});
 						});
 						if (isNew) {
 							var returned = await CheckPoint.create(checkpoint);
 						} else {
-							CheckPoint.findOne(function(err, check) {
+							CheckPoint.findOne(function (err, check) {
 								if (!check) console.log('ERE009');
 								else {
-									if (check === undefined || check.length <= 0) {
+									if (!check || check.length <= 0) {
 										check = check;
 									} else {
 										check.wastegenerated = checkpoint.wastegenerated;
 									}
-									check.update(check).then((x) => {});
+									check.update(check).then((x) => { });
 								}
 							});
 						}
@@ -335,43 +332,39 @@ module.exports = corporation = {
 									transaction = new Object({
 										checkPoints: new Object({
 											wastegenerated: new Object({
-												qrCode: [ value ]
+												qrCode: [value]
 											})
 										})
 									});
 									isNew = true;
 								} else {
-									res.residuesRegister.departments.forEach((department) => {
-										department.qrCode.forEach((qrCode) => {
-											var value = {
-												date: new Date(),
-												code: qrCode.code,
-												material: qrCode.material
-											};
+									var value = {
+										date: new Date(),
+										code: qrCode.code,
+										material: qrCode.material
+									};
 
-											if (
-												transaction.checkPoints.wastegenerated === undefined ||
-												transaction.checkPoints.wastegenerated.length <= 0
-											) {
-												transaction = new Object({
-													checkPoints: new Object({
-														wastegenerated: new Object({
-															qrCode: [ value ]
-														})
-													})
-												});
-											} else {
-												transaction.checkPoints.wastegenerated.qrCode.push(value);
-											}
+									if (
+										transaction.checkPoints.wastegenerated === undefined ||
+										transaction.checkPoints.wastegenerated.length <= 0
+									) {
+										transaction = new Object({
+											checkPoints: new Object({
+												wastegenerated: new Object({
+													qrCode: [value]
+												})
+											})
 										});
-									});
+									} else {
+										transaction.checkPoints.wastegenerated.qrCode.push(value);
+									}
 								}
 							});
 						});
 						if (isNew) {
 							var returned = await TransactionHistory.create(transaction);
 						} else {
-							TransactionHistory.findOne(function(err, trans) {
+							TransactionHistory.findOne(function (err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									if (trans === undefined || trans.length <= 0) {
@@ -379,7 +372,7 @@ module.exports = corporation = {
 									} else {
 										trans.checkPoints.wastegenerated = transaction.checkPoints.wastegenerated;
 									}
-									trans.update(trans).then((x) => {});
+									trans.update(trans).then((x) => { });
 								}
 							});
 						}
@@ -406,11 +399,11 @@ module.exports = corporation = {
 										}
 									});
 								});
-								CheckPoint.findOne(function(err, check) {
+								CheckPoint.findOne(function (err, check) {
 									if (!check) console.log('ERE009');
 									else {
 										check.wastegenerated = checkpoint.wastegenerated;
-										check.update(check).then((x) => {});
+										check.update(check).then((x) => { });
 									}
 								});
 								resolve();
@@ -428,11 +421,11 @@ module.exports = corporation = {
 												code: qrCode.code,
 												material: qrCode.material
 											};
-											TransactionHistory.findOne(function(err, trans) {
+											TransactionHistory.findOne(function (err, trans) {
 												if (!trans) console.log('ERE009');
 												else {
 													trans.checkPoints.wastegenerated.qrCode.push(value);
-													trans.update(trans).then((x) => {});
+													trans.update(trans).then((x) => { });
 												}
 											});
 										}
@@ -494,7 +487,7 @@ module.exports = corporation = {
 													qrCode.set(input.departments[i].qrCode[q]);
 												}
 											});
-											CheckPoint.findOne(function(err, check) {
+											CheckPoint.findOne(function (err, check) {
 												if (!check) console.log('ERE009');
 												else {
 													check.wastegenerated = checkpoint.wastegenerated;
@@ -514,11 +507,11 @@ module.exports = corporation = {
 												code: input.departments[i].qrCode[q].code,
 												material: input.departments[i].qrCode[q].material
 											};
-											TransactionHistory.findOne(function(err, trans) {
+											TransactionHistory.findOne(function (err, trans) {
 												if (!trans) console.log('ERE009');
 												else {
 													trans.checkPoints.wastegenerated.qrCode.push(value);
-													trans.update(trans).then((x) => {});
+													trans.update(trans).then((x) => { });
 												}
 											});
 											resolve();
@@ -545,7 +538,7 @@ module.exports = corporation = {
 												isPushed = true;
 											}
 										});
-										CheckPoint.findOne(function(err, check) {
+										CheckPoint.findOne(function (err, check) {
 											if (!check) console.log('ERE009');
 											else {
 												check.wastegenerated = checkpoint.wastegenerated;
@@ -565,11 +558,11 @@ module.exports = corporation = {
 											code: input.departments[i].qrCode[q].code,
 											material: input.departments[i].qrCode[q].material
 										};
-										TransactionHistory.findOne(function(err, trans) {
+										TransactionHistory.findOne(function (err, trans) {
 											if (!trans) console.log('ERE009');
 											else {
 												trans.checkPoints.wastegenerated.qrCode.push(value);
-												trans.update(trans).then((x) => {});
+												trans.update(trans).then((x) => { });
 											}
 										});
 
@@ -604,12 +597,12 @@ module.exports = corporation = {
 
 				if (res.scheduling === undefined || res.scheduling.length <= 0) {
 					returnElement = await new Promise((resolve, reject) => {
-						Corporation.findById(_id, function(err, corp) {
+						Corporation.findById(_id, function (err, corp) {
 							if (!corp) console.log('ERE009');
 							else {
 								input.forEach((scheduling) => {
 									if (res.scheduling === undefined || res.scheduling.length <= 0) {
-										res.scheduling = [ scheduling ];
+										res.scheduling = [scheduling];
 									} else {
 										res.scheduling.push(scheduling);
 									}
@@ -639,7 +632,7 @@ module.exports = corporation = {
 
 									checkpoint = new Object({
 										collectionrequested: new Object({
-											qrCode: [ value ]
+											qrCode: [value]
 										})
 									});
 									isNew = true;
@@ -657,7 +650,7 @@ module.exports = corporation = {
 											) {
 												checkpoint = new Object({
 													collectionrequested: new Object({
-														qrCode: [ value ]
+														qrCode: [value]
 													})
 												});
 											} else {
@@ -671,7 +664,7 @@ module.exports = corporation = {
 						if (isNew) {
 							var returned = await CheckPoint.create(checkpoint);
 						} else {
-							CheckPoint.findOne(function(err, check) {
+							CheckPoint.findOne(function (err, check) {
 								if (!check) {
 									console.log('ERE009');
 								} else {
@@ -680,7 +673,7 @@ module.exports = corporation = {
 									} else {
 										check.collectionrequested = checkpoint.collectionrequested;
 									}
-									check.update(check).then((x) => {});
+									check.update(check).then((x) => { });
 								}
 							});
 						}
@@ -709,7 +702,7 @@ module.exports = corporation = {
 									transaction = new Object({
 										checkPoints: new Object({
 											collectionrequested: new Object({
-												qrCode: [ value ]
+												qrCode: [value]
 											})
 										})
 									});
@@ -730,7 +723,7 @@ module.exports = corporation = {
 												transaction = new Object({
 													checkPoints: new Object({
 														collectionrequested: new Object({
-															qrCode: [ value ]
+															qrCode: [value]
 														})
 													})
 												});
@@ -745,7 +738,7 @@ module.exports = corporation = {
 						if (isNew) {
 							var returned = await TransactionHistory.create(transaction);
 						} else {
-							TransactionHistory.findOne(function(err, trans) {
+							TransactionHistory.findOne(function (err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									if (trans === undefined || trans.length <= 0) {
@@ -754,7 +747,7 @@ module.exports = corporation = {
 										trans.checkPoints.collectionrequested =
 											transaction.checkPoints.collectionrequested;
 									}
-									trans.update(trans).then((x) => {});
+									trans.update(trans).then((x) => { });
 								}
 							});
 						}
@@ -791,7 +784,7 @@ module.exports = corporation = {
 								}
 							}
 
-							CheckPoint.findOne(function(err, check) {
+							CheckPoint.findOne(function (err, check) {
 								if (!check) console.log('ERE009');
 								else {
 									check.collectionrequested = checkpoint.collectionrequested;
@@ -809,7 +802,7 @@ module.exports = corporation = {
 								transaction.checkPoints.collectionrequested.qrCode.push(input[i].qrCode[x]);
 							}
 
-							TransactionHistory.findOne(function(err, trans) {
+							TransactionHistory.findOne(function (err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									trans.checkPoints.collectionrequested = transaction.checkPoints.collectionrequested;
@@ -845,7 +838,7 @@ module.exports = corporation = {
 				var res = await Corporation.findById(_id);
 				if (res.entries === undefined || res.entries === null) {
 					returnElement = await new Promise((resolve, reject) => {
-						Corporation.findById(_id, function(err, corp) {
+						Corporation.findById(_id, function (err, corp) {
 							if (!corp) console.log('ERE009');
 							else {
 								if (res.entries === undefined || res.entries === null) {
@@ -879,7 +872,7 @@ module.exports = corporation = {
 									};
 
 									checkpoint['collectionperformed'] = new Object({
-										qrCode: [ value ]
+										qrCode: [value]
 									});
 									isNew = true;
 								} else {
@@ -894,7 +887,7 @@ module.exports = corporation = {
 											checkpoint.collectionperformed.length <= 0
 										) {
 											checkpoint['collectionperformed'] = new Object({
-												qrCode: [ value ]
+												qrCode: [value]
 											});
 										} else {
 											checkpoint.collectionperformed.qrCode.push(value);
@@ -915,7 +908,7 @@ module.exports = corporation = {
 									};
 
 									checkpoint['collectionperformed'] = new Object({
-										qrCode: [ value ]
+										qrCode: [value]
 									});
 									isNew = true;
 								} else {
@@ -930,7 +923,7 @@ module.exports = corporation = {
 											checkpoint.collectionperformed.length <= 0
 										) {
 											checkpoint['collectionperformed'] = new Object({
-												qrCode: [ value ]
+												qrCode: [value]
 											});
 										} else {
 											checkpoint.collectionperformed.qrCode.push(value);
@@ -942,7 +935,7 @@ module.exports = corporation = {
 						if (isNew) {
 							var returned = await CheckPoint.create(checkpoint);
 						} else {
-							CheckPoint.findOne(function(err, check) {
+							CheckPoint.findOne(function (err, check) {
 								if (!check) {
 									console.log('ERE009');
 								} else {
@@ -951,7 +944,7 @@ module.exports = corporation = {
 									} else {
 										check.collectionperformed = checkpoint.collectionperformed;
 									}
-									check.update(check).then((x) => {});
+									check.update(check).then((x) => { });
 								}
 							});
 						}
@@ -979,7 +972,7 @@ module.exports = corporation = {
 									transaction = new Object({
 										checkPoints: new Object({
 											collectionperformed: new Object({
-												qrCode: [ value ]
+												qrCode: [value]
 											})
 										})
 									});
@@ -999,7 +992,7 @@ module.exports = corporation = {
 											transaction = new Object({
 												checkPoints: new Object({
 													collectionperformed: new Object({
-														qrCode: [ value ]
+														qrCode: [value]
 													})
 												})
 											});
@@ -1025,7 +1018,7 @@ module.exports = corporation = {
 									transaction = new Object({
 										checkPoints: new Object({
 											collectionperformed: new Object({
-												qrCode: [ value ]
+												qrCode: [value]
 											})
 										})
 									});
@@ -1045,7 +1038,7 @@ module.exports = corporation = {
 											transaction = new Object({
 												checkPoints: new Object({
 													collectionperformed: new Object({
-														qrCode: [ value ]
+														qrCode: [value]
 													})
 												})
 											});
@@ -1059,7 +1052,7 @@ module.exports = corporation = {
 						if (isNew) {
 							var returned = await TransactionHistory.create(transaction);
 						} else {
-							TransactionHistory.findOne(function(err, trans) {
+							TransactionHistory.findOne(function (err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									if (trans === undefined || trans === null) {
@@ -1068,7 +1061,7 @@ module.exports = corporation = {
 										trans.checkPoints.collectionperformed =
 											transaction.checkPoints.collectionperformed;
 									}
-									trans.update(trans).then((x) => {});
+									trans.update(trans).then((x) => { });
 								}
 							});
 						}
@@ -1105,7 +1098,7 @@ module.exports = corporation = {
 										checkpoint.collectionperformed.qrCode.push(input.sale[i].qrCode);
 									}
 								}
-								CheckPoint.findOne(function(err, check) {
+								CheckPoint.findOne(function (err, check) {
 									if (!check) console.log('ERE009');
 									else {
 										check.collectionperformed = checkpoint.collectionperformed;
@@ -1123,7 +1116,7 @@ module.exports = corporation = {
 								if (input.sale !== undefined && input.sale.length > 0) {
 									transaction.checkPoints.collectionperformed.qrCode.push(input.sale[i].qrCode);
 								}
-								TransactionHistory.findOne(function(err, trans) {
+								TransactionHistory.findOne(function (err, trans) {
 									if (!trans) console.log('ERE009');
 									else {
 										trans.checkPoints.collectionperformed =
@@ -1168,7 +1161,7 @@ module.exports = corporation = {
 									}
 								}
 
-								CheckPoint.findOne(function(err, check) {
+								CheckPoint.findOne(function (err, check) {
 									if (!check) console.log('ERE009');
 									else {
 										check.collectionperformed = checkpoint.collectionperformed;
@@ -1187,7 +1180,7 @@ module.exports = corporation = {
 									transaction.checkPoints.collectionperformed.qrCode.push(input.purchase[i].qrCode);
 								}
 
-								TransactionHistory.findOne(function(err, trans) {
+								TransactionHistory.findOne(function (err, trans) {
 									if (!trans) console.log('ERE009');
 									else {
 										trans.checkPoints.collectionperformed =
@@ -1218,7 +1211,7 @@ module.exports = corporation = {
 		},
 		async createorUpdateDocument(root, { _id, input }) {
 			try {
-				res = await Corporation.findById(_id, function(err, corp) {
+				res = await Corporation.findById(_id, function (err, corp) {
 					if (err) {
 						return next(new Error('ERE009'));
 					} else {
@@ -1251,43 +1244,43 @@ async function addID(_id, id, typeCorporation) {
 	if (typeCorporation === Classification.Collector) {
 		var collector = await Collector.findById(_id);
 		if (collector.units === undefined || collector.units.length <= 0) {
-			collector['units'] = [ object ];
+			collector['units'] = [object];
 		} else {
 			collector.units.push(object);
 		}
-		Collector.findOne(_id, function(err, coll) {
+		Collector.findOne(_id, function (err, coll) {
 			if (!coll) console.log('ERE009');
 			else {
 				coll.units = collector.units;
-				coll.update(coll).then((x) => {});
+				coll.update(coll).then((x) => { });
 			}
 		});
 	} else if (typeCorporation === Classification.Provider) {
 		var provider = await Provider.findById(_id);
 		if (provider.units === undefined || provider.units.length <= 0) {
-			provider['units'] = [ object ];
+			provider['units'] = [object];
 		} else {
 			provider.units.push(object);
 		}
-		Provider.findOne(_id, function(err, prov) {
+		Provider.findOne(_id, function (err, prov) {
 			if (!prov) console.log('ERE009');
 			else {
 				prov.units = provider.units;
-				prov.update(prov).then((x) => {});
+				prov.update(prov).then((x) => { });
 			}
 		});
 	} else {
 		var corporation = await Corporation.findById(_id);
 		if (corporation.units === undefined || corporation.units.length <= 0) {
-			corporation['units'] = [ object ];
+			corporation['units'] = [object];
 		} else {
 			corporation.units.push(object);
 		}
-		await Corporation.findById(_id, function(err, corp) {
+		await Corporation.findById(_id, function (err, corp) {
 			if (!corp) console.log('ERE009');
 			else {
 				corp.units = corporation.units;
-				corp.update(corp).then((x) => {});
+				corp.update(corp).then((x) => { });
 			}
 		});
 	}
