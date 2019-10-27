@@ -196,7 +196,6 @@ module.exports = corporation = {
 					!res.residuesRegister || !res.residuesRegister.departments ||
 					res.residuesRegister.departments.length <= 0
 				) {
-					console.log('caiu aqui');
 					var elementSaved;
 					returnElement = await new Promise((resolve, reject) => {
 						Corporation.findById(_id, function (err, corp) {
@@ -379,10 +378,8 @@ module.exports = corporation = {
 						resolve();
 					});
 				} else {
-					for (i = 0; i < input.departments.length; i++) {
-						var exist = await res.residuesRegister.departments.find(
-							(x) => x._id == input.departments[i]._id
-						);
+					for (i = 0;  input.departments.length > i; i++) {
+						var exist = await res.residuesRegister.departments.find((x) => x._id == input.departments[i]._id);
 						if (exist === undefined || exist.length <= 0) {
 							input.departments[i].isChanged = false;
 							await res.residuesRegister.departments.push(input.departments[i]);
@@ -458,13 +455,10 @@ module.exports = corporation = {
 								res = await Corporation.findById(_id);
 							}
 
-							for (q = 0; q < input.departments[i].qrCode.length; q++) {
+							for (q = 0;  input.departments[i].qrCode.length > q; q++) {
 								var isUpdated = false;
 								res = await Corporation.findById(_id);
-								if (
-									input.departments[i].qrCode[q]._id !== undefined &&
-									input.departments[i].qrCode[q]._id !== null
-								) {
+								if (input.departments[i].qrCode[q]._id) {
 									res.residuesRegister.departments.forEach((department) => {
 										department.qrCode.forEach((qrCode) => {
 											if (qrCode.code == input.departments[i].qrCode[q].code) {
@@ -475,7 +469,7 @@ module.exports = corporation = {
 										});
 									});
 									if (isUpdated) {
-										await res.update(res).then(console.log('ok set'));
+										await res.update(res).then(console.log('ok set qr codes'));
 										res = await Corporation.findById(_id);
 										isUpdated = false;
 
