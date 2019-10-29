@@ -557,10 +557,10 @@ module.exports = corporation = {
 											else {
 												trans.checkPoints.wastegenerated.qrCode.push(value);
 												trans.update(trans).then((x) => { });
+												resolve();
 											}
 										});
 
-										resolve();
 									});
 									res = await Corporation.findById(_id);
 								}
