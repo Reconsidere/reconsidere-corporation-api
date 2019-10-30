@@ -699,7 +699,8 @@ module.exports = corporation = {
 									};
 
 									if (
-										transaction.checkPoints.collectionrequested === undefined ||
+										!transaction.checkPoints ||
+										!transaction.checkPoints.collectionrequested ||
 										transaction.checkPoints.collectionrequested.length <= 0
 									) {
 										transaction = new Object({
@@ -721,7 +722,7 @@ module.exports = corporation = {
 							TransactionHistory.findOne(function(err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
-									if (trans === undefined || trans.length <= 0) {
+									if (!trans || trans.length <= 0) {
 										trans = transaction;
 									} else {
 										trans.checkPoints.collectionrequested =
@@ -834,80 +835,69 @@ module.exports = corporation = {
 						});
 					});
 					/* gerando checkPoint */
-					var checkpoint = await CheckPoint.find();
-					var isNew = false;
+					var checkpoint = await CheckPoint.find({}, null, { limit: 1 });
 					res = await Corporation.findById(_id);
+					var isNew = false;
 					var checkpoin = await new Promise(async (resolve, reject) => {
-						if (
-							res.entries.sale !== null &&
-							res.entries.sale !== undefined &&
-							res.entries.sale.length > 0
-						) {
+						if (res.entries.sale && res.entries.sale.length > 0) {
 							res.entries.sale.forEach((sale) => {
-								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+								if (!checkpoint || checkpoint.length <= 0) {
+									var value = {
+										code: sale.qrCode.code,
+										material: sale.qrCode.material
+									};
+									checkpoint = new Object({
+										collectionperformed: new Object({
+											qrCode: [ value ]
+										})
+									});
+									isNew = true;
+								} else {
 									var value = {
 										code: sale.qrCode.code,
 										material: sale.qrCode.material
 									};
 
-									checkpoint['collectionperformed'] = new Object({
-										qrCode: [ value ]
-									});
-									isNew = true;
-								} else {
-									res.entries.sale.forEach((sale) => {
-										var value = {
-											code: sale.qrCode.code,
-											material: sale.qrCode.material
-										};
-
-										if (
-											checkpoint.collectionperformed === undefined ||
-											checkpoint.collectionperformed.length <= 0
-										) {
-											checkpoint['collectionperformed'] = new Object({
+									if (!checkpoint.collectionperformed || checkpoint.collectionperformed.length <= 0) {
+										checkpoint = new Object({
+											collectionperformed: new Object({
 												qrCode: [ value ]
-											});
-										} else {
-											checkpoint.collectionperformed.qrCode.push(value);
-										}
-									});
+											})
+										});
+									} else {
+										checkpoint.collectionperformed.qrCode.push(value);
+									}
 								}
 							});
-						} else if (
-							res.entries.purchase !== null &&
-							res.entries.purchase !== undefined &&
-							res.entries.purchase.length > 0
-						) {
+						} else if (res.entries.purchase && res.entries.purchase.length > 0) {
 							res.entries.purchase.forEach((purchase) => {
-								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+								if (!checkpoint || checkpoint.length <= 0) {
 									var value = {
 										code: purchase.qrCode.code,
 										material: purchase.qrCode.material
 									};
 
-									checkpoint['collectionperformed'] = new Object({
-										qrCode: [ value ]
+									checkpoint = new Object({
+										collectionperformed: new Object({
+											qrCode: [ value ]
+										})
 									});
 									isNew = true;
 								} else {
-									res.entries.purchase.forEach((purchase) => {
-										var value = {
-											code: purchase.qrCode.code,
-											material: purchase.qrCode.material
-										};
+									var value = {
+										code: purchase.qrCode.code,
+										material: purchase.qrCode.material
+									};
 
-										if (
-											checkpoint.collectionperformed === undefined ||
-											checkpoint.collectionperformed.length <= 0
-										) {
-											checkpoint['collectionperformed'] = new Object({
+									if (!checkpoint.collectionperformed || checkpoint.collectionperformed.length <= 0) {
+										checkpoint = new Object({
+											collectionperformed: new Object({
 												qrCode: [ value ]
-											});
-										} else {
-											checkpoint.collectionperformed.qrCode.push(value);
-										}
-									});
+											})
+										});
+									} else {
+										checkpoint.collectionperformed.qrCode.push(value);
+									}
 								}
 							});
 						}
@@ -918,7 +908,7 @@ module.exports = corporation = {
 								if (!check) {
 									console.log('ERE009');
 								} else {
-									if (check === undefined || check.length <= 0) {
+									if (!check || check.length <= 0) {
 										check = checkpoint;
 									} else {
 										check.collectionperformed = checkpoint.collectionperformed;
@@ -931,15 +921,11 @@ module.exports = corporation = {
 					});
 
 					/* gerando histórico de alterações */
-					var transaction = await TransactionHistory.findOne();
-					var isNew = false;
+					var transaction = await TransactionHistory.find({}, null, { limit: 1 });
 					res = await Corporation.findById(_id);
+					var isNew = false;
 					var history = await new Promise(async (resolve, reject) => {
-						if (
-							res.entries.sale !== null &&
-							res.entries.sale !== undefined &&
-							res.entries.sale.length > 0
-						) {
+						if (res.entries.sale && res.entries.sale.length > 0) {
 							res.entries.sale.forEach((sale) => {
 								if (transaction === undefined || transaction === null) {
 									var value = {
@@ -957,35 +943,30 @@ module.exports = corporation = {
 									});
 									isNew = true;
 								} else {
-									res.entries.sale.forEach((sale) => {
-										var value = {
-											date: new Date(),
-											code: sale.qrCode.code,
-											material: sale.qrCode.material
-										};
+									var value = {
+										date: new Date(),
+										code: sale.qrCode.code,
+										material: sale.qrCode.material
+									};
 
-										if (
-											transaction.checkPoints.collectionperformed === undefined ||
-											transaction.checkPoints.collectionperformed.length <= 0
-										) {
-											transaction = new Object({
-												checkPoints: new Object({
-													collectionperformed: new Object({
-														qrCode: [ value ]
-													})
+									if (
+										!transaction.checkPoints ||
+										!transaction.checkPoints.collectionperformed ||
+										transaction.checkPoints.collectionperformed.length <= 0
+									) {
+										transaction = new Object({
+											checkPoints: new Object({
+												collectionperformed: new Object({
+													qrCode: [ value ]
 												})
-											});
-										} else {
-											transaction.checkPoints.collectionperformed.qrCode.push(value);
-										}
-									});
+											})
+										});
+									} else {
+										transaction.checkPoints.collectionperformed.qrCode.push(value);
+									}
 								}
 							});
-						} else if (
-							res.entries.purchase !== null &&
-							res.entries.purchase !== undefined &&
-							res.entries.purchase.length > 0
-						) {
+						} else if (res.entries.purchase && res.entries.purchase.length > 0) {
 							res.entries.purchase.forEach((purchase) => {
 								if (transaction === undefined || transaction === null) {
 									var value = {
@@ -1003,28 +984,27 @@ module.exports = corporation = {
 									});
 									isNew = true;
 								} else {
-									res.entries.purchase.forEach((purchase) => {
-										var value = {
-											date: new Date(),
-											code: purchase.qrCode.code,
-											material: purchase.qrCode.material
-										};
+									var value = {
+										date: new Date(),
+										code: purchase.qrCode.code,
+										material: purchase.qrCode.material
+									};
 
-										if (
-											transaction.checkPoints.collectionperformed === undefined ||
-											transaction.checkPoints.collectionperformed.length <= 0
-										) {
-											transaction = new Object({
-												checkPoints: new Object({
-													collectionperformed: new Object({
-														qrCode: [ value ]
-													})
+									if (
+										!transaction.checkPoints ||
+										!transaction.checkPoints.collectionperformed ||
+										transaction.checkPoints.collectionperformed.length <= 0
+									) {
+										transaction = new Object({
+											checkPoints: new Object({
+												collectionperformed: new Object({
+													qrCode: [ value ]
 												})
-											});
-										} else {
-											transaction.checkPoints.collectionperformed.qrCode.push(value);
-										}
-									});
+											})
+										});
+									} else {
+										transaction.checkPoints.collectionperformed.qrCode.push(value);
+									}
 								}
 							});
 						}
