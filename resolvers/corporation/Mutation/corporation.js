@@ -397,8 +397,6 @@ module.exports = corporation = {
 									}
 								});
 							}
-
-							//nput.departments[i].isChanged = false;
 							input.departments[i].isChanged = false;
 							removed = true;
 						}
@@ -595,7 +593,7 @@ module.exports = corporation = {
 				session.startTransaction();
 				var res = await Corporation.findById(_id);
 
-				if (res.scheduling === undefined || res.scheduling.length <= 0) {
+				if (!res.scheduling || res.scheduling.length <= 0) {
 					returnElement = await new Promise((resolve, reject) => {
 						Corporation.findById(_id, function(err, corp) {
 							if (!corp) console.log('ERE009');
@@ -617,14 +615,13 @@ module.exports = corporation = {
 					});
 
 					/* gerando checkPoint */
-					var checkpoint = await CheckPoint.find();
-					var isNew = false;
+					var checkpoint = await CheckPoint.find({}, null, { limit: 1 });
 					res = await Corporation.findById(_id);
+					var isNew = false;
 					var checkpoin = await new Promise(async (resolve, reject) => {
 						res.scheduling.forEach((scheduling) => {
 							scheduling.qrCode.forEach((qrCode) => {
-								console.log(checkpoint);
-								if (checkpoint === undefined || checkpoint === null || checkpoint.length <= 0) {
+								if (!checkpoint) {
 									var value = {
 										code: qrCode.code,
 										material: qrCode.material
@@ -637,27 +634,20 @@ module.exports = corporation = {
 									});
 									isNew = true;
 								} else {
-									res.scheduling.forEach((scheduling) => {
-										scheduling.qrCode.forEach((qrCode) => {
-											var value = {
-												code: qrCode.code,
-												material: qrCode.material
-											};
+									var value = {
+										code: qrCode.code,
+										material: qrCode.material
+									};
 
-											if (
-												checkpoint.collectionrequested === undefined ||
-												checkpoint.collectionrequested.length <= 0
-											) {
-												checkpoint = new Object({
-													collectionrequested: new Object({
-														qrCode: [ value ]
-													})
-												});
-											} else {
-												checkpoint.collectionrequested.qrCode.push(value);
-											}
+									if (!checkpoint.collectionrequested || checkpoint.collectionrequested.length <= 0) {
+										checkpoint = new Object({
+											collectionrequested: new Object({
+												qrCode: [ value ]
+											})
 										});
-									});
+									} else {
+										checkpoint.collectionrequested.qrCode.push(value);
+									}
 								}
 							});
 						});
@@ -665,10 +655,9 @@ module.exports = corporation = {
 							var returned = await CheckPoint.create(checkpoint);
 						} else {
 							CheckPoint.findOne(function(err, check) {
-								if (!check) {
-									console.log('ERE009');
-								} else {
-									if (check === undefined || check.length <= 0) {
+								if (!check) console.log('ERE009');
+								else {
+									if (!check || check.length <= 0) {
 										check = check;
 									} else {
 										check.collectionrequested = checkpoint.collectionrequested;
@@ -680,19 +669,14 @@ module.exports = corporation = {
 						resolve();
 					});
 
-					/* gerando histórico de alterações */
-					var transaction = await TransactionHistory.find();
-					var isNew = false;
+					/*Gerando historico */
+					var transaction = await TransactionHistory.find({}, null, { limit: 1 });
 					res = await Corporation.findById(_id);
+					var isNew = false;
 					var history = await new Promise(async (resolve, reject) => {
 						res.scheduling.forEach((scheduling) => {
 							scheduling.qrCode.forEach((qrCode) => {
-								if (
-									transaction === undefined ||
-									transaction === null ||
-									transaction.length <= 0 ||
-									transaction.checkPoints === undefined
-								) {
+								if (!transaction) {
 									var value = {
 										date: new Date(),
 										code: qrCode.code,
@@ -708,30 +692,26 @@ module.exports = corporation = {
 									});
 									isNew = true;
 								} else {
-									res.scheduling.forEach((scheduling) => {
-										scheduling.qrCode.forEach((qrCode) => {
-											var value = {
-												date: new Date(),
-												code: qrCode.code,
-												material: qrCode.material
-											};
+									var value = {
+										date: new Date(),
+										code: qrCode.code,
+										material: qrCode.material
+									};
 
-											if (
-												transaction.collectionrequested === undefined ||
-												transaction.collectionrequested.length <= 0
-											) {
-												transaction = new Object({
-													checkPoints: new Object({
-														collectionrequested: new Object({
-															qrCode: [ value ]
-														})
-													})
-												});
-											} else {
-												transaction.collectionrequested.qrCode.push(value);
-											}
+									if (
+										transaction.checkPoints.collectionrequested === undefined ||
+										transaction.checkPoints.collectionrequested.length <= 0
+									) {
+										transaction = new Object({
+											checkPoints: new Object({
+												collectionrequested: new Object({
+													qrCode: [ value ]
+												})
+											})
 										});
-									});
+									} else {
+										transaction.checkPoints.collectionrequested.qrCode.push(value);
+									}
 								}
 							});
 						});
@@ -754,12 +734,11 @@ module.exports = corporation = {
 						resolve();
 					});
 				} else {
-					for (i = 0; i < input.length; i++) {
+					for (var i = 0; input.length > i; i++) {
 						var exist = await res.scheduling.find((x) => x._id == input[i]._id);
 
-						if (exist === undefined || exist === null || exist.length <= 0) {
-							input.departments[i].isChanged = false;
-							await res.scheduling.push(input[i]);
+						if (!exist || exist.length <= 0) {
+							res.scheduling.push(input[i]);
 							await res.update(res).then(console.log('ok push scheduling'));
 						} else {
 							exist.set(input[i]);
@@ -770,7 +749,7 @@ module.exports = corporation = {
 						/* gerando checkPoint */
 						var checkpoint = await CheckPoint.findOne();
 						var element = await new Promise((resolve, reject) => {
-							for (x = 0; x < input[i].qrCode.length; x++) {
+							for (var x = 0; input[i].qrCode.length > x; x++) {
 								var existQr = undefined;
 								for (y = 0; y < checkpoint.collectionrequested.qrCode.length; y++) {
 									if (checkpoint.collectionrequested.qrCode[y].code === input[i].qrCode[x].code) {
@@ -798,7 +777,7 @@ module.exports = corporation = {
 						/* gerando histórico de alterações */
 						var transaction = await TransactionHistory.findOne();
 						var element = await new Promise((resolve, reject) => {
-							for (x = 0; x < input[i].qrCode.length; x++) {
+							for (var x = 0; input[i].qrCode.length > x; x++) {
 								transaction.checkPoints.collectionrequested.qrCode.push(input[i].qrCode[x]);
 							}
 

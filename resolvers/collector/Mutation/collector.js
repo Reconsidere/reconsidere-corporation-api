@@ -182,6 +182,7 @@ module.exports = collector = {
 				throw new Error('ERE009');
 			}
 		},
+
 		async createorUpdateResiduesRegister(root, { _id, input }) {
 			const session = await mongoose.startSession();
 			try {
@@ -189,9 +190,8 @@ module.exports = collector = {
 				var res = await Collector.findById(_id);
 				var returnElement;
 				if (
-					res.residuesRegister === undefined ||
-					res.residuesRegister === null ||
-					res.residuesRegister.departments === undefined ||
+					!res.residuesRegister ||
+					!res.residuesRegister.departments ||
 					res.residuesRegister.departments.length <= 0
 				) {
 					var elementSaved;
@@ -201,9 +201,8 @@ module.exports = collector = {
 							else {
 								input.departments.forEach((department) => {
 									if (
-										res.residuesRegister === undefined ||
-										res.residuesRegister === null ||
-										res.residuesRegister.departments === undefined ||
+										!res.residuesRegister ||
+										!res.residuesRegister.departments ||
 										res.residuesRegister.departments.length <= 0
 									) {
 										res['residuesRegister'] = new Object();
@@ -253,7 +252,7 @@ module.exports = collector = {
 					});
 
 					/* gerando checkPoint */
-					var checkpoint = await CheckPoint.find();
+					var checkpoint = await CheckPoint.find()[0];
 					var isNew = false;
 					res = await Collector.findById(_id);
 					var checkpoin = await new Promise(async (resolve, reject) => {
@@ -272,27 +271,20 @@ module.exports = collector = {
 									});
 									isNew = true;
 								} else {
-									res.residuesRegister.departments.forEach((department) => {
-										department.qrCode.forEach((qrCode) => {
-											var value = {
-												code: qrCode.code,
-												material: qrCode.material
-											};
+									var value = {
+										code: qrCode.code,
+										material: qrCode.material
+									};
 
-											if (
-												checkpoint.wastegenerated === undefined ||
-												checkpoint.wastegenerated.length <= 0
-											) {
-												checkpoint = new Object({
-													wastegenerated: new Object({
-														qrCode: [ value ]
-													})
-												});
-											} else {
-												checkpoint.wastegenerated.qrCode.push(value);
-											}
+									if (!checkpoint.wastegenerated || checkpoint.wastegenerated.length <= 0) {
+										checkpoint = new Object({
+											wastegenerated: new Object({
+												qrCode: [ value ]
+											})
 										});
-									});
+									} else {
+										checkpoint.wastegenerated.qrCode.push(value);
+									}
 								}
 							});
 						});
@@ -302,7 +294,7 @@ module.exports = collector = {
 							CheckPoint.findOne(function(err, check) {
 								if (!check) console.log('ERE009');
 								else {
-									if (check === undefined || check.length <= 0) {
+									if (!check || check.length <= 0) {
 										check = check;
 									} else {
 										check.wastegenerated = checkpoint.wastegenerated;
@@ -315,17 +307,13 @@ module.exports = collector = {
 					});
 
 					/*Gerando historico */
-					var transaction = await TransactionHistory.find();
+					var transaction = await TransactionHistory.find()[0];
 					var isNew = false;
 					res = await Collector.findById(_id);
 					var history = await new Promise(async (resolve, reject) => {
 						res.residuesRegister.departments.forEach((department) => {
 							department.qrCode.forEach((qrCode) => {
-								if (
-									transaction === undefined ||
-									transaction === null ||
-									transaction.checkPoints === undefined
-								) {
+								if (!transaction) {
 									var value = {
 										date: new Date(),
 										code: qrCode.code,
@@ -341,30 +329,26 @@ module.exports = collector = {
 									});
 									isNew = true;
 								} else {
-									res.residuesRegister.departments.forEach((department) => {
-										department.qrCode.forEach((qrCode) => {
-											var value = {
-												date: new Date(),
-												code: qrCode.code,
-												material: qrCode.material
-											};
+									var value = {
+										date: new Date(),
+										code: qrCode.code,
+										material: qrCode.material
+									};
 
-											if (
-												transaction.wastegenerated === undefined ||
-												transaction.wastegenerated.length <= 0
-											) {
-												transaction = new Object({
-													checkPoints: new Object({
-														wastegenerated: new Object({
-															qrCode: [ value ]
-														})
-													})
-												});
-											} else {
-												transaction.wastegenerated.qrCode.push(value);
-											}
+									if (
+										transaction.checkPoints.wastegenerated === undefined ||
+										transaction.checkPoints.wastegenerated.length <= 0
+									) {
+										transaction = new Object({
+											checkPoints: new Object({
+												wastegenerated: new Object({
+													qrCode: [ value ]
+												})
+											})
 										});
-									});
+									} else {
+										transaction.checkPoints.wastegenerated.qrCode.push(value);
+									}
 								}
 							});
 						});
@@ -386,12 +370,45 @@ module.exports = collector = {
 						resolve();
 					});
 				} else {
-					for (i = 0; i < input.departments.length; i++) {
+					var removed = false;
+					for (i = 0; input.departments.length > i; i++) {
+						if (input.departments[i].isChanged) {
+							var existRemoved = false;
+							/*verifica se existe mudança de departamento e exclui o item que esta salvo no departamento antigo para depois inserir no novo
+						Se por acaso o usuário modificou, mas voltou ao antigo ele apenas não exclui e retorn
+						*/
+							for (y = 0; y < input.departments[i].qrCode.length; y++) {
+								res.residuesRegister.departments.forEach((department, index) => {
+									department.qrCode.forEach((qrCode, indexQrCode) => {
+										if (input.departments[i]._id !== department._id) {
+											if (qrCode.code === input.departments[i].qrCode[y].code) {
+												department.qrCode.splice(indexQrCode, 1);
+											}
+										}
+									});
+								});
+								//se não tem mais qrcode remove o departamento
+								res.residuesRegister.departments.forEach((department, index) => {
+									if (!department || !department.qrCode || department.qrCode.length <= 0) {
+										res.residuesRegister.departments.splice(index, 1);
+									}
+								});
+							}
+							input.departments[i].isChanged = false;
+							removed = true;
+						}
+					}
+
+					await res.update(res).then(console.log('ok removed from old'));
+					res = await Collector.findById(_id);
+
+					for (i = 0; input.departments.length > i; i++) {
+						res = await Collector.findById(_id);
 						var exist = await res.residuesRegister.departments.find(
 							(x) => x._id == input.departments[i]._id
 						);
+
 						if (exist === undefined || exist.length <= 0) {
-							input.departments[i].isChanged = false;
 							await res.residuesRegister.departments.push(input.departments[i]);
 							await res.update(res).then(console.log('ok push in department'));
 							res = await Collector.findById(_id);
@@ -442,47 +459,20 @@ module.exports = collector = {
 							});
 							res = await Collector.findById(_id);
 						} else {
-							if (input.departments[i].isChanged) {
-								var existRemoved = false;
-								/*verifica se existe mudança de departamento e exclui o item que esta salvo no departamento antigo para depois inserir no novo
-							Se por acaso o usuário modificou, mas voltou ao antigo ele apenas não exclui e retorn
-							*/
-								for (y = 0; y < input.departments[i].qrCode.length; y++) {
-									res.residuesRegister.departments.forEach((department, index) => {
-										department.qrCode.forEach((qrCode) => {
-											if (!existRemoved) {
-												if (qrCode.code === input.departments[i].qrCode[y].code) {
-													if (input.departments[i]._id !== department._id) {
-													} else {
-														res.residuesRegister.departments.splice(index, 1);
-													}
-												}
-											}
-										});
-									});
-								}
-								await res.update(res).then(console.log('ok set'));
-								res = await Collector.findById(_id);
-							}
-
-							for (q = 0; q < input.departments[i].qrCode.length; q++) {
+							for (q = 0; input.departments[i].qrCode.length > q; q++) {
 								var isUpdated = false;
 								res = await Collector.findById(_id);
-								if (
-									input.departments[i].qrCode[q]._id !== undefined &&
-									input.departments[i].qrCode[q]._id !== null
-								) {
+								if (input.departments[i].qrCode[q]._id) {
 									res.residuesRegister.departments.forEach((department) => {
 										department.qrCode.forEach((qrCode) => {
 											if (qrCode.code == input.departments[i].qrCode[q].code) {
-												department.isChanged = false;
 												qrCode.set(input.departments[i].qrCode[q]);
 												isUpdated = true;
 											}
 										});
 									});
 									if (isUpdated) {
-										await res.update(res).then(console.log('ok set'));
+										await res.update(res).then(console.log('ok set qr codes'));
 										res = await Collector.findById(_id);
 										isUpdated = false;
 
@@ -527,7 +517,6 @@ module.exports = collector = {
 									}
 								} else {
 									res.residuesRegister.departments.forEach((department) => {
-										department.isChanged = false;
 										if (input.departments[i]._id == department._id) {
 											department.qrCode.push(input.departments[i].qrCode[q]);
 										}
@@ -570,10 +559,9 @@ module.exports = collector = {
 											else {
 												trans.checkPoints.wastegenerated.qrCode.push(value);
 												trans.update(trans).then((x) => {});
+												resolve();
 											}
 										});
-
-										resolve();
 									});
 									res = await Collector.findById(_id);
 								}
@@ -596,6 +584,7 @@ module.exports = collector = {
 				return new Error('ERE009');
 			}
 		},
+
 		async createorUpdateScheduling(root, { _id, input }) {
 			const session = await mongoose.startSession();
 			try {
@@ -1241,7 +1230,6 @@ module.exports = collector = {
 			} catch (error) {
 				throw new Error('ERE009');
 			}
-			
 		}
 	}
 };
