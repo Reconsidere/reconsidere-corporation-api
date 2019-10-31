@@ -1166,24 +1166,25 @@ module.exports = collector = {
 				return new Error('ERE009');
 			}
 		},
-
 		async createorUpdateDocument(root, { _id, input }) {
 			try {
-				res = await Collector.findById(_id, function(err, corp) {
-					if (err) {
-						return next(new Error('ERE009'));
-					} else {
-						for (var i = 0; input.length > i; i++) {
-							if (input[i]._id) {
-								index = corp.documents.findIndex((x) => x._id == input[i]._id);
-								corp.documents[index] = input[i];
-							} else {
-								corp.documents.push(input[i]);
+				var element = await new Promise((resolve, reject) => {
+					var res = Collector.findById(_id, function(err, corp) {
+						if (err) {
+							reject(next(new Error('ERE009')));
+						} else {
+							for (var i = 0; input.length > i; i++) {
+								if (input[i]._id) {
+									index = corp.documents.findIndex((x) => x._id == input[i]._id);
+									corp.documents[index] = input[i];
+								} else {
+									corp.documents.push(input[i]);
+								}
 							}
+							corp.save();
+							resolve(corp);
 						}
-						corp.save();
-						return;
-					}
+					});
 				});
 
 				var res = await Collector.findById(_id);
