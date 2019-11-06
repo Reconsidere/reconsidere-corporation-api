@@ -1,7 +1,6 @@
 #import Material  from '../checkpoint/type/Material.graphql'
 #import QrCode  from '../checkpoint/type/QrCode.graphql'
 
-
 #import MaterialInput  from '../checkpoint/input/MaterialInput.graphql'
 #import QrCodeInput  from '../checkpoint/input/QrCodeInput.graphql'
 scalar Date
@@ -55,6 +54,7 @@ input CompleteDestinationInput {
 }
 
 type CheckPoint {
+	_idCorporation: String
 	wastegenerated: WasteGenerated
 	collectionrequested: CollectionRequested
 	collectionperformed: CollectionPerformed
@@ -64,6 +64,7 @@ type CheckPoint {
 }
 
 input CheckPointInput {
+	_idCorporation: String
 	wastegenerated: WasteGeneratedInput
 	collectionrequested: CollectionRequestedInput
 	collectionperformed: CollectionPerformedInput

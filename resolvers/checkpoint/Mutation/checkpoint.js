@@ -2,11 +2,12 @@ CheckPoint = require('../../../models/checkpoint.model');
 
 module.exports = checkpoint = {
 	Query: {
-		async allCheckPoint() {
-			return await CheckPoint.find();
+		//verificar se não achar o id na criação deve ser do tipo coletor se o id do coletor fizer parte 
+		//do check point carregar
+		async allCheckPoint(root, { _idCorporation }) {
+			return await CheckPoint.findOne({ _idCorporation: _idCorporation });
 		}
 	},
 	Mutation: {
-		async createorUpdateCheckPoint(root, { input }) {}
 	}
 };

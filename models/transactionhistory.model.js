@@ -2,6 +2,7 @@ mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TransactionHistorySchema = new Schema({
+	_idCorporation: String,
 	checkPoints: {
 		wastegenerated: {
 			qrCode: [

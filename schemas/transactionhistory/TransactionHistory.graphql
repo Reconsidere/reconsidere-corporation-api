@@ -74,11 +74,13 @@ input CheckPointInput {
 }
 
 type TransactionHistory {
+	_idCorporation: String
 	date: Date
 	checkPoint: CheckPoint
 }
 
 input TransactionHistoryInput {
+	_idCorporation: String
 	date: Date
 	checkPoint: CheckPointInput
 }
