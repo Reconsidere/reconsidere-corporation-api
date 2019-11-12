@@ -109,7 +109,7 @@ var ProviderSchema = new Schema({
 	],
 	myProviders: [
 		{
-			providerId: String
+			providerId: String,
 		}
 	],
 	departments: [
