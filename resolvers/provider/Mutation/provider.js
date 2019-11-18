@@ -75,6 +75,14 @@ module.exports = provider = {
 				return undefined;
 			}
 		},
+		async allResiduePerformed(root, { _id }) {
+			var res = await Provider.findById(_id);
+			if (res) {
+				return res.residuesPerformed;
+			} else {
+				return undefined;
+			}
+		},
 		async allSchedulings(root, { _id }) {
 			var res = await Provider.findById(_id);
 			if (res) {
@@ -101,7 +109,7 @@ module.exports = provider = {
 		}
 	},
 	Mutation: {
-		async createorUpdateProvider(root, { _id,  typeCorporation, input }) {
+		async createorUpdateProvider(root, { _id, typeCorporation, input }) {
 			const session = await mongoose.startSession();
 			try {
 				session.startTransaction();
@@ -658,7 +666,7 @@ module.exports = provider = {
 						if (isNew) {
 							var returned = await CheckPoint.create(checkpoint);
 						} else {
-							CheckPoint.findOne({ _idCorporation: _id },function(err, check) {
+							CheckPoint.findOne({ _idCorporation: _id }, function(err, check) {
 								if (!check) console.log('ERE009');
 								else {
 									if (!check || check.length <= 0) {
@@ -723,7 +731,7 @@ module.exports = provider = {
 						if (isNew) {
 							var returned = await TransactionHistory.create(transaction);
 						} else {
-							TransactionHistory.findOne({ _idCorporation: _id },function(err, trans) {
+							TransactionHistory.findOne({ _idCorporation: _id }, function(err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									if (!trans || trans.length <= 0) {
@@ -768,7 +776,7 @@ module.exports = provider = {
 								}
 							}
 
-							CheckPoint.findOne({ _idCorporation: _id },function(err, check) {
+							CheckPoint.findOne({ _idCorporation: _id }, function(err, check) {
 								if (!check) console.log('ERE009');
 								else {
 									check.collectionrequested = checkpoint.collectionrequested;
@@ -786,7 +794,7 @@ module.exports = provider = {
 								transaction.checkPoints.collectionrequested.qrCode.push(input[i].qrCode[x]);
 							}
 
-							TransactionHistory.findOne({ _idCorporation: _id },function(err, trans) {
+							TransactionHistory.findOne({ _idCorporation: _id }, function(err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									trans.checkPoints.collectionrequested = transaction.checkPoints.collectionrequested;
@@ -908,7 +916,7 @@ module.exports = provider = {
 						if (isNew) {
 							var returned = await CheckPoint.create(checkpoint);
 						} else {
-							CheckPoint.findOne({ _idCorporation: _id },function(err, check) {
+							CheckPoint.findOne({ _idCorporation: _id }, function(err, check) {
 								if (!check) {
 									console.log('ERE009');
 								} else {
@@ -1015,7 +1023,7 @@ module.exports = provider = {
 						if (isNew) {
 							var returned = await TransactionHistory.create(transaction);
 						} else {
-							TransactionHistory.findOne({ _idCorporation: _id },function(err, trans) {
+							TransactionHistory.findOne({ _idCorporation: _id }, function(err, trans) {
 								if (!trans) console.log('ERE009');
 								else {
 									if (trans === undefined || trans === null) {
@@ -1061,7 +1069,7 @@ module.exports = provider = {
 										checkpoint.collectionperformed.qrCode.push(input.sale[i].qrCode);
 									}
 								}
-								CheckPoint.findOne({ _idCorporation: _id },function(err, check) {
+								CheckPoint.findOne({ _idCorporation: _id }, function(err, check) {
 									if (!check) console.log('ERE009');
 									else {
 										check.collectionperformed = checkpoint.collectionperformed;
@@ -1079,7 +1087,7 @@ module.exports = provider = {
 								if (input.sale !== undefined && input.sale.length > 0) {
 									transaction.checkPoints.collectionperformed.qrCode.push(input.sale[i].qrCode);
 								}
-								TransactionHistory.findOne({ _idCorporation: _id },function(err, trans) {
+								TransactionHistory.findOne({ _idCorporation: _id }, function(err, trans) {
 									if (!trans) console.log('ERE009');
 									else {
 										trans.checkPoints.collectionperformed =
@@ -1124,7 +1132,7 @@ module.exports = provider = {
 									}
 								}
 
-								CheckPoint.findOne({ _idCorporation: _id },function(err, check) {
+								CheckPoint.findOne({ _idCorporation: _id }, function(err, check) {
 									if (!check) console.log('ERE009');
 									else {
 										check.collectionperformed = checkpoint.collectionperformed;
@@ -1143,7 +1151,7 @@ module.exports = provider = {
 									transaction.checkPoints.collectionperformed.qrCode.push(input.purchase[i].qrCode);
 								}
 
-								TransactionHistory.findOne({ _idCorporation: _id },function(err, trans) {
+								TransactionHistory.findOne({ _idCorporation: _id }, function(err, trans) {
 									if (!trans) console.log('ERE009');
 									else {
 										trans.checkPoints.collectionperformed =
@@ -1172,6 +1180,7 @@ module.exports = provider = {
 				return new Error('ERE009');
 			}
 		},
+		async createorUpdateResiduePerformed(root, { _id, input }) {},
 		async createorUpdateDocument(root, { _id, input }) {
 			try {
 				var element = await new Promise((resolve, reject) => {
@@ -1207,7 +1216,7 @@ module.exports = provider = {
   */
 async function addID(_id, id, typeCorporation) {
 	var object = {
-		providerId: id,
+		providerId: id
 	};
 	if (typeCorporation === Classification.Collector) {
 		var collector = await Collector.findById(_id);

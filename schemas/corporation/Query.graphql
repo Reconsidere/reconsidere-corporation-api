@@ -10,4 +10,5 @@ type Query {
 	allSchedulings(_id: ID!): [Scheduling]
 	allEntries(_id: ID!): Entries
 	allProvidersId(_id: ID!): [MyProviders]
+	allResiduePerformed(_id: ID!): [ResiduePerformed]
 }

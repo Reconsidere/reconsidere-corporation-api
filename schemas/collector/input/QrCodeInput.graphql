@@ -2,5 +2,7 @@ input QrCodeInput {
 	_id: String
 	code: String
 	date: Date
+	confirmedByCorporation: String
+	confirmedByCollector: String
 	material: MaterialInput
 }

@@ -11,6 +11,7 @@
 #import Entries  from '../provider/type/Entries.graphql'
 #import Location  from '../provider/type/Location.graphql'
 #import Document  from '../provider/type/Document.graphql'
+#import ResiduePerformed  from '../provider/type/ResiduePerformed.graphql'
 
 #import MaterialInput  from '../provider/input/MaterialInput.graphql'
 #import QrCodeInput  from '../provider/input/QrCodeInput.graphql'
@@ -25,6 +26,7 @@
 #import EntriesInput  from '../provider/input/EntriesInput.graphql'
 #import LocationInput  from '../provider/input/LocationInput.graphql'
 #import DocumentInput  from '../provider/input/DocumentInput.graphql'
+#import ResiduePerformedInput  from '../provider/input/ResiduePerformedInput.graphql'
 
 scalar Date
 
@@ -47,12 +49,13 @@ type Provider {
 	verificationDate: Date
 	units: [Unit]
 	users: [User]
+	location: Location
 	myProviders: [MyProviders]
 	departments: [Department]
 	residuesRegister: ResiduesRegister
 	scheduling: Scheduling
 	entries: Entries
-	location: Location
+	residuesPerformed: [ResiduePerformed]
 	documents: [Document]
 }
 
@@ -73,11 +76,12 @@ input ProviderInput {
 	verificationDate: Date
 	units: [UnitInput]
 	users: [UserInput]
+	location: LocationInput
 	myProviders: [MyProvidersInput]
 	departments: [DepartmentInput]
 	residuesRegister: ResiduesRegisterInput
 	scheduling: SchedulingInput
 	entries: EntriesInput
-	location: LocationInput
+	residuesPerformed: [ResiduePerformedInput]
 	documents: [DocumentInput]
 }

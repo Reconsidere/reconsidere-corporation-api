@@ -2,5 +2,7 @@ type QrCode {
 	_id: ID
 	code: String
 	date: Date
+	confirmedByCorporation: String
+	confirmedByCollector: String
 	material: Material
 }

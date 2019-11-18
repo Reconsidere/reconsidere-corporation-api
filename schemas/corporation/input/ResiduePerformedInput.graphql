@@ -1,0 +1,11 @@
+input ResiduePerformedInput {
+	date: Date
+	name: String
+	cost: Number
+	typeEntrie: String
+	quantity: Number
+	weight: Number
+	amount: Number
+	qrCode: QrCodeInput
+
+}

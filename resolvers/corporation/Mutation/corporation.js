@@ -77,6 +77,14 @@ module.exports = corporation = {
 				return undefined;
 			}
 		},
+		async allResiduePerformed(root, { _id }) {
+			var res = await Corporation.findById(_id);
+			if (res) {
+				return res.residuesPerformed;
+			} else {
+				return undefined;
+			}
+		},
 		async allSchedulings(root, { _id }) {
 			var res = await Corporation.findById(_id);
 			if (res) {
@@ -1180,6 +1188,7 @@ module.exports = corporation = {
 				return new Error('ERE009');
 			}
 		},
+		async createorUpdateResiduePerformed(root, { _id, input }) {},
 		async createorUpdateDocument(root, { _id, input }) {
 			try {
 				var element = await new Promise((resolve, reject) => {
