@@ -75,7 +75,7 @@ module.exports = provider = {
 				return undefined;
 			}
 		},
-		async allResiduePerformed(root, { _id }) {
+		async allResidueArrived(root, { _id }) {
 			var res = await Provider.findById(_id);
 			if (res) {
 				return res.residuesPerformed;
@@ -1180,7 +1180,7 @@ module.exports = provider = {
 				return new Error('ERE009');
 			}
 		},
-		async createorUpdateResiduePerformed(root, { _id, input }) {},
+		async createorUpdateResidueArrived(root, { _id, input }) {},
 		async createorUpdateDocument(root, { _id, input }) {
 			try {
 				var element = await new Promise((resolve, reject) => {

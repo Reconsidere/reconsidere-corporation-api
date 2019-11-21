@@ -11,7 +11,7 @@
 #import Entries  from '../corporation/type/Entries.graphql'
 #import Location  from '../corporation/type/Location.graphql'
 #import Document  from '../corporation/type/Document.graphql'
-#import ResiduePerformed  from '../corporation/type/ResiduePerformed.graphql'
+#import ResidueArrived  from '../corporation/type/ResidueArrived.graphql'
 
 #import MaterialInput  from '../corporation/input/MaterialInput.graphql'
 #import QrCodeInput  from '../corporation/input/QrCodeInput.graphql'
@@ -26,7 +26,7 @@
 #import SchedulingInput  from '../corporation/input/SchedulingInput.graphql'
 #import EntriesInput  from '../corporation/input/EntriesInput.graphql'
 #import LocationInput  from '../corporation/input/LocationInput.graphql'
-#import ResiduePerformedInput  from '../corporation/input/ResiduePerformedInput.graphql'
+#import ResidueArrivedInput  from '../corporation/input/ResidueArrivedInput.graphql'
 
 scalar Date
 
@@ -55,7 +55,7 @@ type Corporation {
 	residuesRegister: ResiduesRegister
 	scheduling: Scheduling
 	entries: Entries
-	residuesPerformed: [ResiduePerformed]
+	residuesArrived: [ResidueArrived]
 	documents: [Document]
 }
 
@@ -82,6 +82,6 @@ input CorporationInput {
 	residuesRegister: ResiduesRegisterInput
 	scheduling: SchedulingInput
 	entries: EntriesInput
-	residuesPerformed: [ResiduePerformedInput]
+	residuesArrived: [ResidueArrivedInput]
 	documents: [DocumentInput]
 }

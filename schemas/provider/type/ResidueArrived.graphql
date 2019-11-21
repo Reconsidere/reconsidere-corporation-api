@@ -1,4 +1,4 @@
-type ResiduePerformed {
+type ResidueArrived {
 	date: Date
 	name: String
 	cost: Number
@@ -7,4 +7,7 @@ type ResiduePerformed {
 	weight: Number
 	amount: Number
 	qrCode: QrCode
+	observation: String
+	confirmedByCorporation: String
+	confirmedByCollector: String
 }

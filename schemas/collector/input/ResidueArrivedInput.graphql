@@ -1,4 +1,4 @@
-input ResiduePerformedInput {
+input ResidueArrivedInput {
 	date: Date
 	name: String
 	cost: Number
@@ -7,5 +7,7 @@ input ResiduePerformedInput {
 	weight: Number
 	amount: Number
 	qrCode: QrCodeInput
-
+	observation: String
+	confirmedByCorporation: String
+	confirmedByCollector: String
 }

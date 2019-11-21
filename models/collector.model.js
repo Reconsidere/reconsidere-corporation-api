@@ -23,11 +23,9 @@ const QrCode = new Schema({
 	code: String,
 	date: Date,
 	material: Material,
-	confirmedByCorporation: String,
-	confirmedByCollector: String
 });
 
-const ResiduePerformed = new Schema({
+const ResidueArrived = new Schema({
 	date: Date,
 	name: String,
 	cost: Number,
@@ -36,7 +34,9 @@ const ResiduePerformed = new Schema({
 	weight: Number,
 	amount: Number,
 	qrCode: QrCode,
-	observation: String
+	observation: String,
+	confirmedByCorporation: String,
+	confirmedByCollector: String
 });
 
 const ResiduesRegisterSchema = new Schema({
@@ -73,7 +73,8 @@ const Entries = new Schema({
 			quantity: Number,
 			weight: Number,
 			amount: Number,
-			qrCode: QrCode
+			qrCode: QrCode,
+			_idColector:String,
 		}
 	]
 });
@@ -157,7 +158,7 @@ var CollectorSchema = new Schema({
 		}
 	],
 	entries: Entries,
-	residuesPerformed: [ ResiduePerformed ],
+	residuesArrived: [ResidueArrived],
 	documents: [ Documents ]
 });
 

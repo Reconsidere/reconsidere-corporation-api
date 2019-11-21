@@ -46,8 +46,6 @@ const CheckPointSchema = new Schema({
 			{
 				code: String,
 				date: Date,
-				confirmedByCorporation: String,
-				confirmedByCollector: String,
 				material: {
 					type: { type: String },
 					name: String,

@@ -1,6 +1,5 @@
 #import QrCodeInput  from '../input/QrCodeInput.graphql'
 
-
 input PurchaseInput {
 	_id: String
 	date: Date
@@ -23,6 +22,7 @@ input SaleInput {
 	weight: Number
 	amount: Number
 	qrCode: QrCodeInput
+	_idColector: String
 }
 
 input EntriesInput {

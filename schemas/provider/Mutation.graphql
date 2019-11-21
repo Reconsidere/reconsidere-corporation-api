@@ -6,5 +6,5 @@ type Mutation {
 	createorUpdateResiduesRegister(_id: ID!, input: ResiduesRegisterInput): ResiduesRegister
 	createorUpdateScheduling(_id: ID!, input: [SchedulingInput]): [Scheduling]
 	createorUpdateEntries(_id: ID!, input: EntriesInput): Entries
-	createorUpdateResiduePerformed(_id: ID!, input: [ResiduePerformedInput]): [ResiduePerformed]
+	createorUpdateResidueArrived(_id: ID!, input: [ResidueArrivedInput]): [ResidueArrived]
 }

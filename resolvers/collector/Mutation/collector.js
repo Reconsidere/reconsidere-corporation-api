@@ -48,6 +48,28 @@ module.exports = collector = {
 				return undefined;
 			}
 		},
+		async allClientsToCollector(root, { _id }) {
+			var clients = [];
+			var corporation = await Corporation.findOne({ 'entries.sale._idColector': _id });
+			var provider = await Provider.findOne({ 'entries.sale._idColector': _id });
+			if (corporation) {
+				corporation.entries.sale.forEach((sale, index) => {
+					if (sale._idColector !== _id) {
+						sales.splice(index, 1);
+					}
+				});
+				clients.push(corporation);
+			}
+			if (provider) {
+				provider.entries.sale.forEach((sale, index) => {
+					if (sale._idColector !== _id) {
+						sales.splice(index, 1);
+					}
+				});
+				clients.push(provider);
+			}
+			return clients;
+		},
 		async allDocuments(root, { _id }) {
 			var res = await Collector.findById(_id);
 			if (res) {
@@ -72,7 +94,7 @@ module.exports = collector = {
 				return undefined;
 			}
 		},
-		async allResiduePerformed(root, { _id }) {
+		async allResidueArrived(root, { _id }) {
 			var res = await Collector.findById(_id);
 			if (res) {
 				return res.residuesPerformed;
@@ -1186,7 +1208,7 @@ module.exports = collector = {
 				return new Error('ERE009');
 			}
 		},
-		async createorUpdateResiduePerformed(root, { _id, input }) {},
+		async createorUpdateResidueArrived(root, { _id, input }) {},
 		async createorUpdateDocument(root, { _id, input }) {
 			try {
 				var element = await new Promise((resolve, reject) => {
